@@ -4,7 +4,7 @@ import { createClient } from '@/utils/supabase/server';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 // Removed Alert in favor of a site-consistent muted card banner
-import { CreditCard, Star, Check } from 'lucide-react';
+import { MessageSquare, CreditCard, Star, Check } from 'lucide-react';
 import DodoCheckoutButton from '@/components/dodopayments/DodoCheckoutButton';
 import { pricingPlanService } from '@/lib/pricing-plans';
 import { commonPageMetadata } from '@/lib/seo'
