@@ -235,18 +235,56 @@ export default async function BuyCreditsPage() {
       )}
 
      
+{/* Founder's Personal Guarantee */}
+<div className="mt-10 max-w-3xl mx-auto text-left">
+  <div className="rounded-xl border border-indigo-100 bg-indigo-50/50 dark:bg-muted/20 p-6 relative overflow-hidden">
+    
+    {/* Visual Accent */}
+    <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500/80"></div>
 
-      {/* Universal Guarantee */}
-      <div className="mt-10 max-w-3xl mx-auto text-left">
-        <div className="rounded-lg border bg-muted/30 p-4">
-          <h4 className="text-base font-semibold mb-2">🔒 Our Universal Guarantee</h4>
-          <ul className="space-y-2 text-sm text-muted-foreground">
-            <li> <span className='font-semibold text-primary/90'>1. Quality Guarantee (Shoot Packs)</span>: We guarantee professional quality on all photos generated using our pre-made Shoot Packs. If 30% of the photos quality is not satisfactory, we offer re-creation and if 50% of the photos quality is not satisfactory, we offer a full refund, <span className='font-semibold underline'>no questions asked.</span></li>
-            <li> <span className='font-semibold text-primary/90'>2. Performance Guarantee (All Packs)</span>: We guarantee that your photos will be delivered and your AI Model will train successfully from your selfies. If the technology fails, you get a refund.</li>
-          </ul>
-          <p className="text-xs text-red-500 mt-2">Note: The quality of photos generated using Custom Prompts is the user's responsibility as the Image quality depends entirely on your prompt writing skill.</p>
-        </div>
+    <div className="pl-2">
+      {/* Headline */}
+      <h4 className="text-lg font-bold text-foreground mb-3 flex items-center gap-2">
+        <span>👋</span> A personal note from the founder
+      </h4>
+
+      {/* The Strong "Solo Founder" Copy */}
+      <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
+        <p className="text-foreground font-medium">
+          I get it—spending money on AI without a free trial feels risky.
+        </p>
+        
+        <p>
+          "Will it actually look like me?" "Is this a scam?" — I get it. You are not alone in feeling that way.
+        </p>
+
+        <p>
+          <span className="font-semibold text-foreground">I am a solo founder building Unrealshot AI.</span> I don't have a support team or a corporate policy manual. I just have my reputation and the code I wrote.
+        </p>
+
+        <p>
+          Because I built this myself, every single user matters to me. I stand by my work 100%. If the AI misses the mark, or if you aren't happy for any reason, I will personally fix it or refund you. You aren't just a ticket number here.
+        </p>
       </div>
+
+      {/* The Direct Line */}
+      <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 text-sm">
+        <a
+          href="mailto:support@unrealshot.com"
+          className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-all shadow-sm group"
+        >
+          <MessageSquare className="w-4 h-4 mr-2" />
+          Email me directly
+        </a>
+        <span className="text-muted-foreground text-xs sm:text-sm">
+          I usually reply within a few hours.
+        </span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 
       <p className="text-center  text-gray-600 text-base leading-relaxed mt-8">
      Payments are processed securely with 
