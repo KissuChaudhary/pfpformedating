@@ -30,11 +30,10 @@ export const ProductSection: React.FC = () => {
                 <div className="flex flex-col md:flex-row justify-between items-end gap-8">
                     <div>
                         <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-4">
-                            Digital Lifestyle.
+                            THE ULTIMATE PHOTO DUMP
                         </h2>
                         <p className="font-mono text-foreground/60 max-w-md">
-                            Whether you need to fix your Hinge profile or upgrade your Instagram aesthetic, we generate the photos you actually want to post.
-                        </p>
+                            Stop posting stiff, staged selfies. We generate the kind of candid, "caught-in-the-moment" shots that belong in your monthly carousel. From harsh flash to soft motion blur, get the photos that make people ask, "Who took this?"                        </p>
                     </div>
                     <div className="text-right hidden md:block">
                         <div className="font-mono text-accent text-xs mb-2 animate-pulse">● LIVE PREVIEW</div>

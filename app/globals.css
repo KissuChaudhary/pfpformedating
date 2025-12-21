@@ -974,6 +974,196 @@
   }
 }
 
+/* ================================ */
+/* Dark Theme Blog Content Styles  */
+/* ================================ */
+.theme-public .blog-content {
+  color: rgba(235, 235, 235, 0.85);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.9rem;
+  line-height: 1.8;
+}
+
+/* Headings - Dark Theme */
+.theme-public .blog-content h1,
+.theme-public .blog-content h2,
+.theme-public .blog-content h3,
+.theme-public .blog-content h4,
+.theme-public .blog-content h5,
+.theme-public .blog-content h6 {
+  font-family: var(--font-space-grotesk), sans-serif;
+  color: #EBEBEB;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  border: none;
+}
+
+.theme-public .blog-content h1 {
+  font-size: 2rem;
+  margin-top: 3rem;
+  margin-bottom: 1.5rem;
+}
+
+.theme-public .blog-content h2 {
+  font-size: 1.5rem;
+  margin-top: 2.5rem;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(235, 235, 235, 0.1);
+}
+
+.theme-public .blog-content h3 {
+  font-size: 1.25rem;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.theme-public .blog-content h4,
+.theme-public .blog-content h5,
+.theme-public .blog-content h6 {
+  font-size: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Paragraphs - Dark Theme */
+.theme-public .blog-content p {
+  color: rgba(235, 235, 235, 0.7);
+  margin-bottom: 1.5rem;
+}
+
+/* Links - Dark Theme */
+.theme-public .blog-content a {
+  color: #FF4D00;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.theme-public .blog-content a:hover {
+  color: #EBEBEB;
+}
+
+/* Lists - Dark Theme */
+.theme-public .blog-content ul,
+.theme-public .blog-content ol {
+  color: rgba(235, 235, 235, 0.7);
+  margin-bottom: 1.5rem;
+  padding-left: 1.5rem;
+}
+
+.theme-public .blog-content li {
+  margin-bottom: 0.5rem;
+}
+
+.theme-public .blog-content li::marker {
+  color: #FF4D00;
+}
+
+/* Blockquotes - Dark Theme */
+.theme-public .blog-content blockquote {
+  background: rgba(255, 77, 0, 0.05);
+  border-left: 3px solid #FF4D00;
+  border-radius: 0;
+  padding: 1rem 1.5rem;
+  margin: 1.5rem 0;
+  color: rgba(235, 235, 235, 0.7);
+}
+
+.theme-public .blog-content blockquote p {
+  margin: 0;
+}
+
+/* Code - Dark Theme */
+.theme-public .blog-content code {
+  background: #0a0a0a;
+  color: #FF4D00;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0;
+  font-size: 0.85em;
+  border: 1px solid rgba(235, 235, 235, 0.1);
+}
+
+.theme-public .blog-content pre {
+  background: #0a0a0a;
+  border: 1px solid rgba(235, 235, 235, 0.1);
+  border-radius: 0;
+  padding: 1rem;
+  overflow-x: auto;
+  margin: 1.5rem 0;
+}
+
+.theme-public .blog-content pre code {
+  background: transparent;
+  color: rgba(235, 235, 235, 0.8);
+  border: none;
+  padding: 0;
+}
+
+/* Tables - Dark Theme */
+.theme-public .blog-content table {
+  border: 1px solid rgba(235, 235, 235, 0.1);
+  background: #0a0a0a;
+}
+
+.theme-public .blog-content th {
+  background: rgba(255, 77, 0, 0.1);
+  color: #EBEBEB;
+  border: 1px solid rgba(235, 235, 235, 0.1);
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+}
+
+.theme-public .blog-content td {
+  border: 1px solid rgba(235, 235, 235, 0.1);
+  color: rgba(235, 235, 235, 0.7);
+}
+
+.theme-public .blog-content tr:nth-child(even) {
+  background: rgba(235, 235, 235, 0.02);
+}
+
+/* Images - Dark Theme */
+.theme-public .blog-content img {
+  border: 1px solid rgba(235, 235, 235, 0.1);
+  border-radius: 0;
+}
+
+.theme-public .blog-content figcaption {
+  color: rgba(235, 235, 235, 0.5);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Strong/Em - Dark Theme */
+.theme-public .blog-content strong {
+  color: #EBEBEB;
+}
+
+/* HR - Dark Theme */
+.theme-public .blog-content hr {
+  border-color: rgba(235, 235, 235, 0.1);
+}
+
+/* Buttons - Dark Theme */
+.theme-public .blog-content .wp-block-button__link {
+  background: #FF4D00;
+  color: #080808;
+  font-family: var(--font-jetbrains-mono), monospace;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  border-radius: 0;
+  font-weight: bold;
+}
+
+.theme-public .blog-content .wp-block-button__link:hover {
+  background: #EBEBEB;
+  color: #080808;
+}
+
 
 /* WebKit browsers (Chrome, Safari, Edge) */
 input[type="range"].slider::-webkit-slider-thumb {
