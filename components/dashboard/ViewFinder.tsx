@@ -331,7 +331,7 @@ export const Viewfinder: React.FC = () => {
                             <textarea
                                 value={prompt}
                                 onChange={(e) => setPrompt(e.target.value)}
-                                placeholder="A candid shot of..."
+                                placeholder="describe how you want to look.....i.e. 'i am wearing a hoodie and walking on a urban street.'"
                                 className="w-full h-28 bg-zinc-800/30 border border-zinc-700 text-white text-sm p-4 rounded-lg resize-none outline-none focus:border-zinc-500 focus:bg-zinc-800/50 transition-all placeholder:text-zinc-500"
                             />
                             <div className="absolute bottom-3 right-3 text-[10px] font-medium text-accent opacity-50 group-focus-within:opacity-100 transition-opacity pointer-events-none">

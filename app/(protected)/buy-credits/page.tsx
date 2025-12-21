@@ -88,18 +88,18 @@ export default async function BuyCreditsPage() {
   // Plan feature bullets (aligned with landing page Pricing component)
   const starterFeatures = [
     '10 Hyper-Realistic Photos',
-    '5 Film Modes (Flash, Golden, Gritty, Cine, Headshot)',
-    'Nano-Texture Engine (Real skin, no plastic AI)',
-    'Auto-Delete Privacy (7-day wipe)',
-    'Commercial License (Use anywhere)'
+    '5 Film Modes ',
+    'Nano-Texture Engine ',
+    'Auto-Delete Privacy ',
+    'Commercial License'
   ];
 
   const proFeatures = [
-    '25 Hyper-Realistic Photos (2.5x Capacity)',
-    '$0.79 Per Photo (Save 20%)',
-    '5 Film Modes (Flash, Golden, Gritty, Cine, Headshot)',
-    'Nano-Texture Engine (Real skin, no plastic AI)',
-    'Auto-Delete Privacy (7-day wipe)'
+    '25 Hyper-Realistic Photos',
+    '$0.79 Per Photo ',
+    '5 Film Modes ',
+    'Nano-Texture Engine ',
+    'Auto-Delete Privacy '
   ];
 
   // Use normalized keys so minor plan name differences don't break mapping

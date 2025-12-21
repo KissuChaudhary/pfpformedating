@@ -13,9 +13,11 @@ export const Footer: React.FC = () => {
                 </div>
 
                 <div className="flex gap-8 font-mono text-xs text-foreground/60">
-                    <a href="#" className="hover:text-accent uppercase">Privacy</a>
-                    <a href="#" className="hover:text-accent uppercase">Terms</a>
-                    <a href="#" className="hover:text-accent uppercase">Twitter</a>
+                    <a href="/privacy-policy" className="hover:text-accent uppercase">Privacy</a>
+                    <a href="/terms" className="hover:text-accent uppercase">Terms</a>
+                    <a href="/refund-policy" className="hover:text-accent uppercase">Refund</a>
+                    <a href="/blog" className="hover:text-accent uppercase">Blog</a>
+                    <a href="https://twitter.com/unrealshotai" className="hover:text-accent uppercase">Twitter</a>
                 </div>
             </div>
         </footer>
