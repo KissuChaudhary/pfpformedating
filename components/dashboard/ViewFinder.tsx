@@ -53,6 +53,7 @@ export const Viewfinder: React.FC = () => {
     const [aspectRatio, setAspectRatio] = useState(RATIOS[0]);
     const [lightingTime, setLightingTime] = useState(LIGHTING[0]);
     const [isDeveloping, setIsDeveloping] = useState(false);
+    const [creditBalance, setCreditBalance] = useState<number | null>(null);
 
     // Generated images from database
     const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([]);
@@ -82,6 +83,32 @@ export const Viewfinder: React.FC = () => {
             }
         };
         fetchModels();
+    }, []);
+
+    // Fetch credit balance on mount
+    useEffect(() => {
+        const fetchCredits = async () => {
+            try {
+                const res = await fetch('/api/credits/check');
+                if (res.ok) {
+                    const data = await res.json();
+                    setCreditBalance(data.currentBalance ?? 0);
+                }
+            } catch (error) {
+                console.error('Failed to fetch credits:', error);
+                setCreditBalance(0);
+            }
+        };
+        fetchCredits();
+
+        // Listen for credit updates from other parts of the app
+        const handleCreditUpdate = (e: CustomEvent) => {
+            if (e.detail?.newBalance !== undefined) {
+                setCreditBalance(e.detail.newBalance);
+            }
+        };
+        window.addEventListener('creditUpdate', handleCreditUpdate as EventListener);
+        return () => window.removeEventListener('creditUpdate', handleCreditUpdate as EventListener);
     }, []);
 
     // Fetch generated images when model changes
@@ -343,23 +370,32 @@ export const Viewfinder: React.FC = () => {
 
                 {/* Footer Button */}
                 <div className="p-5 border-t border-zinc-700 bg-zinc-900/50 backdrop-blur-sm">
-                    <button
-                        onClick={handleShutter}
-                        disabled={prompt.length === 0 || isDeveloping || !selectedModel}
-                        className="cursor-pointer w-full h-12 bg-white text-black font-semibold text-sm rounded-lg hover:bg-zinc-200 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-2 shadow-lg shadow-white/5"
-                    >
-                        {isDeveloping ? (
-                            <>
-                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                </svg>
-                                Developing...
-                            </>
-                        ) : (
-                            "Capture Frame"
-                        )}
-                    </button>
+                    {creditBalance === 0 ? (
+                        <Link
+                            href="/buy-credits"
+                            className="w-full h-12 bg-accent text-white font-semibold text-sm rounded-lg hover:bg-accent/90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg shadow-accent/10"
+                        >
+                            Buy Credits →
+                        </Link>
+                    ) : (
+                        <button
+                            onClick={handleShutter}
+                            disabled={prompt.length === 0 || isDeveloping || !selectedModel}
+                            className="cursor-pointer w-full h-12 bg-white text-black font-semibold text-sm rounded-lg hover:bg-zinc-200 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-2 shadow-lg shadow-white/5"
+                        >
+                            {isDeveloping ? (
+                                <>
+                                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Developing...
+                                </>
+                            ) : (
+                                "Capture Frame"
+                            )}
+                        </button>
+                    )}
                 </div>
             </div>
 
@@ -451,8 +487,49 @@ export const Viewfinder: React.FC = () => {
                                         className="w-full h-auto object-cover block"
                                         alt={`Generated ${image.id}`}
                                     />
-                                    {/* Overlay */}
-                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3 backdrop-blur-[2px]">
+
+                                    {/* Mobile: Always visible download button (bottom-right) */}
+                                    <button
+                                        disabled={downloadingImageId === image.id}
+                                        onClick={async () => {
+                                            if (downloadingImageId === image.id) return;
+                                            setDownloadingImageId(image.id);
+                                            try {
+                                                const response = await fetch('/api/download', {
+                                                    method: 'POST',
+                                                    headers: { 'Content-Type': 'application/json' },
+                                                    body: JSON.stringify({ imageUrl: image.uri }),
+                                                });
+                                                if (!response.ok) throw new Error('Download failed');
+                                                const blob = await response.blob();
+                                                const url = window.URL.createObjectURL(blob);
+                                                const a = document.createElement('a');
+                                                a.href = url;
+                                                a.download = `unrealshot_${image.id}.png`;
+                                                document.body.appendChild(a);
+                                                a.click();
+                                                document.body.removeChild(a);
+                                                window.URL.revokeObjectURL(url);
+                                            } catch (error) {
+                                                console.error('Download failed:', error);
+                                            } finally {
+                                                setDownloadingImageId(null);
+                                            }
+                                        }}
+                                        className="md:hidden absolute bottom-2 right-2 p-2.5 bg-black/70 backdrop-blur-sm text-white rounded-full hover:bg-black/90 transition-colors disabled:opacity-70 disabled:cursor-wait z-10"
+                                    >
+                                        {downloadingImageId === image.id ? (
+                                            <svg className="animate-spin w-4 h-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                            </svg>
+                                        ) : (
+                                            <Download className="w-4 h-4" />
+                                        )}
+                                    </button>
+
+                                    {/* Desktop: Hover overlay with download button */}
+                                    <div className="hidden md:flex absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex-col items-center justify-center gap-3 backdrop-blur-[2px]">
                                         <div className="flex gap-2">
                                             <button
                                                 disabled={downloadingImageId === image.id}
@@ -460,15 +537,12 @@ export const Viewfinder: React.FC = () => {
                                                     if (downloadingImageId === image.id) return;
                                                     setDownloadingImageId(image.id);
                                                     try {
-                                                        // Use proxy to avoid CORS
                                                         const response = await fetch('/api/download', {
                                                             method: 'POST',
                                                             headers: { 'Content-Type': 'application/json' },
                                                             body: JSON.stringify({ imageUrl: image.uri }),
                                                         });
-
                                                         if (!response.ok) throw new Error('Download failed');
-
                                                         const blob = await response.blob();
                                                         const url = window.URL.createObjectURL(blob);
                                                         const a = document.createElement('a');
@@ -495,7 +569,6 @@ export const Viewfinder: React.FC = () => {
                                                     <Download className="w-3.5 h-3.5" />
                                                 )}
                                             </button>
-
                                         </div>
                                     </div>
                                 </div>
