@@ -64,7 +64,7 @@ export function NavUser({
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg"
+            className="dark w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg bg-[#0a0a0a] border-white/10 text-white"
             side={isMobile ? "bottom" : "right"}
             align="end"
             sideOffset={4}
@@ -81,27 +81,27 @@ export function NavUser({
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-white/10" />
             <DropdownMenuGroup>
-              <DropdownMenuItem asChild className="cursor-pointer">
+              <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10">
                 <Link href="/buy-credits" className="flex items-center">
-              <Sparkles className="mr-2 h-4 w-4" />
-              Buy Credits
-            </Link>
+                  <Sparkles className="mr-2 h-4 w-4" />
+                  Buy Credits
+                </Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
-            <DropdownMenuSeparator />
-             <DropdownMenuGroup>
-           <DropdownMenuItem className="cursor-pointer">
-            <Home className="mr-2 h-4 w-4" />
-            <Link href="/dashboard">Dashboard</Link>
-          </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <BadgeCheck className="mr-2 h-4 w-4" />
-            <Link href="/account">Account</Link>  
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-            <DropdownMenuSeparator />
+            <DropdownMenuSeparator className="bg-white/10" />
+            <DropdownMenuGroup>
+              <DropdownMenuItem className="cursor-pointer hover:bg-white/10 focus:bg-white/10">
+                <Home className="mr-2 h-4 w-4" />
+                <Link href="/dashboard">Dashboard</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer hover:bg-white/10 focus:bg-white/10">
+                <BadgeCheck className="mr-2 h-4 w-4" />
+                <Link href="/account">Account</Link>
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator className="bg-white/10" />
             <DropdownMenuItem
               onClick={async () => {
                 await signOut()
