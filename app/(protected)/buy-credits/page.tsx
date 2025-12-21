@@ -61,7 +61,7 @@ export default async function BuyCreditsPage() {
   // Server-side authentication check
   const supabase = await createClient();
   const { data: { user }, error } = await supabase.auth.getUser();
-  
+
   if (error || !user) {
     redirect('/login?redirect=/buy-credits');
   }
@@ -126,172 +126,121 @@ export default async function BuyCreditsPage() {
         />
       )}
       <div className="container mx-auto px-4 py-8 text-center">
-      <div className="mx-auto mb-6 max-w-3xl">
-        <div className="relative rounded-lg border border-primary/10 bg-muted/30 p-4 text-left md:text-center">
-          <p className="text-xs font-semibold uppercase tracking-wider text-primary">Exclusive Offer</p>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Hey friend, use code
-            <Badge variant="outline" className="mx-2 font-mono">WELCOME</Badge>
-            to get <span className="font-semibold text-primary">10% off</span> your first pack!
-            <span className="ml-1">Limited time for new users.</span>
+        <div className="mx-auto mb-6 max-w-3xl">
+          <div className="relative rounded-lg border border-primary/10 bg-muted/30 p-4 text-left md:text-center">
+            <p className="text-xs font-semibold uppercase tracking-wider text-primary">Exclusive Offer</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Hey friend, use code
+              <Badge variant="outline" className="mx-2 font-mono">WELCOME</Badge>
+              to get <span className="font-semibold text-primary">10% off</span> your first pack!
+              <span className="ml-1">Limited time for new users.</span>
+            </p>
+            <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]} borderWidth={2} />
+          </div>
+        </div>
+        <div className="text-center mb-8">
+          <h1 className="text-3xl font-bold mb-4">Get Your Professional AI Photoshoot</h1>
+          <p className="text-muted-foreground max-w-2xl mx-auto">
+            Transform your selfies into studio-quality headshots. Photos are guaranteed and credits never expire.
           </p>
-          <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]} borderWidth={2} />
         </div>
-      </div>
-      <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-4">Get Your Professional AI Photoshoot</h1>
-        <p className="text-muted-foreground max-w-2xl mx-auto">
-          Transform your selfies into studio-quality headshots. Photos are guaranteed and credits never expire.
-        </p>
-      </div>
 
-      {plans.length === 0 ? (
-        <div className="text-center py-12">
-          <CreditCard className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
-          <h3 className="text-lg font-semibold mb-2">No pricing plans available</h3>
-          <p className="text-muted-foreground">Please check back later or contact support.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-3xl mx-auto">
-          {plans.map((plan) => (
-            <Card key={plan.id} className={`relative ${plan.isPopular ? '' : ''}`}>
-              {plan.isPopular && <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]}/>}
-              {(() => {
-                const normalized = normalizePlanName(plan.name);
-                const showRecommended = normalized === 'basic pack' || normalized === 'starter';
-                const showBestValue = plan.isPopular && !showRecommended;
-                return (showRecommended || showBestValue) ? (
-                  <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-primary">
-                    <Star className="h-3 w-3 mr-1" />
-                    {showRecommended ? 'Recommended' : 'Best Value'}
-                  </Badge>
-                ) : null;
-              })()}
-              
-              <CardHeader className="text-center">
-                <CardTitle className="text-xl">{getDisplayName(plan.name)}</CardTitle>
-                {plan.description && (
-                  <CardDescription>{plan.description}</CardDescription>
-                )}
-                <div className="mt-4">
-                  <div className="text-3xl font-bold">
-                    {formatPrice(plan.price, plan.currency)}
+        {plans.length === 0 ? (
+          <div className="text-center py-12">
+            <CreditCard className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+            <h3 className="text-lg font-semibold mb-2">No pricing plans available</h3>
+            <p className="text-muted-foreground">Please check back later or contact support.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-3xl mx-auto">
+            {plans.map((plan) => (
+              <Card key={plan.id} className={`relative ${plan.isPopular ? '' : ''}`}>
+                {plan.isPopular && <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]} />}
+                {(() => {
+                  const normalized = normalizePlanName(plan.name);
+                  const showRecommended = normalized === 'basic pack' || normalized === 'starter';
+                  const showBestValue = plan.isPopular && !showRecommended;
+                  return (showRecommended || showBestValue) ? (
+                    <Badge className="absolute -top-2 left-1/2 transform -translate-x-1/2 bg-primary">
+                      <Star className="h-3 w-3 mr-1" />
+                      {showRecommended ? 'Recommended' : 'Best Value'}
+                    </Badge>
+                  ) : null;
+                })()}
+
+                <CardHeader className="text-center">
+                  <CardTitle className="text-xl">{getDisplayName(plan.name)}</CardTitle>
+                  {plan.description && (
+                    <CardDescription>{plan.description}</CardDescription>
+                  )}
+                  <div className="mt-4">
+                    <div className="text-3xl font-bold">
+                      {formatPrice(plan.price, plan.currency)}
+                    </div>
+                    {(() => {
+                      const normalized = normalizePlanName(plan.name);
+                      if (normalized === 'basic pack' || normalized === 'starter') {
+                        return (
+                          <div className="text-sm text-muted-foreground">Less than $0.50 per photo</div>
+                        );
+                      }
+                      return null;
+                    })()}
                   </div>
-                  {(() => {
-                    const normalized = normalizePlanName(plan.name);
-                    if (normalized === 'basic pack' || normalized === 'starter') {
-                      return (
-                        <div className="text-sm text-muted-foreground">Less than $0.50 per photo</div>
-                      );
-                    }
-                    return null;
-                  })()}
-                </div>
                 </CardHeader>
-              
-              <CardContent className="pb-2">
-                <ul className="space-y-2 text-sm">
-                  {(() => {
-                    const normalized = normalizePlanName(plan.name);
-                    const featureList =
-                      featuresByPlanName[normalized] ||
-                      // Fallback by credits if name mapping changes
-                      (plan.credits <= 30 ? starterFeatures : proFeatures);
-                    return featureList.map((feature, idx) => (
-                      <li key={`${plan.id}-${idx}`} className="flex items-center gap-2">
-                        <Check className="h-4 w-4 text-[#111827]" />
-                        <span className="text-muted-foreground">{feature}</span>
-                      </li>
-                    ));
-                  })()}
-                </ul>
-              </CardContent
-              >
-              
-              <CardFooter>
-                <DodoCheckoutButton
-                  planId={plan.id}
-                  userId={user?.id || ''}
-                  amount={plan.price}
-                  credits={plan.credits}
-                  planName={plan.name}
-                  className="w-full border border-input bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer"
+
+                <CardContent className="pb-2">
+                  <ul className="space-y-2 text-sm">
+                    {(() => {
+                      const normalized = normalizePlanName(plan.name);
+                      const featureList =
+                        featuresByPlanName[normalized] ||
+                        // Fallback by credits if name mapping changes
+                        (plan.credits <= 30 ? starterFeatures : proFeatures);
+                      return featureList.map((feature, idx) => (
+                        <li key={`${plan.id}-${idx}`} className="flex items-center gap-2">
+                          <Check className="h-4 w-4 text-[#111827]" />
+                          <span className="text-muted-foreground">{feature}</span>
+                        </li>
+                      ));
+                    })()}
+                  </ul>
+                </CardContent
                 >
-                  {(() => {
-                    const normalized = normalizePlanName(plan.name);
-                    if (normalized === 'basic pack' || normalized === 'starter') {
-                      return 'Buy Basic Pack';
-                    }
-                    if (normalized === 'premium pack' || normalized === 'pro') {
-                      return 'Buy Premium Pack';
-                    }
-                    return 'Buy Pack';
-                  })()}
-                </DodoCheckoutButton>
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-      )}
 
-     
-{/* Founder's Personal Guarantee */}
-<div className="mt-10 max-w-3xl mx-auto text-left">
-  <div className="rounded-xl border border-indigo-100 bg-indigo-50/50 dark:bg-muted/20 p-6 relative overflow-hidden">
-    
-    {/* Visual Accent */}
-    <div className="absolute top-0 left-0 w-1 h-full bg-indigo-500/80"></div>
+                <CardFooter>
+                  <DodoCheckoutButton
+                    planId={plan.id}
+                    userId={user?.id || ''}
+                    amount={plan.price}
+                    credits={plan.credits}
+                    planName={plan.name}
+                    className="w-full border border-input bg-primary text-primary-foreground hover:bg-primary/90 cursor-pointer"
+                  >
+                    {(() => {
+                      const normalized = normalizePlanName(plan.name);
+                      if (normalized === 'basic pack' || normalized === 'starter') {
+                        return 'Buy Standard Roll';
+                      }
+                      if (normalized === 'premium pack' || normalized === 'pro') {
+                        return 'Buy Premium Roll';
+                      }
+                      return 'Buy Pack';
+                    })()}
+                  </DodoCheckoutButton>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        )}
 
-    <div className="pl-2">
-      {/* Headline */}
-      <h4 className="text-lg font-bold text-foreground mb-3 flex items-center gap-2">
-        <span>👋</span> A personal note from the founder
-      </h4>
 
-      {/* The Strong "Solo Founder" Copy */}
-      <div className="space-y-4 text-sm text-muted-foreground leading-relaxed">
-        <p className="text-foreground font-medium">
-          I get it—spending money on AI without a free trial feels risky.
+        <p className="text-center  text-gray-600 text-base leading-relaxed mt-8">
+          Payments are processed securely with
+          <Link href="https://dodopayments.com" className="text-[#ff6f00] font-medium">
+            <Image src="/dodo-logo.png" alt="dodopayments" width={96} height={96} className="inline-block ml-1 bg-black" />
+          </Link>
         </p>
-        
-        <p>
-          "Will it actually look like me?" "Is this a scam?" — I get it. You are not alone in feeling that way.
-        </p>
-
-        <p>
-          <span className="font-semibold text-foreground">I am a solo founder building Unrealshot AI.</span> I don't have a support team or a corporate policy manual. I just have my reputation and the code I wrote.
-        </p>
-
-        <p>
-          Because I built this myself, every single user matters to me. I stand by my work 100%. If the AI misses the mark, or if you aren't happy for any reason, I will personally fix it or refund you. You aren't just a ticket number here.
-        </p>
-      </div>
-
-      {/* The Direct Line */}
-      <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 text-sm">
-        <a
-          href="mailto:support@unrealshot.com"
-          className="inline-flex items-center justify-center px-4 py-2 rounded-md bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition-all shadow-sm group"
-        >
-          <MessageSquare className="w-4 h-4 mr-2" />
-          Email me directly
-        </a>
-        <span className="text-muted-foreground text-xs sm:text-sm">
-          I usually reply within a few hours.
-        </span>
-      </div>
-    </div>
-
-  </div>
-</div>
-
-
-      <p className="text-center  text-gray-600 text-base leading-relaxed mt-8">
-     Payments are processed securely with 
-     <Link href="https://dodopayments.com" className="text-[#ff6f00] font-medium">
-      <Image src="/dodo-logo.png" alt="dodopayments" width={96} height={96} className="inline-block ml-1 bg-black" />
-     </Link>
-    </p>
       </div>
       <FeedbackForm userId={user.id} />
     </>

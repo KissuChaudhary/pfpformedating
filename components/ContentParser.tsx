@@ -16,7 +16,7 @@ export function ContentParser({ content }: ContentParserProps) {
       )}
       <div className="prose prose-lg max-w-none mb-8" dangerouslySetInnerHTML={{ __html: parsedContent }} />
       {faqs.length > 0 && (
-          <ServerFAQAccordion faqs={faqs} />
+        <ServerFAQAccordion faqs={faqs} />
       )}
     </>
   )

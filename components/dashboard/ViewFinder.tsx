@@ -1,0 +1,493 @@
+'use client';
+
+import React, { useState, useEffect, useRef } from 'react';
+import { enhancePrompt, generateCandidPhoto } from '@/lib/genai';
+import { ChevronDown, Plus, Download } from 'lucide-react';
+import Link from 'next/link';
+
+// Configuration for the 4 physics engines (Modes)
+const MODES = [
+    { id: 'FLASH', label: 'NIGHT FLASH', desc: 'Hard shadows' },
+    { id: 'GOLDEN', label: 'GOLDEN HOUR', desc: 'Warm sun' },
+    { id: 'GRITTY', label: 'GRITTY VINTAGE', desc: 'B&W Street' },
+    { id: 'CINE', label: 'CINE SHOOT', desc: 'Cinematic' }
+];
+
+const RATIOS = [
+    { label: '9:16', value: '9:16', class: 'aspect-[9/16]' },
+    { label: '3:4', value: '3:4', class: 'aspect-[3/4]' },
+    { label: '4:5', value: '4:5', class: 'aspect-[4/5]' },
+    { label: '4:3', value: '4:3', class: 'aspect-[4/3]' },
+    { label: '5:4', value: '5:4', class: 'aspect-[5/4]' },
+];
+
+interface Model {
+    id: number;
+    name: string;
+    type: string;
+    samples: { id: number; uri: string }[];
+}
+
+interface GeneratedImage {
+    id: number;
+    uri: string;
+    created_at: string;
+}
+
+export const Viewfinder: React.FC = () => {
+    // Models state
+    const [models, setModels] = useState<Model[]>([]);
+    const [selectedModel, setSelectedModel] = useState<Model | null>(null);
+    const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
+    const [isLoadingModels, setIsLoadingModels] = useState(true);
+
+    // Viewfinder State
+    const [prompt, setPrompt] = useState('');
+    const [mode, setMode] = useState(MODES[0]);
+    const [aspectRatio, setAspectRatio] = useState(RATIOS[0]);
+    const [isDeveloping, setIsDeveloping] = useState(false);
+
+    // Generated images from database
+    const [generatedImages, setGeneratedImages] = useState<GeneratedImage[]>([]);
+    const [flashTrigger, setFlashTrigger] = useState(false);
+    const [statusMessage, setStatusMessage] = useState('');
+    const [downloadingImageId, setDownloadingImageId] = useState<number | null>(null);
+
+    const gridEndRef = useRef<HTMLDivElement>(null);
+    const galleryRef = useRef<HTMLDivElement>(null);
+
+    // Fetch models on mount
+    useEffect(() => {
+        const fetchModels = async () => {
+            try {
+                const res = await fetch('/api/models');
+                if (res.ok) {
+                    const data = await res.json();
+                    setModels(data.models || []);
+                    if (data.models?.length > 0) {
+                        setSelectedModel(data.models[0]);
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to fetch models:', error);
+            } finally {
+                setIsLoadingModels(false);
+            }
+        };
+        fetchModels();
+    }, []);
+
+    // Fetch generated images when model changes
+    useEffect(() => {
+        if (!selectedModel) return;
+
+        const fetchImages = async () => {
+            try {
+                const res = await fetch(`/api/models/${selectedModel.id}/images`);
+                if (res.ok) {
+                    const data = await res.json();
+                    setGeneratedImages(data.images || []);
+                }
+            } catch (error) {
+                console.error('Failed to fetch images:', error);
+            }
+        };
+        fetchImages();
+    }, [selectedModel]);
+
+    // Main Logic: The Shutter
+    const handleShutter = async () => {
+        if (prompt.length === 0 || isDeveloping || !selectedModel) return;
+
+        setFlashTrigger(true);
+        setTimeout(() => setFlashTrigger(false), 200);
+
+        setIsDeveloping(true);
+        setStatusMessage('Developing...');
+
+        try {
+            // Get reference images from selected model's samples
+            const refImages = selectedModel.samples.map(s => s.uri);
+            const gender = selectedModel.type || 'Female';
+
+            const enhancedPrompt = await enhancePrompt(prompt, mode.id, gender.toUpperCase());
+            console.log("Enhanced Prompt:", enhancedPrompt);
+
+            const imageBase64 = await generateCandidPhoto(enhancedPrompt, refImages, aspectRatio.value);
+
+            if (imageBase64) {
+                setStatusMessage('Saving...');
+
+                // Save to R2 and database
+                const saveRes = await fetch(`/api/models/${selectedModel.id}/images`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ imageBase64 }),
+                });
+
+                if (saveRes.ok) {
+                    const { image, newBalance } = await saveRes.json();
+                    // Add to the beginning of the list
+                    setGeneratedImages(prev => [image, ...prev]);
+                    setStatusMessage('Saved');
+
+                    // Auto-scroll to gallery on mobile for better UX
+                    setTimeout(() => {
+                        galleryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+
+                    // Dispatch credit update event for real-time UI updates
+                    // The sidebar/header components listen to this via useCreditManager
+                    if (newBalance !== undefined && typeof window !== 'undefined') {
+                        window.dispatchEvent(new CustomEvent('creditUpdate', {
+                            detail: {
+                                newBalance,
+                                change: -1,
+                                operation: 'deduct',
+                                timestamp: Date.now()
+                            }
+                        }));
+                    }
+                } else {
+                    console.warn('Failed to save image, showing locally');
+                    // Still show the image locally even if save failed
+                    setGeneratedImages(prev => [{ id: Date.now(), uri: imageBase64, created_at: new Date().toISOString() }, ...prev]);
+                }
+            } else {
+                console.warn("Generation returned null");
+                setStatusMessage('Failed');
+            }
+
+            setPrompt('');
+        } catch (error) {
+            console.error("Generation failed:", error);
+            setStatusMessage('Error');
+            alert("Generation failed. Please try again.");
+        } finally {
+            setIsDeveloping(false);
+        }
+    };
+
+    if (isLoadingModels) {
+        return (
+            <div className="h-[calc(100vh-4rem)] flex items-center justify-center">
+                <div className="text-zinc-400">Loading models...</div>
+            </div>
+        );
+    }
+
+    // SHOOTING SCREEN
+    return (
+        <div className="relative min-h-[calc(100vh-4rem)] md:h-[calc(100vh-4rem)] flex flex-col md:flex-row bg-background md:overflow-hidden">
+            {/* FLASH OVERLAY */}
+            <div className={`fixed inset-0 bg-white z-[100] pointer-events-none transition-opacity duration-150 ease-out ${flashTrigger ? 'opacity-100' : 'opacity-0'}`}></div>
+
+            {/* --- LEFT PANEL: CONTROLS --- */}
+            <div className="order-1 w-full md:w-[30%] md:min-w-[340px] min-h-[calc(100vh-4rem)] md:min-h-0 md:h-full flex flex-col relative bg-zinc-900 rounded-lg border border-zinc-700 z-20">
+
+                {/* Scrollable Form */}
+                <div className="flex-1 overflow-y-auto custom-scrollbar p-5 space-y-6">
+
+                    {/* 1. Model Selector */}
+                    <div>
+                        <label className="text-xs font-medium text-zinc-400 mb-3 block uppercase tracking-wide">Your Model</label>
+                        <p className="text-[10px] text-zinc-500 mb-2">Choose which trained model to use for image generation</p>
+                        <div className="relative">
+                            <button
+                                onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
+                                className="w-full flex items-center justify-between gap-2 px-4 py-3 bg-zinc-800/50 rounded-lg border border-zinc-700 hover:border-zinc-600 transition-colors"
+                            >
+                                <div className="flex items-center gap-3">
+                                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-zinc-700 to-zinc-800 border border-zinc-600 flex items-center justify-center overflow-hidden">
+                                        {selectedModel?.samples?.[0]?.uri ? (
+                                            <img
+                                                src={selectedModel.samples[0].uri}
+                                                alt=""
+                                                className="w-full h-full object-cover"
+                                                onError={(e) => {
+                                                    e.currentTarget.style.display = 'none';
+                                                }}
+                                            />
+                                        ) : (
+                                            <span className="text-xs font-bold text-zinc-500">{selectedModel?.name?.charAt(0) || '?'}</span>
+                                        )}
+                                    </div>
+                                    <span className="text-sm font-medium text-white">
+                                        {selectedModel?.name || 'Select Model'}
+                                    </span>
+                                </div>
+                                <ChevronDown className={`w-4 h-4 text-zinc-400 transition-transform ${isModelDropdownOpen ? 'rotate-180' : ''}`} />
+                            </button>
+
+                            {isModelDropdownOpen && (
+                                <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl z-50 overflow-hidden">
+                                    {models.map((model) => (
+                                        <button
+                                            key={model.id}
+                                            onClick={() => {
+                                                setSelectedModel(model);
+                                                setIsModelDropdownOpen(false);
+                                            }}
+                                            className={`w-full px-4 py-3 text-left text-sm hover:bg-zinc-700 transition-colors flex items-center gap-3 ${selectedModel?.id === model.id ? 'bg-zinc-700 text-white' : 'text-zinc-300'
+                                                }`}
+                                        >
+                                            <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-zinc-700 to-zinc-800 border border-zinc-600 flex items-center justify-center overflow-hidden shrink-0">
+                                                {model.samples?.[0]?.uri ? (
+                                                    <img
+                                                        src={model.samples[0].uri}
+                                                        alt=""
+                                                        className="w-full h-full object-cover"
+                                                        onError={(e) => {
+                                                            e.currentTarget.style.display = 'none';
+                                                        }}
+                                                    />
+                                                ) : (
+                                                    <span className="text-xs font-bold text-zinc-500">{model.name?.charAt(0) || '?'}</span>
+                                                )}
+                                            </div>
+                                            {model.name}
+                                        </button>
+                                    ))}
+                                    <Link
+                                        href="/models/create"
+                                        className="flex items-center gap-2 w-full px-4 py-3 text-left text-sm text-emerald-400 hover:bg-zinc-700 border-t border-zinc-700"
+                                    >
+                                        <Plus className="w-4 h-4" />
+                                        Train New Model
+                                    </Link>
+                                </div>
+                            )}
+                        </div>
+                    </div>
+
+                    {/* 2. Aspect Ratio Selector */}
+                    <div>
+                        <label className="text-xs font-medium text-zinc-400 mb-3 block uppercase tracking-wide">Aspect Ratio</label>
+                        <div className="flex gap-2 overflow-x-auto pb-1 no-scrollbar">
+                            {RATIOS.map((r) => (
+                                <button
+                                    key={r.value}
+                                    onClick={() => setAspectRatio(r)}
+                                    className={`cursor-pointer flex flex-col items-center gap-2 p-2 rounded-lg border transition-all min-w-[52px] ${aspectRatio.value === r.value
+                                        ? 'bg-white text-black shadow-sm'
+                                        : 'bg-transparent border-zinc-700 text-zinc-400 hover:bg-white/5 hover:text-white'
+                                        }`}
+                                >
+                                    <div className={`w-5 bg-current rounded-[1px] opacity-80 ${r.class}`}></div>
+                                    <span className="text-[10px] font-medium">{r.label}</span>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 3. Lighting Style */}
+                    <div>
+                        <label className="text-xs font-medium text-zinc-400 mb-3 block uppercase tracking-wide">Photoshoot Style</label>
+                        <div className="grid grid-cols-2 gap-2">
+                            {MODES.map((m) => (
+                                <button
+                                    key={m.id}
+                                    onClick={() => setMode(m)}
+                                    className={`cursor-pointer p-2.5 rounded-lg border text-left transition-all ${mode.id === m.id
+                                        ? 'bg-white text-black shadow-sm'
+                                        : 'bg-transparent border-zinc-700 hover:bg-white/5 hover:border-zinc-700'
+                                        }`}
+                                >
+                                    <div className={`font-semibold text-xs mb-0.5 ${mode.id === m.id ? 'text-black' : 'text-zinc-400'}`}>{m.label}</div>
+                                    <div className={`text-[10px] font-medium ${mode.id === m.id ? 'text-zinc-600' : 'text-zinc-500'}`}>{m.desc}</div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 4. Scene Input */}
+                    <div>
+                        <label className="text-xs font-medium text-zinc-400 mb-3 block uppercase tracking-wide">Scene Description</label>
+                        <div className="relative group">
+                            <textarea
+                                value={prompt}
+                                onChange={(e) => setPrompt(e.target.value)}
+                                placeholder="A candid shot of..."
+                                className="w-full h-28 bg-zinc-800/30 border border-zinc-700 text-white text-sm p-4 rounded-lg resize-none outline-none focus:border-zinc-500 focus:bg-zinc-800/50 transition-all placeholder:text-zinc-500"
+                            />
+                            <div className="absolute bottom-3 right-3 text-[10px] font-medium text-accent opacity-50 group-focus-within:opacity-100 transition-opacity pointer-events-none">
+                                AI Enhanced
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Footer Button */}
+                <div className="p-5 border-t border-zinc-700 bg-zinc-900/50 backdrop-blur-sm">
+                    <button
+                        onClick={handleShutter}
+                        disabled={prompt.length === 0 || isDeveloping || !selectedModel}
+                        className="cursor-pointer w-full h-12 bg-white text-black font-semibold text-sm rounded-lg hover:bg-zinc-200 transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:active:scale-100 flex items-center justify-center gap-2 shadow-lg shadow-white/5"
+                    >
+                        {isDeveloping ? (
+                            <>
+                                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                Developing...
+                            </>
+                        ) : (
+                            "Capture Frame"
+                        )}
+                    </button>
+                </div>
+            </div>
+
+            {/* --- RIGHT PANEL: OUTPUT GALLERY --- */}
+            <div ref={galleryRef} className="order-2 w-full md:w-[70%] min-h-[50vh] md:h-full bg-background relative flex flex-col">
+
+
+
+                {/* Gallery Area */}
+                <div className="flex-1 overflow-y-auto md:px-4 custom-scrollbar">
+                    {generatedImages.length === 0 && !isDeveloping ? (
+                        <div className="h-full flex flex-col items-center justify-center text-center opacity-40 select-none">
+                            <div className="w-16 h-16 rounded-2xl border-2 border-dashed border-zinc-600 mb-4 flex items-center justify-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-500"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>
+                            </div>
+                            <h3 className="text-sm font-medium text-white">No exposures yet</h3>
+                            <p className="text-xs text-zinc-400 mt-1">Compose your shot to begin</p>
+                        </div>
+                    ) : (
+                        <div className="columns-2 md:columns-2 lg:columns-3 gap-2 md:gap-4 space-y-2 md:space-y-3 pb-12 pt-4 md:pt-0">
+                            {/* Custom Loading Animation */}
+                            {isDeveloping && (
+                                <div className="break-inside-avoid w-full bg-gradient-to-br from-zinc-900 to-zinc-800 border border-zinc-700 rounded-lg overflow-hidden aspect-[3/4] flex flex-col items-center justify-center relative">
+                                    {/* Animated camera shutter */}
+                                    <div className="relative w-16 h-16 mb-4">
+                                        {/* Outer ring */}
+                                        <div className="absolute inset-0 rounded-full border-2 border-zinc-600"></div>
+
+                                        {/* Spinning segments */}
+                                        <div className="absolute inset-1 rounded-full overflow-hidden">
+                                            {[...Array(8)].map((_, i) => (
+                                                <div
+                                                    key={i}
+                                                    className="absolute w-full h-full origin-center"
+                                                    style={{
+                                                        transform: `rotate(${i * 45}deg)`,
+                                                    }}
+                                                >
+                                                    <div
+                                                        className="absolute top-0 left-1/2 w-0.5 h-4 -translate-x-1/2 bg-white/30 rounded-full animate-pulse"
+                                                        style={{
+                                                            animationDelay: `${i * 100}ms`,
+                                                        }}
+                                                    ></div>
+                                                </div>
+                                            ))}
+                                        </div>
+
+                                        {/* Center dot with glow */}
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <div className="w-3 h-3 bg-white rounded-full animate-ping opacity-75"></div>
+                                            <div className="absolute w-2 h-2 bg-white rounded-full"></div>
+                                        </div>
+                                    </div>
+
+                                    {/* Text */}
+                                    <div className="text-xs font-medium text-white/80 tracking-widest uppercase">
+                                        Creating
+                                    </div>
+                                    <div className="flex gap-1 mt-1">
+                                        <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                                        <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                                        <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                                    </div>
+
+                                    {/* Subtle shimmer effect */}
+                                    <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-30">
+                                        <div
+                                            className="absolute inset-x-0 h-20 bg-gradient-to-b from-white/10 via-white/5 to-transparent"
+                                            style={{
+                                                animation: 'shimmer 2s ease-in-out infinite',
+                                            }}
+                                        ></div>
+                                    </div>
+                                    <style jsx>{`
+                                        @keyframes shimmer {
+                                            0%, 100% { transform: translateY(-100%); }
+                                            50% { transform: translateY(400%); }
+                                        }
+                                    `}</style>
+                                </div>
+                            )}
+
+                            {/* Photos from database */}
+                            {generatedImages.map((image) => (
+                                <div key={image.id} className="break-inside-avoid group relative bg-zinc-900 border border-zinc-700 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-black/50 hover:border-zinc-600 hover:-translate-y-1">
+                                    <img
+                                        src={image.uri}
+                                        className="w-full h-auto object-cover block"
+                                        alt={`Generated ${image.id}`}
+                                    />
+                                    {/* Overlay */}
+                                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-3 backdrop-blur-[2px]">
+                                        <div className="flex gap-2">
+                                            <button
+                                                disabled={downloadingImageId === image.id}
+                                                onClick={async () => {
+                                                    if (downloadingImageId === image.id) return;
+                                                    setDownloadingImageId(image.id);
+                                                    try {
+                                                        // Use proxy to avoid CORS
+                                                        const response = await fetch('/api/download', {
+                                                            method: 'POST',
+                                                            headers: { 'Content-Type': 'application/json' },
+                                                            body: JSON.stringify({ imageUrl: image.uri }),
+                                                        });
+
+                                                        if (!response.ok) throw new Error('Download failed');
+
+                                                        const blob = await response.blob();
+                                                        const url = window.URL.createObjectURL(blob);
+                                                        const a = document.createElement('a');
+                                                        a.href = url;
+                                                        a.download = `unrealshot_${image.id}.png`;
+                                                        document.body.appendChild(a);
+                                                        a.click();
+                                                        document.body.removeChild(a);
+                                                        window.URL.revokeObjectURL(url);
+                                                    } catch (error) {
+                                                        console.error('Download failed:', error);
+                                                    } finally {
+                                                        setDownloadingImageId(null);
+                                                    }
+                                                }}
+                                                className="cursor-pointer px-4 py-2 bg-white text-black text-xs font-semibold rounded-full hover:bg-zinc-200 transition-colors flex items-center gap-1.5 disabled:opacity-70 disabled:cursor-wait"
+                                            >
+                                                {downloadingImageId === image.id ? (
+                                                    <svg className="animate-spin w-3.5 h-3.5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                                                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                    </svg>
+                                                ) : (
+                                                    <Download className="w-3.5 h-3.5" />
+                                                )}
+                                            </button>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                            <div ref={gridEndRef} />
+                        </div>
+                    )}
+                </div>
+            </div>
+
+            <style>{`
+            .custom-scrollbar::-webkit-scrollbar { width: 5px; }
+            .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #555; }
+        `}</style>
+        </div>
+    );
+};

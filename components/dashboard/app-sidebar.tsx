@@ -41,7 +41,7 @@ const navSecondary = [
 // Credits Card Component
 function CreditsCard({ userId }: { userId?: string }) {
   const { balance, loading } = useCreditManager(userId || null)
-  
+
   if (loading) {
     return (
       <Card className="mb-4 py-2">
@@ -53,7 +53,7 @@ function CreditsCard({ userId }: { userId?: string }) {
       </Card>
     )
   }
-  
+
   return (
     <Card className="py-2">
       <CardContent className="gap-1 flex flex-col px-3">
@@ -61,7 +61,7 @@ function CreditsCard({ userId }: { userId?: string }) {
         <div className="text-xs text-muted-foreground mb-3 flex justify-between">
           <span className="flex items-center gap-2"><Coins className="h-3 w-3" />Credits</span> <span className="text-amber-600"> {balance.toLocaleString()}</span>
         </div>
-        <Button size="sm" className="w-full bg-black hover:bg-black/90 text-white border-0" asChild>
+        <Button size="sm" className="w-full bg-white text-black hover:bg-zinc-200 transition-all active:scale-[0.98] border-0" asChild>
           <Link href="/buy-credits">
             <Sparkles className="h-3 w-3" /> Get Credits
           </Link>
@@ -71,9 +71,9 @@ function CreditsCard({ userId }: { userId?: string }) {
   )
 }
 
-export function AppSidebar({ 
+export function AppSidebar({
   user,
-  ...props 
+  ...props
 }: React.ComponentProps<typeof Sidebar> & {
   user?: {
     name: string
@@ -93,61 +93,45 @@ export function AppSidebar({
 
   React.useEffect(() => {
     let active = true
-    ;(async () => {
-      try {
-        let uid = userData.id
-        if (!uid) {
-          const { data: { user } } = await supabase.auth.getUser()
-          uid = user?.id
-        }
-        if (!uid) {
+      ; (async () => {
+        try {
+          let uid = userData.id
+          if (!uid) {
+            const { data: { user } } = await supabase.auth.getUser()
+            uid = user?.id
+          }
+          if (!uid) {
+            if (active) setHasTrainedModel(false)
+            return
+          }
+          const { data } = await supabase
+            .from("models")
+            .select("id")
+            .eq("user_id", uid)
+            .eq("status", "finished")
+            .limit(1)
+          if (active) setHasTrainedModel(!!data && data.length > 0)
+        } catch (e) {
           if (active) setHasTrainedModel(false)
-          return
         }
-        const { data } = await supabase
-          .from("models")
-          .select("id")
-          .eq("user_id", uid)
-          .eq("status", "finished")
-          .limit(1)
-        if (active) setHasTrainedModel(!!data && data.length > 0)
-      } catch (e) {
-        if (active) setHasTrainedModel(false)
-      }
-    })()
+      })()
     return () => { active = false }
   }, [supabase, userData.id])
 
   const navItems = React.useMemo(() => [
     {
-      title: "Dashboard",
+      title: "Generate Photos",
       url: "/dashboard",
       icon: SquareTerminal,
       isActive: true,
     },
-    ...(hasTrainedModel ? [
-      {
-        title: "Generate Photos",
-        url: "/generate-image",
-        icon: SparklesIcon,
-      },
-      {
-      title: "Trained Models",
-      url: "/trained-models",
-      icon: FolderOpen,
-    },
-    ] : []),
     {
       title: "My Gallery",
       url: "/gallery",
       icon: ImageIcon,
     },
-    {
-      title: "Photo Upload Guide",
-      url: "/photo-upload-guide",
-      icon: Upload,
-    },
-  ], [hasTrainedModel])
+
+  ], [])
 
   return (
     <Sidebar variant="inset" {...props}>
@@ -155,8 +139,8 @@ export function AppSidebar({
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild>
-               <Link href="/">
-                  <Image src="/site-logo.png" alt="Unrealshot AI" width={30} height={30} className="rounded-sm"/>
+              <Link href="/">
+                <Image src="/site-logo.png" alt="Unrealshot AI" width={30} height={30} className="rounded-sm" />
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-semibold">Unrealshot AI</span>
                   <span className="truncate text-xs">Realistic AI Photoshoots</span>

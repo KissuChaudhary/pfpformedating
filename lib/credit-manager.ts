@@ -77,9 +77,9 @@ class CreditManager {
             const newBalance = payload.new.credits as number
             const oldBalance = this.userCredits.get(userId) || 0
             const change = newBalance - oldBalance
-            
+
             this.userCredits.set(userId, newBalance)
-            
+
             // Emit credit update event
             this.emitCreditUpdate({
               userId,
@@ -105,9 +105,9 @@ class CreditManager {
   updateCreditsLocally(userId: string, newBalance: number, operation: 'add' | 'deduct' | 'set' = 'set') {
     const oldBalance = this.userCredits.get(userId) || 0
     const change = newBalance - oldBalance
-    
+
     this.userCredits.set(userId, newBalance)
-    
+
     this.emitCreditUpdate({
       userId,
       newBalance,
@@ -120,7 +120,7 @@ class CreditManager {
   // Add event listener for credit updates
   onCreditUpdate(callback: (event: CreditUpdateEvent) => void): () => void {
     this.listeners.add(callback)
-    
+
     // Return unsubscribe function
     return () => {
       this.listeners.delete(callback)
@@ -185,15 +185,27 @@ export function useCreditManager(userId: string | null) {
       setLoading(false)
     })
 
-    // Listen for credit updates
+    // Listen for credit updates from credit manager
     const unsubscribe = creditManager.onCreditUpdate((event) => {
       if (event.userId === userId) {
         setBalance(event.newBalance)
       }
     })
 
+    // Also listen for DOM events (for cross-component updates without userId)
+    const handleDOMCreditUpdate = (event: CustomEvent) => {
+      if (event.detail?.newBalance !== undefined) {
+        setBalance(event.detail.newBalance)
+        // Also update the credit manager's local cache
+        creditManager.updateCreditsLocally(userId, event.detail.newBalance, event.detail.operation || 'set')
+      }
+    }
+
+    window.addEventListener('creditUpdate', handleDOMCreditUpdate as EventListener)
+
     return () => {
       unsubscribe()
+      window.removeEventListener('creditUpdate', handleDOMCreditUpdate as EventListener)
     }
   }, [userId])
 
@@ -221,18 +233,18 @@ export async function makeApiCallWithCreditUpdate<T>(
   userId: string
 ): Promise<T> {
   const response = await apiCall()
-  
+
   if (!response.ok) {
     throw new Error(`API call failed: ${response.status}`)
   }
-  
+
   const data = await response.json()
-  
+
   // If the response includes a new balance, update it locally for immediate UI feedback
   if (data.newBalance !== undefined) {
     creditManager.updateCreditsLocally(userId, data.newBalance)
   }
-  
+
   return data
 }
 

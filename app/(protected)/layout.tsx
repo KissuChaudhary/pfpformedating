@@ -22,7 +22,7 @@ export default async function DashboardLayout({
   children: React.ReactNode
 }) {
   const supabase = await createClient()
-  
+
   // Check if user is authenticated
   const {
     data: { user },
@@ -36,7 +36,7 @@ export default async function DashboardLayout({
   // Fetch user's credit balance for header display
   const { balance: creditBalance } = await creditService.getUserCredits(user.id)
   return (
-    <div className="protected-scope">
+    <div className="protected-scope dark bg-background text-foreground">
       <NavigationProgress />
       <ClarityInit projectId={process.env.NEXT_PUBLIC_CLARITY_PROJECT_ID || ""} userId={user.id} />
       {/* Checkout return tracking script moved here from root layout to scope it to protected pages */}
@@ -83,7 +83,7 @@ export default async function DashboardLayout({
       </Script>
       <OnboardingGate>
         <SidebarProvider>
-          <AppSidebar 
+          <AppSidebar
             user={{
               name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'User',
               email: user.email || '',
