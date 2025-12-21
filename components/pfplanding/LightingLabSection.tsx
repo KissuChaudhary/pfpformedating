@@ -1,34 +1,75 @@
 import React from 'react';
+import { Zap, Sun, Film, Video } from 'lucide-react';
 
 export const LightingLabSection: React.FC = () => {
+    const modes = [
+        {
+            icon: Zap,
+            name: "Flash Mode",
+            desc: "Hard light, red eyes, and the messy energy of a 3am party."
+        },
+        {
+            icon: Sun,
+            name: "Golden Mode",
+            desc: "Soft natural sunlight, dreamy skin tones, and morning coffee vibes."
+        },
+        {
+            icon: Film,
+            name: "Gritty Mode",
+            desc: "High contrast, street texture, and raw documentary realism."
+        },
+        {
+            icon: Video,
+            name: "Cine Mode",
+            desc: "Neon lights, moody shadows, and cinematic color grading."
+        },
+    ];
+
     return (
         <section className="min-h-[80vh] border-b border-foreground/10 bg-[#080808] grid md:grid-cols-2">
-            {/* Left Column: Text & Context */}
-            <div className="flex flex-col justify-center p-8 md:p-20 border-r border-foreground/10 h-full">
+            {/* Left Column: Text & Visual Menu */}
+            <div className="flex flex-col justify-center p-8 md:p-16 lg:p-20 border-r border-foreground/10 h-full">
+                {/* Heading */}
                 <div className="mb-8">
-                    <h2 className="font-display text-4xl md:text-6xl font-bold uppercase leading-[0.9] mb-6">
-                        Choose Your <br />
-                        <span className="text-transparent stroke-text">Physics</span>.
+                    <div className="font-mono text-[10px] text-foreground/40 mb-4 tracking-widest">
+                        AESTHETIC_ENGINE // 4_MODES
+                    </div>
+                    <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase leading-[0.9] mb-6">
+                        Choose Your<br />
+                        <span className="text-transparent stroke-text">Aesthetic</span>.
                     </h2>
-                    <p className="font-mono text-foreground/70 text-sm md:text-base max-w-md leading-relaxed">
-                        We don't use filters. We re-render the scene's light transport. Choose the lighting condition that matches your vibe.
+                    <p className="font-mono text-foreground/60 text-sm max-w-md leading-relaxed">
+                        Don't settle for one generic "AI look." We give you <strong className="text-foreground">four distinct film stocks</strong> to match your mood. Unlike basic filters that just overlay color, our engine completely rebuilds the lighting, texture, and environment of the scene.
                     </p>
                 </div>
 
-                <div className="mt-8 inline-block border border-foreground/20 px-4 py-2 bg-white/5 w-fit">
-                    <span className="font-mono text-[10px] tracking-[0.2em] text-foreground/40 uppercase">
-                        Lighting_Engine_V2 // SELECT_MODE
-                    </span>
+                {/* The 4 Modes List */}
+                <div className="space-y-3 mt-4">
+                    {modes.map((mode, i) => (
+                        <div key={i} className="group flex items-start gap-4 p-3 -mx-3 border border-transparent hover:border-foreground/10 hover:bg-white/5 transition-all cursor-default">
+                            <div className="w-8 h-8 flex items-center justify-center border border-foreground/20 group-hover:border-accent/50 transition-colors">
+                                <mode.icon className="w-4 h-4 text-foreground/50 group-hover:text-accent transition-colors" />
+                            </div>
+                            <div>
+                                <h4 className="font-display text-sm font-bold uppercase text-foreground group-hover:text-accent transition-colors mb-1">
+                                    {mode.name}
+                                </h4>
+                                <p className="font-mono text-[11px] text-foreground/50 leading-relaxed">
+                                    {mode.desc}
+                                </p>
+                            </div>
+                        </div>
+                    ))}
                 </div>
             </div>
 
             {/* Right Column: 2x2 Grid of Samples */}
             <div className="grid grid-cols-2 bg-black">
                 {[
-                    { title: "Tungsten Flash", k: "3200K + FLASH", desc: "Harsh, night-out, paparazzi.", img: "/showcase18.png" },
-                    { title: "Cinematic Cold", k: "5600K DAYLIGHT", desc: "Moody blue, window, soft.", img: "/showcase16.png" },
-                    { title: "Golden Hour", k: "2800K WARM", desc: "Late Night, haze, warmth.", img: "/showcase14.png" },
-                    { title: "B&W Noir", k: "MONOCHROME", desc: "High contrast, grain, 35mm.", img: "/showcase19.png" },
+                    { title: "Flash Mode", k: "FLASH", desc: "Hard light, red eyes, 3am party energy.", img: "/showcase18.png" },
+                    { title: "Golden Mode", k: "GOLDEN", desc: "Soft sunlight, dreamy skin tones.", img: "/showcase16.png" },
+                    { title: "Gritty Mode", k: "GRITTY", desc: "High contrast, raw documentary feel.", img: "/showcase14.png" },
+                    { title: "Cine Mode", k: "CINE", desc: "Neon lights, cinematic color grading.", img: "/showcase19.png" },
                 ].map((item, i) => (
                     <div key={i} className={`group cursor-pointer relative aspect-[3/4] overflow-hidden border-foreground/10 bg-[#111]
                             ${i % 2 === 0 ? 'border-r' : ''} 
