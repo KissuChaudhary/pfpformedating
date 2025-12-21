@@ -2,6 +2,9 @@
 
 import { GoogleGenAI } from "@google/genai";
 import { REFERENCE_PROMPTS } from "./prompts";
+import { putR2Object } from './r2';
+import { createClient } from '@/utils/supabase/server';
+import { hasCredits, deductCredits } from '@/lib/credits';
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -188,9 +191,6 @@ export async function generateCandidPhoto(
  * Generates the image and saves it directly to R2/database on server.
  * This avoids sending the large base64 to the client, preventing browser freezes.
  */
-import { putR2Object } from './r2';
-import { createClient } from '@/utils/supabase/server';
-import { hasCredits, deductCredits } from '@/lib/credits';
 
 export async function generateAndSaveImage(
     userPrompt: string,
