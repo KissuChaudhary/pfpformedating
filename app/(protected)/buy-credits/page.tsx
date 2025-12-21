@@ -38,10 +38,10 @@ function normalizePlanName(name: string) {
 function getDisplayName(name: string) {
   const n = normalizePlanName(name);
   if (n === 'basic pack' || n === 'starter') {
-    return 'Starter Pack';
+    return 'Standard Roll';
   }
   if (n === 'premium pack' || n === 'pro') {
-    return 'Premium Pack (Advanced)';
+    return 'Pro Roll';
   }
   return name;
 }
@@ -85,22 +85,21 @@ export default async function BuyCreditsPage() {
     // Handle error gracefully - could redirect to error page or show empty state
   }
 
-  // Plan feature bullets (aligned with pricing cards)
+  // Plan feature bullets (aligned with landing page Pricing component)
   const starterFeatures = [
-    '20 High-Res AI Photos',
-    '100% Quality & Performance Guarantee',
-    '1 AI Model Training Included',
-    '20 Unique Styles & Backgrounds',
-    'Full Commercial License Included'
+    '10 Hyper-Realistic Photos',
+    '5 Film Modes (Flash, Golden, Gritty, Cine, Headshot)',
+    'Nano-Texture Engine (Real skin, no plastic AI)',
+    'Auto-Delete Privacy (7-day wipe)',
+    'Commercial License (Use anywhere)'
   ];
 
   const proFeatures = [
-    'Up to 80 AI Photos',
-    '1 AI Model Training Included',
-    '80 Unique Styles & Backgrounds',
-    'Priority processing',
-    'Full Commercial License Included',
-    'Premium customer support'
+    '25 Hyper-Realistic Photos (2.5x Capacity)',
+    '$0.79 Per Photo (Save 20%)',
+    '5 Film Modes (Flash, Golden, Gritty, Cine, Headshot)',
+    'Nano-Texture Engine (Real skin, no plastic AI)',
+    'Auto-Delete Privacy (7-day wipe)'
   ];
 
   // Use normalized keys so minor plan name differences don't break mapping
@@ -139,9 +138,9 @@ export default async function BuyCreditsPage() {
           </div>
         </div>
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold mb-4">Get Your Professional AI Photoshoot</h1>
+          <h1 className="text-3xl font-bold mb-4">Pick Your Film Roll</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Transform your selfies into studio-quality headshots. Photos are guaranteed and credits never expire.
+            No subscriptions. Pay once, own forever. Hyper-realistic photos, not plastic AI.
           </p>
         </div>
 
@@ -181,7 +180,12 @@ export default async function BuyCreditsPage() {
                       const normalized = normalizePlanName(plan.name);
                       if (normalized === 'basic pack' || normalized === 'starter') {
                         return (
-                          <div className="text-sm text-muted-foreground">Less than $0.50 per photo</div>
+                          <div className="text-sm text-muted-foreground">$0.99 per photo</div>
+                        );
+                      }
+                      if (normalized === 'premium pack' || normalized === 'pro') {
+                        return (
+                          <div className="text-sm text-muted-foreground">$0.79 per photo (Save 20%)</div>
                         );
                       }
                       return null;
@@ -220,10 +224,10 @@ export default async function BuyCreditsPage() {
                     {(() => {
                       const normalized = normalizePlanName(plan.name);
                       if (normalized === 'basic pack' || normalized === 'starter') {
-                        return 'Buy Standard Roll';
+                        return 'Buy Standard Roll →';
                       }
                       if (normalized === 'premium pack' || normalized === 'pro') {
-                        return 'Buy Premium Roll';
+                        return 'Buy Pro Roll →';
                       }
                       return 'Buy Pack';
                     })()}
