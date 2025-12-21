@@ -44,7 +44,7 @@ export function HeaderUser({ user, initialCreditBalance }: HeaderUserProps) {
       <div className="flex items-center gap-1.5 px-2 py-1 bg-muted/50 rounded-md">
         <ImagePlayIcon className="h-4 w-4 text-amber-600" />
         <span className="text-sm font-medium text-foreground">
-          ROLLS: {creditBalance.toLocaleString()}
+          FILMS:{creditBalance.toLocaleString()}
         </span>
       </div>
 
