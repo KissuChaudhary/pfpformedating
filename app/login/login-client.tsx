@@ -199,71 +199,56 @@ function LoginShowcase() {
   const images = [
     "/hero2.png",
     "/hero1.png",
-
+    "/hero3.png",
+    "/showcase14.png",
   ]
-  const [topIndex, setTopIndex] = useState(0)
-  const [bottomIndex, setBottomIndex] = useState(0)
 
-  useEffect(() => {
-    const topInterval = setInterval(() => {
-      setTopIndex((i) => (i + 1) % 3)
-    }, 3500)
-
-    // Offset the bottom panel timing by half
-    const bottomInterval = setInterval(() => {
-      setBottomIndex((i) => (i + 1) % 3)
-    }, 4000)
-
-    return () => {
-      clearInterval(topInterval)
-      clearInterval(bottomInterval)
-    }
-  }, [])
-
-  // Split images for top and bottom panels
-  const topImages = images.slice(0, 3)
-  const bottomImages = images.slice(3, 6)
+  // Static images: first 2 for top section, next 2 for bottom section
+  const topImages = [images[0], images[1]]
+  const bottomImages = [images[2], images[3]]
 
   return (
     <div className="absolute inset-0 grid grid-rows-2">
-      {/* Image 1 - Top Panel */}
-      <div className="relative overflow-hidden border-b border-foreground/10">
+      {/* Top Panel - 2 images side by side */}
+      <div className="relative overflow-hidden border-b border-foreground/10 grid grid-cols-2">
         {topImages.map((src, i) => (
-          <img
-            key={src}
-            src={src}
-            alt="AI Generated Portrait"
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${topIndex === i ? "opacity-90" : "opacity-0"}`}
-          />
+          <div key={src} className={`relative overflow-hidden ${i === 0 ? 'border-r border-foreground/10' : ''}`}>
+            <img
+              src={src}
+              alt="AI Generated Portrait"
+              className="absolute inset-0 h-full w-full object-cover opacity-90 hover:opacity-100 transition-opacity"
+            />
+          </div>
         ))}
-        <div className="absolute bottom-4 left-4 bg-[#080808]/80 backdrop-blur border border-foreground/20 px-2 py-1 text-[10px] font-mono uppercase text-foreground/70">
+        <div className="absolute bottom-4 left-4 bg-[#080808]/80 backdrop-blur border border-foreground/20 px-2 py-1 text-[10px] font-mono uppercase text-foreground/70 z-10">
           // 35mm film, high grain
         </div>
 
         {/* Film Sprocket Right Edge */}
-        <div className="absolute right-0 top-0 bottom-0 w-6 bg-black border-l border-foreground/20 flex flex-col justify-between items-center py-2">
+        <div className="absolute right-0 top-0 bottom-0 w-6 bg-black border-l border-foreground/20 flex flex-col justify-between items-center py-2 z-10">
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="w-3 h-4 bg-[#1a1a1a] rounded-[2px]"></div>
           ))}
         </div>
       </div>
 
-      {/* Image 2 - Bottom Panel */}
-      <div className="relative overflow-hidden">
+      {/* Bottom Panel - 2 images side by side */}
+      <div className="relative overflow-hidden grid grid-cols-2">
         {bottomImages.map((src, i) => (
-          <img
-            key={src}
-            src={src}
-            alt="AI Generated Portrait"
-            className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${bottomIndex === i ? "opacity-90" : "opacity-0"}`}
-          />
+          <div key={src} className={`relative overflow-hidden ${i === 0 ? 'border-r border-foreground/10' : ''}`}>
+            <img
+              src={src}
+              alt="AI Generated Portrait"
+              className="absolute inset-0 h-full w-full object-cover opacity-90 hover:opacity-100 transition-opacity"
+            />
+          </div>
         ))}
-        <div className="absolute bottom-4 left-4 bg-[#080808]/80 backdrop-blur border border-foreground/20 px-2 py-1 text-[10px] font-mono uppercase text-foreground/70">
+        <div className="absolute bottom-4 left-4 bg-[#080808]/80 backdrop-blur border border-foreground/20 px-2 py-1 text-[10px] font-mono uppercase text-foreground/70 z-10">
           // raw mode, natural light
         </div>
 
         {/* Film Sprocket Right Edge */}
-        <div className="absolute right-0 top-0 bottom-0 w-6 bg-black border-l border-foreground/20 flex flex-col justify-between items-center py-2">
+        <div className="absolute right-0 top-0 bottom-0 w-6 bg-black border-l border-foreground/20 flex flex-col justify-between items-center py-2 z-10">
           {Array.from({ length: 8 }).map((_, i) => (
             <div key={i} className="w-3 h-4 bg-[#1a1a1a] rounded-[2px]"></div>
           ))}

@@ -1,16 +1,17 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { enhancePrompt, generateCandidPhoto } from '@/lib/genai';
+import { generateAndSaveImage } from '@/lib/genai';
 import { ChevronDown, Plus, Download } from 'lucide-react';
 import Link from 'next/link';
 
-// Configuration for the 4 physics engines (Modes)
+// Configuration for the 5 physics engines (Modes)
 const MODES = [
     { id: 'FLASH', label: 'NIGHT FLASH', desc: 'Hard shadows' },
     { id: 'GOLDEN', label: 'GOLDEN HOUR', desc: 'Warm sun' },
     { id: 'GRITTY', label: 'GRITTY VINTAGE', desc: 'B&W Street' },
-    { id: 'CINE', label: 'CINE SHOOT', desc: 'Cinematic' }
+    { id: 'CINE', label: 'CINE SHOOT', desc: 'Cinematic' },
+    { id: 'PROFESSIONAL', label: 'HEADSHOT', desc: 'LinkedIn' }
 ];
 
 const RATIOS = [
@@ -19,6 +20,11 @@ const RATIOS = [
     { label: '4:5', value: '4:5', class: 'aspect-[4/5]' },
     { label: '4:3', value: '4:3', class: 'aspect-[4/3]' },
     { label: '5:4', value: '5:4', class: 'aspect-[5/4]' },
+];
+
+const LIGHTING = [
+    { id: 'DAYLIGHT', label: 'Daylight', desc: 'Natural sun' },
+    { id: 'NIGHT', label: 'Night', desc: 'Artificial light' }
 ];
 
 interface Model {
@@ -45,6 +51,7 @@ export const Viewfinder: React.FC = () => {
     const [prompt, setPrompt] = useState('');
     const [mode, setMode] = useState(MODES[0]);
     const [aspectRatio, setAspectRatio] = useState(RATIOS[0]);
+    const [lightingTime, setLightingTime] = useState(LIGHTING[0]);
     const [isDeveloping, setIsDeveloping] = useState(false);
 
     // Generated images from database
@@ -103,59 +110,56 @@ export const Viewfinder: React.FC = () => {
         setTimeout(() => setFlashTrigger(false), 200);
 
         setIsDeveloping(true);
-        setStatusMessage('Developing...');
+        setStatusMessage('Enhancing prompt...');
 
         try {
             // Get reference images from selected model's samples
             const refImages = selectedModel.samples.map(s => s.uri);
             const gender = selectedModel.type || 'Female';
 
-            const enhancedPrompt = await enhancePrompt(prompt, mode.id, gender.toUpperCase());
-            console.log("Enhanced Prompt:", enhancedPrompt);
+            setStatusMessage('Generating...');
 
-            const imageBase64 = await generateCandidPhoto(enhancedPrompt, refImages, aspectRatio.value);
+            // Use unified server action - large base64 never comes to client!
+            const result = await generateAndSaveImage(
+                prompt,
+                mode.id,
+                gender.toUpperCase(),
+                lightingTime.id,
+                refImages,
+                aspectRatio.value,
+                selectedModel.id
+            );
 
-            if (imageBase64) {
-                setStatusMessage('Saving...');
+            if (result.success && result.image) {
+                setStatusMessage('Done!');
 
-                // Save to R2 and database
-                const saveRes = await fetch(`/api/models/${selectedModel.id}/images`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ imageBase64 }),
-                });
+                // Add to the beginning of the list
+                setGeneratedImages(prev => [result.image!, ...prev]);
 
-                if (saveRes.ok) {
-                    const { image, newBalance } = await saveRes.json();
-                    // Add to the beginning of the list
-                    setGeneratedImages(prev => [image, ...prev]);
-                    setStatusMessage('Saved');
+                // Auto-scroll to gallery on mobile for better UX
+                setTimeout(() => {
+                    galleryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 100);
 
-                    // Auto-scroll to gallery on mobile for better UX
-                    setTimeout(() => {
-                        galleryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 100);
-
-                    // Dispatch credit update event for real-time UI updates
-                    // The sidebar/header components listen to this via useCreditManager
-                    if (newBalance !== undefined && typeof window !== 'undefined') {
-                        window.dispatchEvent(new CustomEvent('creditUpdate', {
-                            detail: {
-                                newBalance,
-                                change: -1,
-                                operation: 'deduct',
-                                timestamp: Date.now()
-                            }
-                        }));
-                    }
-                } else {
-                    console.warn('Failed to save image, showing locally');
-                    // Still show the image locally even if save failed
-                    setGeneratedImages(prev => [{ id: Date.now(), uri: imageBase64, created_at: new Date().toISOString() }, ...prev]);
+                // Dispatch credit update event for real-time UI updates
+                if (result.newBalance !== undefined && typeof window !== 'undefined') {
+                    window.dispatchEvent(new CustomEvent('creditUpdate', {
+                        detail: {
+                            newBalance: result.newBalance,
+                            change: -1,
+                            operation: 'deduct',
+                            timestamp: Date.now()
+                        }
+                    }));
                 }
             } else {
-                console.warn("Generation returned null");
+                console.warn("Generation failed:", result.error);
                 setStatusMessage('Failed');
+                if (result.error === 'Insufficient credits') {
+                    alert("You don't have enough credits. Please purchase more.");
+                } else {
+                    alert(result.error || "Generation failed. Please try again.");
+                }
             }
 
             setPrompt('');
@@ -280,7 +284,27 @@ export const Viewfinder: React.FC = () => {
                         </div>
                     </div>
 
-                    {/* 3. Lighting Style */}
+                    {/* 3. Lighting Time */}
+                    <div>
+                        <label className="text-xs font-medium text-zinc-400 mb-3 block uppercase tracking-wide">Lighting Time</label>
+                        <div className="flex gap-2">
+                            {LIGHTING.map((l) => (
+                                <button
+                                    key={l.id}
+                                    onClick={() => setLightingTime(l)}
+                                    className={`cursor-pointer flex-1 p-2.5 rounded-lg border text-center transition-all ${lightingTime.id === l.id
+                                        ? 'bg-white text-black shadow-sm'
+                                        : 'bg-transparent border-zinc-700 hover:bg-white/5 hover:border-zinc-700'
+                                        }`}
+                                >
+                                    <div className={`font-semibold text-xs mb-0.5 ${lightingTime.id === l.id ? 'text-black' : 'text-zinc-400'}`}>{l.label}</div>
+                                    <div className={`text-[10px] font-medium ${lightingTime.id === l.id ? 'text-zinc-600' : 'text-zinc-500'}`}>{l.desc}</div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* 4. Lighting Style */}
                     <div>
                         <label className="text-xs font-medium text-zinc-400 mb-3 block uppercase tracking-wide">Photoshoot Style</label>
                         <div className="grid grid-cols-2 gap-2">
@@ -391,9 +415,9 @@ export const Viewfinder: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    {/* Text */}
+                                    {/* Status text */}
                                     <div className="text-xs font-medium text-white/80 tracking-widest uppercase">
-                                        Creating
+                                        {statusMessage || 'Creating'}
                                     </div>
                                     <div className="flex gap-1 mt-1">
                                         <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
