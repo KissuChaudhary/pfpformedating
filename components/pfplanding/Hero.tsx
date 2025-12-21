@@ -7,19 +7,17 @@ export const Hero: React.FC = () => {
     <section className="relative min-h-screen flex flex-col md:grid md:grid-cols-12 border-b border-foreground/10">
       {/* Left Content */}
       <div className="md:col-span-7 flex flex-col justify-center p-6 md:p-12 lg:p-20 border-r border-foreground/10 relative">
-        <div className="relative mb-6 md:mb-0 md:absolute md:top-6 md:left-6 font-mono text-xs text-foreground/40">
-          FRAME: 001 // ISO: 3200
+        <div className="mb-6 font-mono text-xs text-foreground/40">
+          // DESIGNED FOR <span className="text-red-500/70 font-bold">REALISM</span>
         </div>
 
         <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-bold leading-[0.9] tracking-tighter uppercase mb-8">
-          The Anti-AI <br />
-          <span className="text-transparent stroke-text">Profile Picture</span>.
+          The Hyper-Realistic <br />
+          <span className="text-transparent stroke-text">Anti-AI Photoshoot</span>.
         </h1>
 
         <p className="font-mono text-foreground/70 text-sm md:text-base max-w-xl mb-12 leading-relaxed">
-          Most AI generators try to make you look perfect. We make you look <strong className="text-white">real</strong>
-          . Generate hyper-realistic, candid, and cinematic photos that capture the vibe of a Friday night—complete with
-          flash glare, film grain, and genuine emotion.
+          Turn your selfies into professional, candid photos without the camera. Stop using plastic-looking AI avatars. We generate raw, cinematic, and photorealistic images that look like they were taken on 35mm film.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
@@ -53,7 +51,7 @@ export const Hero: React.FC = () => {
           {/* Image 2 */}
           <div className="relative overflow-hidden h-full w-full">
             <img
-              src="/hero1.png"
+              src="/hero3.png"
               alt="Messy Bun Morning"
               className="w-full h-full object-cover opacity-90 hover:grayscale-100 hover:opacity-100 transition-all duration-100 ease-linear cursor-none"
             />

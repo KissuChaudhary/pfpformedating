@@ -12,10 +12,10 @@ export const ConsistencySection: React.FC = () => {
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
                     <div>
                         <h2 className="font-display text-4xl md:text-5xl font-bold uppercase mb-4 leading-none">
-                            Identity Lock: <span className="text-accent">99.8%</span>
+                            NO SHAPESHIFTING.  <span className="text-accent">JUST YOU.</span>
                         </h2>
                         <p className="font-mono text-foreground/60 max-w-xl text-sm md:text-base">
-                            Other generators hallucinate new faces in every seed. Our <strong className="text-foreground">ID-Lock™ Protocol</strong> forces the model to respect your bone structure across every angle, lighting condition, and focal length.
+                            Other AI generators hallucinate new faces when you change the angle or lighting. We don't. Whether you’re laughing in a taxi or eating under neon lights, <strong className="text-foreground">your identity stays locked</strong>. No AI cousins. No glitchy lookalikes. Just you.
                         </p>
                     </div>
                     <div className="font-mono text-[10px] md:text-xs text-accent text-right">

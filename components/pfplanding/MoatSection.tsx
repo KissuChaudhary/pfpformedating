@@ -21,7 +21,7 @@ export const MoatSection: React.FC = () => {
                         <div className="absolute -left-[31px] md:-left-[39px] top-0 w-3 h-3 bg-red-900/50 border border-red-500/30 rounded-full"></div>
 
                         <div className="flex items-center gap-3 mb-4">
-                            <span className="font-mono text-[10px] uppercase tracking-widest text-red-500/50">Other AI Image Tools</span>
+                            <span className="font-mono text-[10px] uppercase tracking-widest text-red-500/50">Other AI Photoshoot Tools</span>
                             <span className="h-[1px] w-8 bg-red-500/20"></span>
                         </div>
 
@@ -61,7 +61,7 @@ export const MoatSection: React.FC = () => {
 
                             <div>
                                 <h3 className="font-display text-xl md:text-2xl text-foreground font-bold uppercase mb-1 flex items-center gap-2">
-                                    <span className="text-accent text-sm">02 //</span> Bad Lighting™
+                                    <span className="text-accent text-sm">02 //</span> Perfect Lighting™
                                 </h3>
                                 <p className="font-mono text-xs text-foreground/60 pl-8 border-l border-foreground/10 ml-1">
                                     Engineered motion blur, red-eye, and harsh flash.
@@ -85,7 +85,7 @@ export const MoatSection: React.FC = () => {
             {/* Visual Comparison Grid (Right Side) */}
             <div className="grid grid-cols-2 h-[50vh] md:h-auto">
                 <div className="border-r border-foreground/10 relative group h-full">
-                    <div className="absolute top-0 left-0 w-full p-2 text-center text-sm font-mono text-foreground/80 bg-black/50 backdrop-blur-sm z-10">// OTHERS</div>
+                    <div className="absolute top-0 left-0 w-full p-2 text-center text-sm font-mono text-foreground/80 bg-black/50 backdrop-blur-sm z-10">// OTHERS PHOTOSHOOT TOOLS</div>
                     <img
                         src="/comparegenericai.jpg"
                         className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"

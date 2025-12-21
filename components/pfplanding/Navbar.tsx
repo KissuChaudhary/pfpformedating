@@ -50,17 +50,21 @@ export const Navbar: React.FC = () => {
 
                 {/* Desktop Navigation */}
                 <div className="hidden md:flex items-center gap-12">
-                    {['Manifesto', 'Vibe Packs', 'Pricing'].map((item) => (
-                        <a
-                            key={item}
-                            href="#"
+                    {[
+                        { name: 'About', href: '/about' },
+                        { name: 'Blog', href: '/blog' },
+                        { name: 'Pricing', href: '/pricing' },
+                    ].map((item) => (
+                        <Link
+                            key={item.name}
+                            href={item.href}
                             className="relative font-mono text-xs uppercase tracking-widest text-foreground/60 hover:text-accent transition-colors group py-2"
                         >
                             <span className="absolute -left-4 opacity-0 group-hover:opacity-100 transition-all duration-300 text-accent font-bold translate-x-2 group-hover:translate-x-0">
                                 /
                             </span>
-                            {item}
-                        </a>
+                            {item.name}
+                        </Link>
                     ))}
                 </div>
 
@@ -106,22 +110,29 @@ export const Navbar: React.FC = () => {
                 </div>
 
                 <div className="flex flex-col gap-6 relative z-10 h-full">
-                    {['Manifesto', 'Vibe Packs', 'Pricing', 'Login'].map((item, i) => (
-                        <a
-                            key={item}
-                            href="#"
+                    {[
+                        { name: 'About', href: '/about' },
+                        { name: 'Blog', href: '/blog' },
+                        { name: 'Pricing', href: '/pricing' },
+                        { name: 'Login', href: '/login' },
+                    ].map((item, i) => (
+                        <Link
+                            key={item.name}
+                            href={item.href}
                             className="font-display text-5xl font-bold uppercase text-foreground/40 hover:text-foreground transition-all duration-300 flex items-baseline gap-4 group"
                             onClick={() => setIsOpen(false)}
                         >
                             <span className="font-mono text-xs text-accent opacity-0 group-hover:opacity-100 -translate-x-4 group-hover:translate-x-0 transition-all duration-300">0{i + 1}</span>
-                            {item}
-                        </a>
+                            {item.name}
+                        </Link>
                     ))}
 
                     <div className="mt-auto mb-12 space-y-6">
-                        <Button size="lg" className="w-full text-center justify-center">
-                            Start Your Roll ($19)
-                        </Button>
+                        <Link href="/login" onClick={() => setIsOpen(false)}>
+                            <Button size="lg" className="w-full text-center justify-center">
+                                Start Your Roll ($9.99)
+                            </Button>
+                        </Link>
 
                         <div className="flex justify-between font-mono text-[10px] text-foreground/30 border-t border-foreground/10 pt-6">
                             <span>SYS_STATUS: ONLINE</span>
