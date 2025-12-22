@@ -1,17 +1,16 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
-import { generateAndSaveImage } from '@/lib/genai';
-import { ChevronDown, Plus, Download } from 'lucide-react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { ChevronDown, Plus, Download, Loader2 } from 'lucide-react';
 import Link from 'next/link';
 
 // Configuration for the 5 physics engines (Modes)
 const MODES = [
-    { id: 'FLASH', label: 'NIGHT FLASH', desc: 'Hard shadows' },
+    { id: 'FLASH', label: 'FLASH', desc: 'Hard shadows' },
     { id: 'GOLDEN', label: 'GOLDEN HOUR', desc: 'Warm sun' },
     { id: 'GRITTY', label: 'GRITTY VINTAGE', desc: 'B&W Street' },
     { id: 'CINE', label: 'CINE SHOOT', desc: 'Cinematic' },
-    { id: 'PROFESSIONAL', label: 'HEADSHOT', desc: 'LinkedIn' }
+    { id: 'PROFESSIONAL', label: 'HEADSHOT', desc: 'Professional' }
 ];
 
 const RATIOS = [
@@ -24,7 +23,7 @@ const RATIOS = [
 
 const LIGHTING = [
     { id: 'DAYLIGHT', label: 'Daylight', desc: 'Natural sun' },
-    { id: 'NIGHT', label: 'Night', desc: 'Artificial light' }
+    { id: 'NIGHT', label: 'Night', desc: 'Night light' }
 ];
 
 interface Model {
@@ -38,6 +37,14 @@ interface GeneratedImage {
     id: number;
     uri: string;
     created_at: string;
+}
+
+interface PendingJob {
+    id: string;
+    status: 'pending' | 'processing' | 'completed' | 'failed';
+    prompt: string;
+    created_at: string;
+    result_url?: string;
 }
 
 export const Viewfinder: React.FC = () => {
@@ -60,6 +67,7 @@ export const Viewfinder: React.FC = () => {
     const [flashTrigger, setFlashTrigger] = useState(false);
     const [statusMessage, setStatusMessage] = useState('');
     const [downloadingImageId, setDownloadingImageId] = useState<number | null>(null);
+    const [pendingJobs, setPendingJobs] = useState<PendingJob[]>([]);
 
     const gridEndRef = useRef<HTMLDivElement>(null);
     const galleryRef = useRef<HTMLDivElement>(null);
@@ -129,56 +137,131 @@ export const Viewfinder: React.FC = () => {
         fetchImages();
     }, [selectedModel]);
 
-    // Main Logic: The Shutter
+    // Fetch pending jobs from database on mount/model change (restores after refresh)
+    useEffect(() => {
+        if (!selectedModel) return;
+
+        const fetchPendingJobs = async () => {
+            try {
+                const res = await fetch(`/api/fal/jobs?modelId=${selectedModel.id}&status=pending`);
+                if (res.ok) {
+                    const { jobs } = await res.json();
+                    const pending = (jobs || []).map((j: any) => ({
+                        id: j.id,
+                        status: j.status,
+                        prompt: j.prompt || '',
+                        created_at: j.created_at,
+                        result_url: j.result_url,
+                    }));
+                    setPendingJobs(pending);
+                }
+            } catch (error) {
+                console.error('Failed to fetch pending jobs:', error);
+            }
+        };
+        fetchPendingJobs();
+    }, [selectedModel]);
+
+    // Poll for pending job updates - runs every 5s when jobs are pending
+    useEffect(() => {
+        if (!selectedModel || pendingJobs.filter(j => j.status === 'pending').length === 0) return;
+
+        const pollJobs = async () => {
+            try {
+                const res = await fetch(`/api/fal/jobs?modelId=${selectedModel.id}&limit=10`);
+                if (!res.ok) return;
+
+                const { jobs } = await res.json();
+
+                // Check for completed jobs
+                const completedJobIds = jobs
+                    ?.filter((j: any) => j.status === 'completed' || j.status === 'failed')
+                    .map((j: any) => j.id) || [];
+
+                if (completedJobIds.length > 0) {
+                    // Refresh images to show new completions
+                    const imagesRes = await fetch(`/api/models/${selectedModel.id}/images?limit=10`);
+                    if (imagesRes.ok) {
+                        const data = await imagesRes.json();
+                        setGeneratedImages((data.images || []).slice(0, 10));
+                    }
+
+                    // Remove completed/failed jobs from pending state
+                    setPendingJobs(prev => prev.filter(p => !completedJobIds.includes(p.id)));
+
+                    // Auto-scroll to gallery
+                    setTimeout(() => {
+                        galleryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 100);
+                }
+            } catch (error) {
+                console.error('Failed to poll jobs:', error);
+            }
+        };
+
+        // Poll every 5 seconds
+        const interval = setInterval(pollJobs, 5000);
+        pollJobs(); // Initial poll
+
+        return () => clearInterval(interval);
+    }, [selectedModel, pendingJobs]);
+
+    // Main Logic: The Shutter - Now uses fal.ai queue for background processing
     const handleShutter = async () => {
-        if (prompt.length === 0 || isDeveloping || !selectedModel) return;
+        if (prompt.length === 0 || !selectedModel) return;
 
         setFlashTrigger(true);
         setTimeout(() => setFlashTrigger(false), 200);
 
         setIsDeveloping(true);
-        setStatusMessage('Enhancing prompt...');
+        setStatusMessage('Submitting job...');
 
         try {
-            // Get reference images from selected model's samples
-            const refImages = selectedModel.samples.map(s => s.uri);
             const gender = selectedModel.type || 'Female';
 
-            setStatusMessage('Generating...');
+            // Submit to fal.ai queue via our API
+            const res = await fetch('/api/fal/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    modelId: selectedModel.id,
+                    prompt,
+                    mode: mode.id,
+                    gender: gender.toUpperCase(),
+                    lighting: lightingTime.id,
+                    aspectRatio: aspectRatio.value,
+                }),
+            });
 
-            // Use unified server action - large base64 never comes to client!
-            const result = await generateAndSaveImage(
-                prompt,
-                mode.id,
-                gender.toUpperCase(),
-                lightingTime.id,
-                refImages,
-                aspectRatio.value,
-                selectedModel.id
-            );
+            const result = await res.json();
 
-            if (result.success && result.image) {
-                setStatusMessage('Done!');
+            if (res.ok && result.success) {
+                setStatusMessage('Processing in background...');
 
-                // Add to the beginning of the list
-                setGeneratedImages(prev => [result.image!, ...prev]);
+                // Add to pending jobs for tracking
+                const newJob: PendingJob = {
+                    id: result.jobId || result.requestId,
+                    status: 'pending',
+                    prompt: prompt,
+                    created_at: new Date().toISOString(),
+                };
+                setPendingJobs(prev => [newJob, ...prev]);
 
-                // Auto-scroll to gallery on mobile for better UX
-                setTimeout(() => {
-                    galleryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 100);
-
-                // Dispatch credit update event for real-time UI updates
-                if (result.newBalance !== undefined && typeof window !== 'undefined') {
+                // Dispatch credit update event
+                if (typeof window !== 'undefined') {
                     window.dispatchEvent(new CustomEvent('creditUpdate', {
                         detail: {
-                            newBalance: result.newBalance,
                             change: -1,
                             operation: 'deduct',
                             timestamp: Date.now()
                         }
                     }));
                 }
+
+                setPrompt('');
+
+                // Quick feedback then clear
+                setTimeout(() => setStatusMessage(''), 2000);
             } else {
                 console.warn("Generation failed:", result.error);
                 setStatusMessage('Failed');
@@ -188,8 +271,6 @@ export const Viewfinder: React.FC = () => {
                     alert(result.error || "Generation failed. Please try again.");
                 }
             }
-
-            setPrompt('');
         } catch (error) {
             console.error("Generation failed:", error);
             setStatusMessage('Error');
@@ -319,7 +400,7 @@ export const Viewfinder: React.FC = () => {
                                 <button
                                     key={l.id}
                                     onClick={() => setLightingTime(l)}
-                                    className={`cursor-pointer flex-1 p-2.5 rounded-lg border text-center transition-all ${lightingTime.id === l.id
+                                    className={`cursor-pointer flex-1 p-2.5 rounded-lg border transition-all ${lightingTime.id === l.id
                                         ? 'bg-white text-black shadow-sm'
                                         : 'bg-transparent border-zinc-700 hover:bg-white/5 hover:border-zinc-700'
                                         }`}
@@ -406,7 +487,7 @@ export const Viewfinder: React.FC = () => {
 
                 {/* Gallery Area */}
                 <div className="flex-1 overflow-y-auto md:px-4 custom-scrollbar">
-                    {generatedImages.length === 0 && !isDeveloping ? (
+                    {generatedImages.length === 0 && !isDeveloping && pendingJobs.filter(j => j.status === 'pending').length === 0 ? (
                         <div className="h-full flex flex-col items-center justify-center text-center opacity-40 select-none">
                             <div className="w-16 h-16 rounded-2xl border-2 border-dashed border-zinc-600 mb-4 flex items-center justify-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-zinc-500"><rect width="18" height="18" x="3" y="3" rx="2" ry="2" /><circle cx="9" cy="9" r="2" /><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" /></svg>
@@ -416,7 +497,31 @@ export const Viewfinder: React.FC = () => {
                         </div>
                     ) : (
                         <div className="columns-2 md:columns-2 lg:columns-3 gap-2 md:gap-4 space-y-2 md:space-y-3 pb-12 pt-4 md:pt-0">
-                            {/* Custom Loading Animation */}
+                            {/* Pending job loader cards - one for each pending job */}
+                            {pendingJobs.filter(j => j.status === 'pending').map((job) => (
+                                <div key={job.id} className="break-inside-avoid w-full bg-gradient-to-br from-zinc-900 to-zinc-800 border border-zinc-700 rounded-lg overflow-hidden aspect-[3/4] flex flex-col items-center justify-center relative">
+                                    {/* Animated spinner */}
+                                    <div className="relative w-16 h-16 mb-4">
+                                        <div className="absolute inset-0 rounded-full border-2 border-zinc-600"></div>
+                                        <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-white animate-spin"></div>
+                                        <div className="absolute inset-0 flex items-center justify-center">
+                                            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                                        </div>
+                                    </div>
+                                    <div className="text-xs font-medium text-white/80 tracking-widest uppercase">
+                                        Processing
+                                    </div>
+                                    <div className="text-[10px] text-zinc-500 mt-1 px-4 text-center truncate max-w-full">
+                                        {job.prompt.slice(0, 30)}...
+                                    </div>
+                                    <div className="flex gap-1 mt-2">
+                                        <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                                        <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                                        <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                                    </div>
+                                </div>
+                            ))}
+                            {/* Custom Loading Animation for active submission */}
                             {isDeveloping && (
                                 <div className="break-inside-avoid w-full bg-gradient-to-br from-zinc-900 to-zinc-800 border border-zinc-700 rounded-lg overflow-hidden aspect-[3/4] flex flex-col items-center justify-center relative">
                                     {/* Animated camera shutter */}
