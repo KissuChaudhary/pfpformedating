@@ -38,6 +38,12 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Job not found" }, { status: 404 });
         }
 
+        // Skip if job already completed/failed (prevents duplicate processing)
+        if (job.status === "completed" || job.status === "failed") {
+            console.log("Job already processed, skipping webhook:", request_id);
+            return NextResponse.json({ received: true, status: "already_processed" });
+        }
+
         // Handle error status
         if (status === "ERROR") {
             await supabase
