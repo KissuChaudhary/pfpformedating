@@ -6,7 +6,6 @@ import { MoatSection } from '@/components/pfplanding/MoatSection';
 import { ConsistencySection } from '@/components/pfplanding/ConsistencySection';
 import { LightingLabSection } from '@/components/pfplanding/LightingLabSection';
 import { ProductSection } from '@/components/pfplanding/ProductSection';
-import { TextureLabSection } from '@/components/pfplanding/TextureLabSection';
 import { FullFrameSection } from '@/components/pfplanding/FullFrameSection';
 import { HowItWorks } from '@/components/pfplanding/HowItWorks';
 import { SocialProof } from '@/components/pfplanding/SocialProof';
@@ -32,7 +31,6 @@ export default function Home() {
         <ConsistencySection />
         <LightingLabSection />
         <ProductSection />
-        <TextureLabSection />
         <FullFrameSection />
         <HowItWorks />
         <SocialProof />
