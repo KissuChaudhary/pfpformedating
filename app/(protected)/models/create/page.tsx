@@ -114,7 +114,7 @@ export default function CreateModelPage() {
     };
 
     return (
-        <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center p-6">
+        <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
             <div className="w-full max-w-lg">
                 {/* Header */}
                 <div className="text-center mb-8">
