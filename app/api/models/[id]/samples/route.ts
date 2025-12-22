@@ -5,6 +5,8 @@ import { putR2Object } from '@/lib/r2';
 // Vercel config for file uploads
 export const runtime = 'nodejs';
 export const maxDuration = 60; // 60 seconds timeout
+export const dynamic = 'force-dynamic';
+export const fetchCache = 'force-no-store';
 
 // POST: Upload sample images for a model
 export async function POST(
@@ -42,8 +44,8 @@ export async function POST(
             return NextResponse.json({ error: 'No images provided' }, { status: 400 });
         }
 
-        if (files.length > 4) {
-            return NextResponse.json({ error: 'Maximum 4 images allowed' }, { status: 400 });
+        if (files.length > 3) {
+            return NextResponse.json({ error: 'Maximum 3 images allowed' }, { status: 400 });
         }
 
         const uploadedSamples = [];

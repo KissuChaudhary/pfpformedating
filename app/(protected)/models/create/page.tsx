@@ -23,7 +23,7 @@ export default function CreateModelPage() {
         if (!e.target.files) return;
 
         const newFiles = Array.from(e.target.files);
-        const remainingSlots = 4 - images.length;
+        const remainingSlots = 3 - images.length;
         const filesToAdd = newFiles.slice(0, remainingSlots);
 
         setImages(prev => [...prev, ...filesToAdd]);
@@ -193,7 +193,7 @@ export default function CreateModelPage() {
                             </label>
                             <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${images.length >= 3 ? 'bg-green-500/10 text-green-500' : 'bg-zinc-800 text-zinc-400'
                                 }`}>
-                                {images.length}/4
+                                {images.length}/3
                             </span>
                         </div>
 
@@ -210,7 +210,7 @@ export default function CreateModelPage() {
                                     </button>
                                 </div>
                             ))}
-                            {images.length < 4 && (
+                            {images.length < 3 && (
                                 <label className="aspect-[3/4] border border-zinc-700 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-accent/50 hover:bg-accent/5 transition-colors bg-zinc-800/50">
                                     <Upload className="w-5 h-5 text-zinc-400 mb-1" />
                                     <span className="text-[10px] text-zinc-500">Add Photo</span>
