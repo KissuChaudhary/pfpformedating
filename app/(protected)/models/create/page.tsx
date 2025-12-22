@@ -23,7 +23,7 @@ export default function CreateModelPage() {
         if (!e.target.files) return;
 
         const newFiles = Array.from(e.target.files);
-        const remainingSlots = 3 - images.length;
+        const remainingSlots = 4 - images.length;
         const filesToAdd = newFiles.slice(0, remainingSlots);
 
         setImages(prev => [...prev, ...filesToAdd]);
@@ -69,26 +69,38 @@ export default function CreateModelPage() {
 
             const { model } = await modelRes.json();
 
-            // Step 2: Upload sample images
-            const formData = new FormData();
-            images.forEach(img => formData.append('images', img));
+            // Step 2: Upload sample images ONE AT A TIME (to bypass Vercel body size limit)
+            let uploadedCount = 0;
+            const uploadErrors: string[] = [];
 
-            const samplesRes = await fetch(`/api/models/${model.id}/samples`, {
-                method: 'POST',
-                body: formData,
-            });
+            for (const img of images) {
+                try {
+                    const formData = new FormData();
+                    formData.append('file', img);
+                    formData.append('filename', img.name);
 
-            const samplesData = await samplesRes.json().catch(() => ({}));
+                    const samplesRes = await fetch(`/api/models/${model.id}/samples`, {
+                        method: 'POST',
+                        body: formData,
+                    });
 
-            if (!samplesRes.ok) {
-                console.error('Samples upload error:', samplesData);
-                throw new Error(samplesData.error || samplesData.details || 'Failed to upload images');
+                    const result = await samplesRes.json().catch(() => ({}));
+
+                    if (!samplesRes.ok) {
+                        console.error(`Upload failed for ${img.name}:`, result);
+                        uploadErrors.push(result.error || `Failed to upload ${img.name}`);
+                    } else {
+                        uploadedCount++;
+                    }
+                } catch (err) {
+                    console.error(`Error uploading ${img.name}:`, err);
+                    uploadErrors.push(`Error uploading ${img.name}`);
+                }
             }
 
-            // Check if any uploads actually succeeded
-            if (samplesData.uploadedCount === 0) {
-                console.error('No samples uploaded:', samplesData.errors);
-                throw new Error(samplesData.errors?.[0] || 'No images were uploaded successfully');
+            // Check if we uploaded enough images
+            if (uploadedCount < 3) {
+                throw new Error(uploadErrors[0] || 'Failed to upload enough images');
             }
 
             // Success - redirect to dashboard
@@ -193,7 +205,7 @@ export default function CreateModelPage() {
                             </label>
                             <span className={`text-xs font-mono px-2 py-0.5 rounded-full ${images.length >= 3 ? 'bg-green-500/10 text-green-500' : 'bg-zinc-800 text-zinc-400'
                                 }`}>
-                                {images.length}/3
+                                {images.length}/4
                             </span>
                         </div>
 
@@ -210,7 +222,7 @@ export default function CreateModelPage() {
                                     </button>
                                 </div>
                             ))}
-                            {images.length < 3 && (
+                            {images.length < 4 && (
                                 <label className="aspect-[3/4] border border-zinc-700 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-accent/50 hover:bg-accent/5 transition-colors bg-zinc-800/50">
                                     <Upload className="w-5 h-5 text-zinc-400 mb-1" />
                                     <span className="text-[10px] text-zinc-500">Add Photo</span>

@@ -1,120 +1,119 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
-import { putR2Object } from '@/lib/r2';
+import { createClient } from "@/utils/supabase/server";
+import { NextRequest, NextResponse } from "next/server";
+import { putR2Object } from "@/lib/r2";
 
-// Vercel config for file uploads
-export const runtime = 'nodejs';
-export const maxDuration = 60; // 60 seconds timeout
-export const dynamic = 'force-dynamic';
-export const fetchCache = 'force-no-store';
+export const dynamic = "force-dynamic";
+export const runtime = "nodejs";
 
-// POST: Upload sample images for a model
+function sanitizeFilename(name: string) {
+    const base = name?.split("/").pop() || "file";
+    return base.replace(/[^a-zA-Z0-9._-]/g, "-");
+}
+
+// POST: Upload a single sample image for a model
 export async function POST(
     request: NextRequest,
     { params }: { params: Promise<{ id: string }> }
-) {
+): Promise<NextResponse> {
     const supabase = await createClient();
     const { id: modelId } = await params;
 
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     // Verify the model belongs to the user
     const { data: model, error: modelError } = await supabase
-        .from('models')
-        .select('id, user_id')
-        .eq('id', modelId)
+        .from("models")
+        .select("id, user_id")
+        .eq("id", modelId)
         .single();
 
     if (modelError || !model) {
-        return NextResponse.json({ error: 'Model not found' }, { status: 404 });
+        return NextResponse.json({ error: "Model not found" }, { status: 404 });
     }
 
     if (model.user_id !== user.id) {
-        return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+        return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     try {
         const formData = await request.formData();
-        const files = formData.getAll('images') as File[];
+        const file = formData.get("file") as File | null;
+        const providedName = (formData.get("filename") as string) || file?.name || "image.jpg";
 
-        if (!files || files.length === 0) {
-            return NextResponse.json({ error: 'No images provided' }, { status: 400 });
+        if (!file) {
+            return NextResponse.json({ error: "Missing file" }, { status: 400 });
         }
 
-        if (files.length > 3) {
-            return NextResponse.json({ error: 'Maximum 3 images allowed' }, { status: 400 });
+        // Validate file type
+        const allowedTypes = new Set(["image/jpeg", "image/png", "image/gif", "image/webp"]);
+        const contentType = file.type || "application/octet-stream";
+        if (!allowedTypes.has(contentType)) {
+            return NextResponse.json({ error: "Unsupported file type" }, { status: 415 });
         }
 
-        const uploadedSamples = [];
-        const r2BaseUrl = process.env.R2_PUBLIC_URL || '';
-        const errors: string[] = [];
-
-        for (const file of files) {
-            try {
-                // Generate unique key for R2
-                const timestamp = Date.now();
-                const randomId = Math.random().toString(36).substring(7);
-                const extension = file.name.split('.').pop() || 'jpg';
-                const key = `models/${user.id}/${modelId}/samples/${timestamp}-${randomId}.${extension}`;
-
-                // Read file as buffer
-                const arrayBuffer = await file.arrayBuffer();
-                const buffer = Buffer.from(arrayBuffer);
-
-                // Upload to R2
-                console.log(`Uploading to R2: ${key}`);
-                await putR2Object(key, buffer, file.type);
-                console.log(`R2 upload successful: ${key}`);
-
-                // Construct the public URL
-                const uri = `${r2BaseUrl}/${key}`;
-
-                // Save to samples table
-                console.log(`Saving to DB: modelId=${modelId}, uri=${uri}`);
-                const { data: sample, error: sampleError } = await supabase
-                    .from('samples')
-                    .insert({
-                        uri,
-                        modelId: parseInt(modelId),
-                    })
-                    .select()
-                    .single();
-
-                if (sampleError) {
-                    console.error('Error saving sample to DB:', sampleError);
-                    errors.push(`DB error: ${sampleError.message}`);
-                    continue;
-                }
-
-                console.log(`Sample saved successfully: ${sample.id}`);
-                uploadedSamples.push(sample);
-            } catch (fileError) {
-                console.error(`Error processing file ${file.name}:`, fileError);
-                errors.push(`File ${file.name}: ${fileError instanceof Error ? fileError.message : 'Unknown error'}`);
-            }
+        // Validate file size (10MB max per file)
+        const maxSizeBytes = 10 * 1024 * 1024;
+        const size = file.size;
+        if (typeof size === "number" && size > maxSizeBytes) {
+            return NextResponse.json({ error: "File too large (max 10MB)" }, { status: 413 });
         }
 
-        // Update model status to 'ready' if we have samples
-        if (uploadedSamples.length > 0) {
+        // Generate unique key for R2
+        const sanitized = sanitizeFilename(providedName);
+        const unique = `${Date.now()}-${crypto.randomUUID()}`;
+        const key = `models/${user.id}/${modelId}/samples/${unique}-${sanitized}`;
+
+        // Upload to R2
+        const arrayBuffer = await file.arrayBuffer();
+        const body = Buffer.from(arrayBuffer);
+        await putR2Object(key, body, contentType);
+
+        // Construct the public URL
+        const r2BaseUrl = process.env.R2_PUBLIC_URL || "";
+        const uri = `${r2BaseUrl}/${key}`;
+
+        // Save to samples table
+        const { data: sample, error: sampleError } = await supabase
+            .from("samples")
+            .insert({
+                uri,
+                modelId: parseInt(modelId),
+            })
+            .select()
+            .single();
+
+        if (sampleError) {
+            console.error("Error saving sample to DB:", sampleError);
+            return NextResponse.json({ error: "Failed to save sample" }, { status: 500 });
+        }
+
+        // Check how many samples exist for this model
+        const { count } = await supabase
+            .from("samples")
+            .select("*", { count: "exact", head: true })
+            .eq("modelId", parseInt(modelId));
+
+        // Update model status to 'ready' if we have at least 3 samples
+        if (count && count >= 3) {
             await supabase
-                .from('models')
-                .update({ status: 'ready' })
-                .eq('id', modelId);
+                .from("models")
+                .update({ status: "ready" })
+                .eq("id", modelId);
         }
 
         return NextResponse.json({
-            samples: uploadedSamples,
-            uploadedCount: uploadedSamples.length,
-            errors: errors.length > 0 ? errors : undefined
-        }, { status: uploadedSamples.length > 0 ? 201 : 500 });
+            sample,
+            key,
+            uri,
+        });
     } catch (error) {
-        console.error('Error uploading samples:', error);
-        return NextResponse.json({
-            error: 'Failed to upload samples',
-            details: error instanceof Error ? error.message : 'Unknown error'
-        }, { status: 500 });
+        console.error("R2 upload failed:", error);
+        return NextResponse.json(
+            { error: "Upload failed", details: error instanceof Error ? error.message : "Unknown error" },
+            { status: 500 }
+        );
     }
 }
