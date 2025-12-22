@@ -44,40 +44,51 @@ export async function POST(
 
         const uploadedSamples = [];
         const r2BaseUrl = process.env.R2_PUBLIC_URL || '';
+        const errors: string[] = [];
 
         for (const file of files) {
-            // Generate unique key for R2
-            const timestamp = Date.now();
-            const randomId = Math.random().toString(36).substring(7);
-            const extension = file.name.split('.').pop() || 'jpg';
-            const key = `models/${user.id}/${modelId}/samples/${timestamp}-${randomId}.${extension}`;
+            try {
+                // Generate unique key for R2
+                const timestamp = Date.now();
+                const randomId = Math.random().toString(36).substring(7);
+                const extension = file.name.split('.').pop() || 'jpg';
+                const key = `models/${user.id}/${modelId}/samples/${timestamp}-${randomId}.${extension}`;
 
-            // Read file as buffer
-            const arrayBuffer = await file.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
+                // Read file as buffer
+                const arrayBuffer = await file.arrayBuffer();
+                const buffer = Buffer.from(arrayBuffer);
 
-            // Upload to R2
-            await putR2Object(key, buffer, file.type);
+                // Upload to R2
+                console.log(`Uploading to R2: ${key}`);
+                await putR2Object(key, buffer, file.type);
+                console.log(`R2 upload successful: ${key}`);
 
-            // Construct the public URL
-            const uri = `${r2BaseUrl}/${key}`;
+                // Construct the public URL
+                const uri = `${r2BaseUrl}/${key}`;
 
-            // Save to samples table
-            const { data: sample, error: sampleError } = await supabase
-                .from('samples')
-                .insert({
-                    uri,
-                    modelId: parseInt(modelId),
-                })
-                .select()
-                .single();
+                // Save to samples table
+                console.log(`Saving to DB: modelId=${modelId}, uri=${uri}`);
+                const { data: sample, error: sampleError } = await supabase
+                    .from('samples')
+                    .insert({
+                        uri,
+                        modelId: parseInt(modelId),
+                    })
+                    .select()
+                    .single();
 
-            if (sampleError) {
-                console.error('Error saving sample:', sampleError);
-                continue;
+                if (sampleError) {
+                    console.error('Error saving sample to DB:', sampleError);
+                    errors.push(`DB error: ${sampleError.message}`);
+                    continue;
+                }
+
+                console.log(`Sample saved successfully: ${sample.id}`);
+                uploadedSamples.push(sample);
+            } catch (fileError) {
+                console.error(`Error processing file ${file.name}:`, fileError);
+                errors.push(`File ${file.name}: ${fileError instanceof Error ? fileError.message : 'Unknown error'}`);
             }
-
-            uploadedSamples.push(sample);
         }
 
         // Update model status to 'ready' if we have samples
@@ -90,10 +101,14 @@ export async function POST(
 
         return NextResponse.json({
             samples: uploadedSamples,
-            uploadedCount: uploadedSamples.length
-        }, { status: 201 });
+            uploadedCount: uploadedSamples.length,
+            errors: errors.length > 0 ? errors : undefined
+        }, { status: uploadedSamples.length > 0 ? 201 : 500 });
     } catch (error) {
         console.error('Error uploading samples:', error);
-        return NextResponse.json({ error: 'Failed to upload samples' }, { status: 500 });
+        return NextResponse.json({
+            error: 'Failed to upload samples',
+            details: error instanceof Error ? error.message : 'Unknown error'
+        }, { status: 500 });
     }
 }

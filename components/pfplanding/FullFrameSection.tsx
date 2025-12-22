@@ -24,8 +24,8 @@ export const FullFrameSection: React.FC = () => {
             {/* Copy Side (Left) */}
             <div className="flex flex-col justify-center p-8 md:p-20 border-r border-foreground/10 relative z-10 bg-[#080808]">
                 <h2 className="font-display text-4xl md:text-6xl font-bold uppercase leading-[0.9] mb-8">
-                    Don't just get <br /> a Headshot. <br />
-                    <span className="text-foreground/50">Get the whole scene.</span>
+                    BUILT FOR THE FEED.
+                    <span className="text-foreground/50"> NOT JUST THE PROFILE</span>
                 </h2>
 
                 <p className="font-mono text-foreground/70 mb-10 text-sm md:text-base max-w-md leading-relaxed">
@@ -39,7 +39,7 @@ export const FullFrameSection: React.FC = () => {
                             01
                         </div>
                         <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            Crop it for Twitter AVI
+                            9:16 VERTICAL RATIO (Story Ready)
                         </div>
                     </div>
                     <div className="flex items-center gap-4 group">
@@ -47,7 +47,7 @@ export const FullFrameSection: React.FC = () => {
                             02
                         </div>
                         <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            Post it for your Story
+                            FULL BODY & OUTFIT (Not just a face)
                         </div>
                     </div>
                     <div className="flex items-center gap-4 group">
@@ -55,12 +55,11 @@ export const FullFrameSection: React.FC = () => {
                             03
                         </div>
                         <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            Keep it for Wallpaper
+                            HIGH-RES DOWNLOAD (Print quality)
                         </div>
                     </div>
                 </div>
 
-                <div className="mt-12 font-mono text-[10px] text-foreground/30">DOWNLOAD SPEC: 4K (2048x3096) // PNG</div>
             </div>
 
             {/* Visual Side (Right) - Vertical Masonry */}

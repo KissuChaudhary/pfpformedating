@@ -17,21 +17,21 @@ export const HowItWorks: React.FC = () => {
                 {[
                     {
                         step: '01',
-                        title: 'Upload Dumps',
-                        desc: 'Give us 10-15 photos. Mirror selfies and camera roll dumps work best.',
-                        meta: 'INPUT_SOURCE'
+                        title: 'Upload Selfies',
+                        desc: 'Upload 4-5 clear photos of yourself. The AI learns your unique features to create your personal model.',
+                        meta: 'MODEL_TRAINING'
                     },
                     {
                         step: '02',
-                        title: 'Choose Vibe',
-                        desc: 'Packs: 90s Flash, Golden Hour, Moody Cinematic, Lazy Sunday.',
+                        title: 'Pick Your Vibe',
+                        desc: 'Choose from 5 film modes: Night Flash, Golden Hour, Gritty Vintage, Cine Shoot, or Headshot. Set lighting and describe your scene.',
                         meta: 'STYLE_SELECT'
                     },
                     {
                         step: '03',
-                        title: 'Download',
-                        desc: 'Receive 20+ high-res photos that look like documentary photography.',
-                        meta: 'RENDER_OUT'
+                        title: 'Get Photos',
+                        desc: 'AI generates hyper-realistic photos in under 60 seconds. Download instantly. No plastic AI look—real skin, real texture.',
+                        meta: 'INSTANT_RENDER'
                     }
                 ].map((item, i) => (
                     <div key={i} className={`p-8 border-b md:border-b-0 border-foreground/10 flex flex-col justify-between hover:bg-white/5 transition-colors group ${i !== 2 ? 'md:border-r' : ''}`}>

@@ -11,9 +11,10 @@ import { HowItWorks } from '@/components/pfplanding/HowItWorks';
 import { SocialProof } from '@/components/pfplanding/SocialProof';
 import { Pricing } from '@/components/pfplanding/Pricing';
 import { FAQ } from '@/components/pfplanding/FAQ';
+import { faqData } from '@/components/pfplanding/faq-data';
 import { Footer } from '@/components/pfplanding/Footer';
-import { commonPageMetadata, generateWebApplicationJsonLd } from '@/lib/seo'
-import { StructuredData } from '@/components/seo/StructuredData'
+import { commonPageMetadata, generateWebApplicationJsonLd, generateFAQJsonLd } from '@/lib/seo'
+import { MultipleStructuredData } from '@/components/seo/StructuredData'
 
 
 
@@ -38,14 +39,26 @@ export default function Home() {
         <FAQ />
       </main>
       <Footer />
-      {/* Decorative floating metadata */}
-      <div className="fixed bottom-6 right-6 font-mono text-[10px] text-foreground/20 pointer-events-none hidden lg:block z-40">
-        SYS_READY <br />
-        V2.0.4 <br />
-        ANTI-AI KERNEL
-      </div>
-      {/* WebApplication Schema - Home Page Only */}
-      <StructuredData data={JSON.parse(generateWebApplicationJsonLd())} />
+
+      <MultipleStructuredData
+        schemas={[
+          {
+            id: 'web-application',
+            data: JSON.parse(generateWebApplicationJsonLd()),
+          },
+          {
+            id: 'faq',
+            data: JSON.parse(
+              generateFAQJsonLd(
+                faqData.map((item) => ({
+                  question: item.q,
+                  answer: item.a,
+                }))
+              )
+            ),
+          },
+        ]}
+      />
     </div>
   )
 }

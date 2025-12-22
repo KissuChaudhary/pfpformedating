@@ -32,7 +32,7 @@ export const ProductSection: React.FC = () => {
                         <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-4">
                             THE ULTIMATE PHOTO DUMP
                         </h2>
-                        <p className="font-mono text-foreground/60 max-w-md">
+                        <p className="font-mono text-foreground/60 max-w-2xl">
                             Stop posting stiff, staged selfies. We generate the kind of candid, "caught-in-the-moment" shots that belong in your monthly carousel. From harsh flash to soft motion blur, get the photos that make people ask, "Who took this?"                        </p>
                     </div>
                     <div className="text-right hidden md:block">

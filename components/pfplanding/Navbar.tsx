@@ -85,10 +85,11 @@ export const Navbar: React.FC = () => {
                 {/* Mobile Actions & Toggle */}
                 <div className="flex md:hidden items-center gap-4">
                     {/* Mobile CTA (Mini) - Visible on Navbar */}
-                    <button className="px-3 py-1.5 text-[10px] font-mono font-bold uppercase tracking-wider bg-accent text-background border border-accent hover:bg-white hover:text-black hover:border-white transition-colors">
-                        Generate
-                    </button>
-
+                    <Link href="/login">
+                        <button className="px-3 py-1.5 text-[10px] font-mono font-bold uppercase tracking-wider bg-accent text-background border border-accent hover:bg-white hover:text-black hover:border-white transition-colors">
+                            Generate
+                        </button>
+                    </Link>
                     {/* Hamburger / Menu Toggle */}
                     <button
                         onClick={() => setIsOpen(!isOpen)}
