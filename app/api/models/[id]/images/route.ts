@@ -120,6 +120,11 @@ export async function GET(
     const supabase = await createClient();
     const { id: modelId } = await params;
 
+    // Parse limit from query params (default 50, max 100)
+    const { searchParams } = new URL(request.url);
+    const limitParam = searchParams.get('limit');
+    const limit = Math.min(parseInt(limitParam || '50'), 100);
+
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -144,7 +149,8 @@ export async function GET(
         .from('images')
         .select('id, uri, created_at')
         .eq('modelId', parseInt(modelId))
-        .order('created_at', { ascending: false });
+        .order('created_at', { ascending: false })
+        .limit(limit);
 
     if (error) {
         console.error('Error fetching images:', error);

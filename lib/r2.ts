@@ -85,3 +85,39 @@ export async function putR2Object(
   await client.send(command);
   return { bucket, key };
 }
+
+// Delete a single object from R2
+export async function deleteR2Object(key: string) {
+  const { DeleteObjectCommand } = await import("@aws-sdk/client-s3");
+  const { bucket } = getEnvVars();
+  const client = getR2Client();
+
+  const command = new DeleteObjectCommand({
+    Bucket: bucket,
+    Key: key,
+  });
+
+  await client.send(command);
+  return { deleted: true, key };
+}
+
+// Delete multiple objects from R2
+export async function deleteR2Objects(keys: string[]) {
+  const results = await Promise.allSettled(
+    keys.map(key => deleteR2Object(key))
+  );
+
+  const deleted: string[] = [];
+  const failed: string[] = [];
+
+  results.forEach((result, index) => {
+    if (result.status === 'fulfilled') {
+      deleted.push(keys[index]);
+    } else {
+      console.error(`Failed to delete ${keys[index]}:`, result.reason);
+      failed.push(keys[index]);
+    }
+  });
+
+  return { deleted, failed };
+}

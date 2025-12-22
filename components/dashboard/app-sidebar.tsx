@@ -10,6 +10,12 @@ import {
   Upload,
   Sparkles as SparklesIcon,
   FolderOpen,
+  ImagePlayIcon,
+  DamIcon,
+  DatabaseBackup,
+  ImagePlus,
+  MessageCircleCodeIcon,
+  WandSparklesIcon,
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
@@ -122,13 +128,18 @@ export function AppSidebar({
     {
       title: "Generate Photos",
       url: "/dashboard",
-      icon: SquareTerminal,
+      icon: WandSparklesIcon,
       isActive: true,
     },
     {
       title: "My Gallery",
       url: "/gallery",
-      icon: ImageIcon,
+      icon: ImagePlayIcon,
+    },
+    {
+      title: "My Models",
+      url: "/models",
+      icon: DatabaseBackup,
     },
 
   ], [])

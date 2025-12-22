@@ -111,16 +111,16 @@ export const Viewfinder: React.FC = () => {
         return () => window.removeEventListener('creditUpdate', handleCreditUpdate as EventListener);
     }, []);
 
-    // Fetch generated images when model changes
+    // Fetch generated images when model changes (limit to latest 10)
     useEffect(() => {
         if (!selectedModel) return;
 
         const fetchImages = async () => {
             try {
-                const res = await fetch(`/api/models/${selectedModel.id}/images`);
+                const res = await fetch(`/api/models/${selectedModel.id}/images?limit=10`);
                 if (res.ok) {
                     const data = await res.json();
-                    setGeneratedImages(data.images || []);
+                    setGeneratedImages((data.images || []).slice(0, 10));
                 }
             } catch (error) {
                 console.error('Failed to fetch images:', error);

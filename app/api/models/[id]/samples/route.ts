@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 import { putR2Object } from "@/lib/r2";
+import { apiRateLimit, checkRateLimit } from "@/utils/rate-limit";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
@@ -23,6 +24,17 @@ export async function POST(
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    // Non-blocking rate-limit instrumentation: logs when exceeded
+    const rl = await checkRateLimit(`sample-upload:user:${user.id}`, apiRateLimit);
+    if (!rl.success) {
+        console.warn("Rate limit exceeded on sample-upload", {
+            userId: user.id,
+            modelId,
+            limit: rl.limit,
+            remaining: rl.remaining,
+            reset: rl.reset,
+        });
+    }
     // Verify the model belongs to the user
     const { data: model, error: modelError } = await supabase
         .from("models")
