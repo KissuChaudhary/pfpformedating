@@ -1,36 +1,50 @@
-import { S3Client, GetObjectCommand } from "@aws-sdk/client-s3";
+import { S3Client, GetObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
 
-const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID as string;
-const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID as string;
-const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY as string;
-const R2_BUCKET_NAME = process.env.R2_BUCKET_NAME as string;
+// Lazy initialization to avoid throwing at module load time
+let _r2Client: S3Client | null = null;
 
-if (!R2_ACCOUNT_ID || !R2_ACCESS_KEY_ID || !R2_SECRET_ACCESS_KEY || !R2_BUCKET_NAME) {
-  throw new Error("Missing Cloudflare R2 environment variables: R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME");
+function getEnvVars() {
+  const accountId = process.env.R2_ACCOUNT_ID;
+  const accessKeyId = process.env.R2_ACCESS_KEY_ID;
+  const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
+  const bucket = process.env.R2_BUCKET_NAME;
+
+  const missing: string[] = [];
+  if (!accountId) missing.push('R2_ACCOUNT_ID');
+  if (!accessKeyId) missing.push('R2_ACCESS_KEY_ID');
+  if (!secretAccessKey) missing.push('R2_SECRET_ACCESS_KEY');
+  if (!bucket) missing.push('R2_BUCKET_NAME');
+
+  if (missing.length > 0) {
+    throw new Error(`Missing Cloudflare R2 environment variables: ${missing.join(', ')}`);
+  }
+
+  return { accountId: accountId!, accessKeyId: accessKeyId!, secretAccessKey: secretAccessKey!, bucket: bucket! };
 }
 
-// Cloudflare R2 S3-compatible endpoint
-const R2_ENDPOINT = `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`;
-
 export function getR2Client() {
-  return new S3Client({
-    region: "auto",
-    endpoint: R2_ENDPOINT,
-    credentials: {
-      accessKeyId: R2_ACCESS_KEY_ID,
-      secretAccessKey: R2_SECRET_ACCESS_KEY,
-    },
-    forcePathStyle: true,
-  });
+  if (!_r2Client) {
+    const { accountId, accessKeyId, secretAccessKey } = getEnvVars();
+    _r2Client = new S3Client({
+      region: "auto",
+      endpoint: `https://${accountId}.r2.cloudflarestorage.com`,
+      credentials: {
+        accessKeyId,
+        secretAccessKey,
+      },
+      forcePathStyle: true,
+    });
+  }
+  return _r2Client;
 }
 
 export async function getR2ObjectStream(key: string) {
+  const { bucket } = getEnvVars();
   const client = getR2Client();
-  const command = new GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: key });
+  const command = new GetObjectCommand({ Bucket: bucket, Key: key });
   const result = await client.send(command);
-  const body = result.Body as any; // Node.js Readable or Web ReadableStream depending on runtime
+  const body = result.Body as any;
   const contentType = result.ContentType || "application/octet-stream";
   const contentLength = result.ContentLength || undefined;
   const lastModified = result.LastModified?.toUTCString();
@@ -39,8 +53,9 @@ export async function getR2ObjectStream(key: string) {
 }
 
 export async function getR2SignedUrl(key: string, expiresInSeconds = 900) {
+  const { bucket } = getEnvVars();
   const client = getR2Client();
-  const command = new GetObjectCommand({ Bucket: R2_BUCKET_NAME, Key: key });
+  const command = new GetObjectCommand({ Bucket: bucket, Key: key });
   const signedUrl = await getSignedUrl(client, command, { expiresIn: expiresInSeconds });
   return signedUrl;
 }
@@ -51,16 +66,8 @@ export async function putR2Object(
   contentType?: string,
   cacheControl?: string,
 ) {
-  const accountId = process.env.R2_ACCOUNT_ID;
-  const accessKeyId = process.env.R2_ACCESS_KEY_ID;
-  const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
-  const bucket = process.env.R2_BUCKET_NAME;
+  const { accountId, accessKeyId, secretAccessKey, bucket } = getEnvVars();
 
-  if (!accountId || !accessKeyId || !secretAccessKey || !bucket) {
-    throw new Error("Missing R2 env vars: R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY, R2_BUCKET_NAME");
-  }
-
-  const { S3Client } = await import("@aws-sdk/client-s3");
   const client = new S3Client({
     region: "auto",
     endpoint: `https://${accountId}.r2.cloudflarestorage.com`,

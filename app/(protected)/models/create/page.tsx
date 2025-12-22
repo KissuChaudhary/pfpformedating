@@ -63,7 +63,8 @@ export default function CreateModelPage() {
             });
 
             if (!modelRes.ok) {
-                throw new Error('Failed to create model');
+                const errorData = await modelRes.json().catch(() => ({}));
+                throw new Error(errorData.error || 'Failed to create model');
             }
 
             const { model } = await modelRes.json();
@@ -77,8 +78,17 @@ export default function CreateModelPage() {
                 body: formData,
             });
 
+            const samplesData = await samplesRes.json().catch(() => ({}));
+
             if (!samplesRes.ok) {
-                throw new Error('Failed to upload images');
+                console.error('Samples upload error:', samplesData);
+                throw new Error(samplesData.error || samplesData.details || 'Failed to upload images');
+            }
+
+            // Check if any uploads actually succeeded
+            if (samplesData.uploadedCount === 0) {
+                console.error('No samples uploaded:', samplesData.errors);
+                throw new Error(samplesData.errors?.[0] || 'No images were uploaded successfully');
             }
 
             // Success - redirect to dashboard
