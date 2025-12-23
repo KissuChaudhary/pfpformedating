@@ -38,11 +38,28 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Job not found" }, { status: 404 });
         }
 
-        // Skip if job already completed/failed (prevents duplicate processing)
-        if (job.status === "completed" || job.status === "failed") {
-            console.log("Job already processed, skipping webhook:", request_id);
+        // Skip if job already completed/failed/processing
+        if (job.status !== "pending") {
+            console.log("Job already being processed or completed, skipping:", request_id, job.status);
             return NextResponse.json({ received: true, status: "already_processed" });
         }
+
+        // ATOMIC LOCK: Try to claim the job by setting status to 'processing'
+        // Only succeeds if status is still 'pending' (prevents race condition)
+        const { data: claimedJob, error: claimError } = await supabase
+            .from("generation_jobs")
+            .update({ status: "processing" })
+            .eq("id", job.id)
+            .eq("status", "pending")  // Only update if still pending
+            .select()
+            .single();
+
+        if (claimError || !claimedJob) {
+            console.log("Failed to claim job (another process got it first):", request_id);
+            return NextResponse.json({ received: true, status: "claimed_by_other" });
+        }
+
+        console.log("Webhook claimed job:", request_id);
 
         // Handle error status
         if (status === "ERROR") {

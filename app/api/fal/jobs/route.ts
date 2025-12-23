@@ -59,6 +59,22 @@ export async function GET(request: NextRequest) {
                 console.log(`Job ${job.id} fal status:`, falStatus.status);
 
                 if (falStatus.status === "COMPLETED") {
+                    // ATOMIC LOCK: Try to claim the job by setting status to 'processing'
+                    const { data: claimedJob, error: claimError } = await supabase
+                        .from("generation_jobs")
+                        .update({ status: "processing" })
+                        .eq("id", job.id)
+                        .eq("status", "pending")  // Only if still pending
+                        .select()
+                        .single();
+
+                    if (claimError || !claimedJob) {
+                        console.log(`Job ${job.id} already claimed by another process, skipping`);
+                        continue;  // Another process (webhook) got it first
+                    }
+
+                    console.log(`Polling claimed job ${job.id}, fetching result...`);
+
                     // Fetch the result
                     const result = await fal.queue.result("fal-ai/bytedance/seedream/v4.5/edit", {
                         requestId: job.fal_request_id,
