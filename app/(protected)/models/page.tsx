@@ -15,6 +15,7 @@ interface Model {
     id: number;
     name: string;
     type: string;
+    mode?: 'single' | 'couple';
     status: string;
     created_at: string;
     samples: Sample[];
@@ -163,7 +164,13 @@ export default function ModelsPage() {
                                 <div className="p-2.5 sm:p-3">
                                     <h3 className="font-medium text-white text-sm truncate">{model.name}</h3>
                                     <div className="flex items-center justify-between mt-1">
-                                        <span className="text-[11px] text-zinc-400">{model.type}</span>
+                                        <div className="flex items-center gap-1.5">
+                                            <span className="text-[11px] text-zinc-400">{model.type}</span>
+                                            <span className="text-zinc-700 text-[10px]">•</span>
+                                            <span className="text-[11px] font-medium text-zinc-300 capitalize">
+                                                {model.mode || 'single'}
+                                            </span>
+                                        </div>
                                         <span className="text-[11px] text-zinc-500">{formatDate(model.created_at)}</span>
                                     </div>
                                 </div>
