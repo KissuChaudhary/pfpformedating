@@ -29,13 +29,8 @@ export async function enhancePrompt(
 
         // Define lighting guidelines based on user selection
         const lightingGuide = lighting === 'NIGHT'
-            ? `LIGHTING TIME: Night/Indoor
-- Use natural night lighting: flash, neon lights, street lamps, indoor lighting to capture the imperfact natural lightiung shot on mobiles
-- Hard shadows from direct flash or dramatic artificial night light`
-            : `LIGHTING TIME: Daylight/Outdoor
-- Use natural sunlight: golden hour, overcast, direct sun, window light
-- Outdoor settings: parks, streets, cafes, beaches, city streets, markets, malls, airports, train stations, bus stations, shopping centers
-- Soft or harsh natural shadows depending on time of day`;
+            ? `User have asked to write the prompt to generate an image in day-light so the lighting should be natural and realistic`
+            : `User have asked to write the prompt to generate an image in night-light so the lighting should be natural and realistic suitable for night photography`;
 
         const systemInstruction = `
       You are a specialized AI Photographer Assistant. Your goal is to write a prompt for an Image-to-Image generation model.
@@ -43,7 +38,7 @@ export async function enhancePrompt(
       THE AESTHETIC:
       - Raw, candid, disposable camera style.
       - Imperfect lighting (varying based on time of day).
-      - Realistic skin texture (visible pores, natural skin, imperfections).
+      - Realistic skin texture (natural skin, imperfections).
       - NO "AI perfection", NO smooth plastic skin.
       
       ${lightingGuide}
@@ -52,11 +47,11 @@ export async function enhancePrompt(
       - ${examples}
       
       INSTRUCTIONS:
-      1. Analyze the user's idea: "${userPrompt}"
+      1. Analyze the user's idea he want an photoshoot for: "${userPrompt}"
       2. Write a single, detailed image generation prompt.
       3. The subject is ${gender}.
-      4. IMPORTANT: The lighting MUST match the ${lighting === 'NIGHT' ? 'NIGHT/ARTIFICIAL' : 'DAYLIGHT/NATURAL'} setting specified above.
-      5. Incorporate the style of the REFERENCE EXAMPLES (camera angle, texture).
+      4. IMPORTANT: The lighting MUST match the ${lighting === 'NIGHT' ? 'NIGHT/ARTIFICIAL' : 'DAYLIGHT/NATURAL'} setting specified above by the user.
+      5. Incorporate the hyper realistic style of the attached best, curated REFERENCE EXAMPLES (camera angle, texture, camera composition, The poses).
       6. Explicitly state: "Keep facial identity consistent with reference photos."
       7. Output ONLY the prompt string. No explanations.
     `;
@@ -95,13 +90,8 @@ export async function enhanceCouplePrompt(
             : COUPLE_REFERENCE_PROMPTS.FLASH.slice(0, 3).join("\n- ");
 
         const lightingGuide = lighting === 'NIGHT'
-            ? `LIGHTING TIME: Night/Indoor
-- Use natural night lighting: flash, neon lights, street lamps, indoor lighting
-- Hard shadows from direct flash or dramatic artificial night light`
-            : `LIGHTING TIME: Daylight/Outdoor
-- Use natural sunlight: golden hour, overcast, direct sun, window light
-- Outdoor romantic settings: parks, beaches, cafes, city streets, gardens`;
-
+            ? `User have asked to write the prompt to generate an image in day-light so the lighting should be natural and realistic`
+            : `User have asked to write the prompt to generate an image in night-light so the lighting should be natural and realistic suitable for night photography`;
         const systemInstruction = `
       You are a specialized AI Photographer Assistant for COUPLE PHOTOSHOOTS.
       
@@ -113,14 +103,14 @@ export async function enhanceCouplePrompt(
       
       ${lightingGuide}
       
-      REFERENCE EXAMPLES OF THE STYLE:
+      Here are the pro level REFERENCE EXAMPLES OF THE prompts which are tested and have produced the hyper realistic results:
       - ${examples}
       
       INSTRUCTIONS:
-      1. Analyze the user's idea: "${userPrompt}"
-      2. Write a single, detailed image generation prompt for a COUPLE.
+      1. Analyze the user's idea what they are looking to generate: "${userPrompt}"
+      2. Write a single, detailed image generation prompt for the couple photoshoot.
       3. The subjects are a man and a woman together (romantic couple).
-      4. IMPORTANT: The lighting MUST match the ${lighting === 'NIGHT' ? 'NIGHT/ARTIFICIAL' : 'DAYLIGHT/NATURAL'} setting.
+      4. IMPORTANT: The lighting in the prompt MUST match the ${lighting === 'NIGHT' ? 'NIGHT/ARTIFICIAL' : 'DAYLIGHT/NATURAL'} setting.
       5. Focus on natural interaction, body language, and connection between them.
       6. Explicitly state: "Keep both faces' identities consistent with reference photos."
       7. Output ONLY the prompt string. No explanations.
@@ -145,6 +135,11 @@ export async function enhanceCouplePrompt(
 /**
  * Helper: Convert URL or base64 string to clean base64 data
  */
+/**
+ * Helper: Convert URL or base64 string to clean base64 data
+ * (LEGACY: Used by generateCandidPhoto)
+ */
+/*
 async function imageToBase64(imageInput: string): Promise<{ data: string; mimeType: string }> {
     // If it's already base64 data URL
     if (imageInput.startsWith('data:image/')) {
@@ -184,12 +179,18 @@ async function imageToBase64(imageInput: string): Promise<{ data: string; mimeTy
     // Assume it's raw base64 without prefix
     return { mimeType: 'image/jpeg', data: imageInput };
 }
+*/
+
+/* 
+// LEGACY: Gemini Image Generation (Replaced by Fal.ai)
+// Keeping for reference or potential fallback in future
 
 /**
  * Step 2: Image Generation
  * Uses gemini-2.5-flash-image to generate the photo.
  * Accepts reference images (URLs or base64) to guide the generation (Identity/Context).
  */
+/*
 export async function generateCandidPhoto(
     enhancedPrompt: string,
     referenceImages: string[],
@@ -250,13 +251,14 @@ export async function generateCandidPhoto(
         throw error;
     }
 }
+*/
 
 /**
  * Step 3: Unified Generate + Save (OPTIMIZED)
  * Generates the image and saves it directly to R2/database on server.
  * This avoids sending the large base64 to the client, preventing browser freezes.
  */
-
+/*
 export async function generateAndSaveImage(
     userPrompt: string,
     mode: string,
@@ -356,3 +358,5 @@ export async function generateAndSaveImage(
         return { success: false, error: 'Generation failed' };
     }
 }
+*/
+

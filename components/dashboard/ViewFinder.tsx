@@ -195,11 +195,6 @@ export const Viewfinder: React.FC = () => {
 
                     // Remove completed/failed jobs from pending state
                     setPendingJobs(prev => prev.filter(p => !completedJobIds.includes(p.id)));
-
-                    // Auto-scroll to gallery
-                    setTimeout(() => {
-                        galleryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }, 100);
                 }
             } catch (error) {
                 console.error('Failed to poll jobs:', error);
@@ -266,6 +261,14 @@ export const Viewfinder: React.FC = () => {
                 }
 
                 setPrompt('');
+
+                // Auto-scroll to gallery on mobile (ONE TIME ONLY)
+                // Use a small timeout to let the UI update with the new pending card
+                setTimeout(() => {
+                    if (window.innerWidth < 768) { // Only force scroll on mobile
+                        galleryRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
 
                 // Quick feedback then clear
                 setTimeout(() => setStatusMessage(''), 2000);
