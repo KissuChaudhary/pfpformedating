@@ -10,7 +10,7 @@ const MODES = [
     { id: 'GOLDEN', label: 'GOLDEN HOUR', desc: 'Warm sun' },
     { id: 'GRITTY', label: 'GRITTY VINTAGE', desc: 'B&W Street' },
     { id: 'CINE', label: 'CINE SHOOT', desc: 'Cinematic' },
-    { id: 'PROFESSIONAL', label: 'HEADSHOT', desc: 'Professional' }
+    { id: 'PROFESSIONAL', label: 'Professional', desc: 'confident' }
 ];
 
 const RATIOS = [
