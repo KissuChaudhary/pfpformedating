@@ -5,7 +5,6 @@ create table public.models (
   created_at timestamp with time zone not null default now(),
   user_id uuid null,
   status text not null default 'processing'::text,
-  "modelId" text null,
   is_custom boolean null default false,
   constraint models_pkey primary key (id),
   constraint models_user_id_fkey foreign KEY (user_id) references auth.users (id) on delete CASCADE

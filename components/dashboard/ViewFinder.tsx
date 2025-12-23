@@ -30,6 +30,7 @@ interface Model {
     id: number;
     name: string;
     type: string;
+    mode?: 'single' | 'couple';
     samples: { id: number; uri: string }[];
 }
 
@@ -53,6 +54,12 @@ export const Viewfinder: React.FC = () => {
     const [selectedModel, setSelectedModel] = useState<Model | null>(null);
     const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
     const [isLoadingModels, setIsLoadingModels] = useState(true);
+    const [viewMode, setViewMode] = useState<'single' | 'couple'>('single');
+
+    // Filter models based on view mode
+    const filteredModels = models.filter(m =>
+        m.mode === viewMode || (!m.mode && viewMode === 'single')
+    );
 
     // Viewfinder State
     const [prompt, setPrompt] = useState('');
@@ -300,6 +307,39 @@ export const Viewfinder: React.FC = () => {
                 {/* Scrollable Form */}
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-5 space-y-6">
 
+                    {/* Single/Couple Mode Tabs */}
+                    <div className="flex p-1 bg-zinc-800 rounded-lg border border-zinc-700">
+                        <button
+                            onClick={() => {
+                                setViewMode('single');
+                                // Select first single model if available
+                                const singleModels = models.filter(m => m.mode === 'single' || !m.mode);
+                                if (singleModels.length > 0) setSelectedModel(singleModels[0]);
+                            }}
+                            className={`flex-1 py-2 text-xs font-medium rounded-md transition-all ${viewMode === 'single'
+                                ? 'bg-white text-black shadow-sm'
+                                : 'text-zinc-400 hover:text-white'
+                                }`}
+                        >
+                            Single
+                        </button>
+                        <button
+                            onClick={() => {
+                                setViewMode('couple');
+                                // Select first couple model if available
+                                const coupleModels = models.filter(m => m.mode === 'couple');
+                                if (coupleModels.length > 0) setSelectedModel(coupleModels[0]);
+                                else setSelectedModel(null);
+                            }}
+                            className={`flex-1 py-2 text-xs font-medium rounded-md transition-all ${viewMode === 'couple'
+                                ? 'bg-white text-black shadow-sm'
+                                : 'text-zinc-400 hover:text-white'
+                                }`}
+                        >
+                            Couple
+                        </button>
+                    </div>
+
                     {/* 1. Model Selector */}
                     <div>
                         <label className="text-xs font-medium text-zinc-400 mb-3 block uppercase tracking-wide">Your Model</label>
@@ -333,7 +373,7 @@ export const Viewfinder: React.FC = () => {
 
                             {isModelDropdownOpen && (
                                 <div className="absolute top-full left-0 right-0 mt-2 bg-zinc-800 border border-zinc-700 rounded-lg shadow-xl z-50 overflow-hidden">
-                                    {models.map((model) => (
+                                    {filteredModels.map((model) => (
                                         <button
                                             key={model.id}
                                             onClick={() => {

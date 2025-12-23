@@ -16,6 +16,7 @@ export async function GET() {
       id,
       name,
       type,
+      mode,
       status,
       created_at,
       samples (
@@ -45,7 +46,7 @@ export async function POST(request: NextRequest) {
 
     try {
         const body = await request.json();
-        const { name, type } = body;
+        const { name, type, mode } = body;
 
         if (!name || !type) {
             return NextResponse.json({ error: 'Name and type are required' }, { status: 400 });
@@ -56,6 +57,7 @@ export async function POST(request: NextRequest) {
             .insert({
                 name,
                 type,
+                mode: mode || 'single',
                 user_id: user.id,
                 status: 'processing',
             })
