@@ -12,19 +12,20 @@ export const metadata: Metadata = commonPageMetadata.pricing()
 
 // Pricing feature sets for structured data
 const starterFeatures = [
-  "10 Hyper-Realistic Photos",
-  "5 Film Modes (Flash, Golden, Gritty, Cine, Headshot)",
-  "Nano-Texture Engine (Real skin, no plastic AI)",
-  "Auto-Delete Privacy (7-day wipe)",
-  "Commercial License (Use anywhere)"
+  "15 Hyper-Realistic Photos",
+  "4 Film Modes Included",
+  "Nano-Texture Engine",
+  "Auto-Delete Privacy",
+  "Commercial License"
 ]
 
 const proFeatures = [
-  "25 Hyper-Realistic Photos (2.5x Capacity)",
-  "$0.79 Per Photo (Save 20%)",
-  "5 Film Modes (Flash, Golden, Gritty, Cine, Headshot)",
-  "Nano-Texture Engine (Real skin, no plastic AI)",
-  "Auto-Delete Privacy (7-day wipe)"
+  "50 Hyper-Realistic Photos",
+  "Best Value ($0.37 per photo)",
+  "Perfect for Couples & Solos",
+  "4 Film Modes Included",
+  "Nano-Texture Engine",
+  "Auto-Delete Privacy"
 ]
 
 export default function PricingPage() {
@@ -61,7 +62,7 @@ export default function PricingPage() {
                   <tr className="border-b border-foreground/5">
                     <td className="px-6 py-3 text-foreground">Cost</td>
                     <td className="px-6 py-3">$150–$600+ per session</td>
-                    <td className="px-6 py-3 text-accent font-semibold">$9.99–$19.99 one-time</td>
+                    <td className="px-6 py-3 text-accent font-semibold">$8.99–$18.99 one-time</td>
                   </tr>
                   <tr className="border-b border-foreground/5">
                     <td className="px-6 py-3 text-foreground">Setup & Scheduling</td>
@@ -213,8 +214,8 @@ export default function PricingPage() {
             data: JSON.parse(
               generateProductJsonLd({
                 name: 'Standard Roll',
-                description: '10 hyper-realistic AI photos with 5 film modes and commercial license.',
-                price: 9.99,
+                description: '15 hyper-realistic AI photos with 4 film modes and commercial license.',
+                price: 8.99,
                 currency: 'USD',
                 features: starterFeatures,
               })
@@ -225,8 +226,8 @@ export default function PricingPage() {
             data: JSON.parse(
               generateProductJsonLd({
                 name: 'Pro Roll',
-                description: '25 hyper-realistic AI photos at 20% savings with all features included.',
-                price: 19.99,
+                description: '50 hyper-realistic AI photos including couple shots at best value.',
+                price: 18.99,
                 currency: 'USD',
                 features: proFeatures,
               })

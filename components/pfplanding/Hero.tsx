@@ -23,7 +23,7 @@ export const Hero: React.FC = () => {
         <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
           <Link href="/login">
             <Button size="lg" className="w-full sm:w-auto">
-              Load Film Roll ($9.99)
+              Create Your Photos ($8.99)
             </Button>
           </Link>
 
