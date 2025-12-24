@@ -3,11 +3,13 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { ChevronDown, Plus, Download, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
+import { getThumbnailUrl } from '@/lib/image-optimization';
 
 // Configuration for the 5 physics engines (Modes)
 const MODES = [
     { id: 'FLASH', label: 'FLASH', desc: 'Hard shadows' },
-    { id: 'GOLDEN', label: 'GOLDEN HOUR', desc: 'Warm sun' },
+    { id: 'LIFESTYLE', label: 'LIFESTYLE', desc: 'Warm sun, Bistro lights' },
     { id: 'GRITTY', label: 'GRITTY VINTAGE', desc: 'B&W Street' },
     { id: 'CINE', label: 'CINE SHOOT', desc: 'Cinematic' },
     { id: 'PROFESSIONAL', label: 'Professional', desc: 'confident' }
@@ -88,7 +90,10 @@ export const Viewfinder: React.FC = () => {
                     const data = await res.json();
                     setModels(data.models || []);
                     if (data.models?.length > 0) {
-                        setSelectedModel(data.models[0]);
+                        const firstModel = data.models[0];
+                        setSelectedModel(firstModel);
+                        // Sync viewMode with the first selected model's mode
+                        setViewMode(firstModel.mode === 'couple' ? 'couple' : 'single');
                     }
                 }
             } catch (error) {
@@ -630,10 +635,14 @@ export const Viewfinder: React.FC = () => {
                             {/* Photos from database */}
                             {generatedImages.map((image) => (
                                 <div key={image.id} className="break-inside-avoid group relative bg-zinc-900 border border-zinc-700 rounded-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-black/50 hover:border-zinc-600 hover:-translate-y-1">
-                                    <img
-                                        src={image.uri}
+                                    <Image
+                                        src={getThumbnailUrl(image.uri)}
+                                        width={600}
+                                        height={800}
                                         className="w-full h-auto object-cover block"
                                         alt={`Generated ${image.id}`}
+                                        loading="lazy"
+                                        unoptimized
                                     />
 
                                     {/* Mobile: Always visible download button (bottom-right) */}

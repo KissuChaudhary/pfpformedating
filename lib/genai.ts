@@ -21,11 +21,13 @@ export async function enhancePrompt(
     lighting: string = 'DAYLIGHT'
 ): Promise<string> {
     try {
-        // Get relevant examples based on mode
+        // Get relevant examples based on mode and gender
         const modeKey = mode as keyof typeof REFERENCE_PROMPTS;
-        const examples = REFERENCE_PROMPTS[modeKey]
-            ? REFERENCE_PROMPTS[modeKey].slice(0, 3).join("\n- ")
-            : REFERENCE_PROMPTS.FLASH.slice(0, 3).join("\n- "); // Default to Flash if not found
+        const genderKey = gender.toUpperCase() === 'MALE' ? 'MALE' : 'FEMALE';
+
+        const modePrompts = REFERENCE_PROMPTS[modeKey];
+        const genderPrompts = modePrompts?.[genderKey] || REFERENCE_PROMPTS.FLASH.FEMALE;
+        const examples = genderPrompts.slice(0, 3).join("\n- ");
 
         // Define lighting guidelines based on user selection
         const lightingGuide = lighting === 'NIGHT'
