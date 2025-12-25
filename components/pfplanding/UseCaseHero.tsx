@@ -11,6 +11,7 @@ interface UseCaseHeroProps {
     image2: string
     ctaText?: string
     ctaLink?: string
+    ctaSubtext?: string
 }
 
 export const UseCaseHero: React.FC<UseCaseHeroProps> = ({
@@ -21,7 +22,8 @@ export const UseCaseHero: React.FC<UseCaseHeroProps> = ({
     image1,
     image2,
     ctaText = "Create Your Photos ($8.99)",
-    ctaLink = "/login"
+    ctaLink = "/login",
+    ctaSubtext = "[!] No plastic skin. No fake smiles. 100% Aesthetic."
 }) => {
     return (
         <section className="relative min-h-screen flex flex-col md:grid md:grid-cols-12 border-b border-foreground/10">
@@ -53,7 +55,7 @@ export const UseCaseHero: React.FC<UseCaseHeroProps> = ({
                     </Link>
 
                     <span className="font-mono text-xs text-foreground/40 sm:max-w-[200px] max-w-full">
-                        [!] No plastic skin. No fake smiles. 100% Aesthetic.
+                        {ctaSubtext}
                     </span>
                 </div>
             </div>
