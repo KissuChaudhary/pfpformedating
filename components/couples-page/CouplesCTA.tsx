@@ -21,8 +21,8 @@ export const CouplesCTA = () => {
                 </p>
 
                 <Link href="/login?plan=pro_roll">
-                    <Button size="lg" className="px-12 py-8 text-xl w-full sm:w-auto">
-                        CREATE COUPLE PORTRAITS - $18.99
+                    <Button size="lg" className="w-full sm:w-auto">
+                        Create Couple Portraits - $18.99
                     </Button>
                 </Link>
                 <div className="mt-4 font-mono text-xs text-foreground/40 uppercase tracking-widest">

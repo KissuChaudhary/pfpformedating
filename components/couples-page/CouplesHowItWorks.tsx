@@ -20,19 +20,31 @@ export const CouplesHowItWorks = () => {
     ];
 
     return (
-        <section className="py-20 border-b border-foreground/10">
-            <div className="container mx-auto px-6 md:px-12">
-                <h2 className="font-display text-4xl font-bold uppercase mb-16 text-center">How to Create an AI Couple Photoshoot</h2>
+        <section className="border-b border-foreground/10 bg-black">
+            <div className="grid md:grid-cols-12 min-h-[40vh]">
+                {/* Header */}
+                <div className="md:col-span-4 p-8 md:p-12 border-r border-foreground/10 flex flex-col justify-center bg-[#0a0a0a]">
+                    <h2 className="font-display text-4xl md:text-5xl font-bold uppercase leading-none mb-6">
+                        How It <br /> Works.
+                    </h2>
+                    <p className="font-mono text-foreground/60 text-sm">
+                        Create your photoshoot in 4 simple steps. <br /> No camera required.
+                    </p>
+                </div>
 
-                <div className="grid md:grid-cols-4 gap-8">
+                {/* Steps Grid */}
+                <div className="md:col-span-8 grid md:grid-cols-2">
                     {steps.map((step, i) => (
-                        <div key={i} className="relative group">
-                            <div className="font-mono text-6xl font-bold text-foreground/5 absolute -top-10 -left-6 z-0 group-hover:text-accent/10 transition-colors">
+                        <div key={i} className="p-8 border-b md:border-b-0 border-foreground/10 md:even:border-l relative group hover:bg-foreground/5 transition-colors">
+                            <div className="font-mono text-5xl font-bold text-foreground/10 absolute top-4 right-4 group-hover:text-accent/20 transition-colors">
                                 0{i + 1}
                             </div>
-                            <div className="relative z-10">
-                                <h3 className="font-display text-xl font-bold uppercase mb-4">{step.title}</h3>
-                                <p className="font-mono text-sm text-foreground/60">{step.desc}</p>
+
+                            <div className="relative z-10 pt-8">
+                                <h3 className="font-display text-xl font-bold uppercase mb-2">{step.title}</h3>
+                                <p className="font-mono text-xs text-foreground/60 h-10 border-l border-foreground/10 pl-3">
+                                    {step.desc}
+                                </p>
                             </div>
                         </div>
                     ))}
