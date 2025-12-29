@@ -4,11 +4,61 @@ import { useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Upload, X, Loader2, Camera, Sparkles, Users, User } from 'lucide-react';
+import { Upload, X, Loader2, Camera, Sparkles, Users, User, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const GENDERS = ['Female', 'Male', 'Non-Binary'] as const;
 type Gender = typeof GENDERS[number];
 type ModelMode = 'single' | 'couple';
+
+// Upload progress tracking
+type UploadStatus = 'pending' | 'uploading' | 'success' | 'failed';
+interface UploadProgress {
+    statuses: UploadStatus[];
+    percentages: number[];
+    errors: (string | null)[];
+}
+
+// Helper to upload with progress tracking using XHR
+function uploadWithProgress(
+    url: string,
+    formData: FormData,
+    onProgress: (percent: number) => void
+): Promise<{ ok: boolean; error?: string }> {
+    return new Promise((resolve) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.addEventListener('progress', (e) => {
+            if (e.lengthComputable) {
+                const percent = Math.round((e.loaded / e.total) * 100);
+                onProgress(percent);
+            }
+        });
+
+        xhr.addEventListener('load', () => {
+            if (xhr.status >= 200 && xhr.status < 300) {
+                resolve({ ok: true });
+            } else {
+                try {
+                    const resp = JSON.parse(xhr.responseText);
+                    resolve({ ok: false, error: resp.error || 'Upload failed' });
+                } catch {
+                    resolve({ ok: false, error: 'Upload failed' });
+                }
+            }
+        });
+
+        xhr.addEventListener('error', () => {
+            resolve({ ok: false, error: 'Network error' });
+        });
+
+        xhr.addEventListener('abort', () => {
+            resolve({ ok: false, error: 'Upload cancelled' });
+        });
+
+        xhr.open('POST', url);
+        xhr.send(formData);
+    });
+}
 
 export default function CreateModelPage() {
     const router = useRouter();
@@ -29,6 +79,9 @@ export default function CreateModelPage() {
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
+
+    // Upload progress tracking
+    const [uploadProgress, setUploadProgress] = useState<UploadProgress | null>(null);
 
     // Single mode image upload
     const handleImageUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -108,8 +161,23 @@ export default function CreateModelPage() {
         setIsLoading(true);
         setError('');
 
+        // Get all images to upload
+        const allImages = modelMode === 'couple'
+            ? [...womanImages, ...manImages]
+            : images;
+
+        // Initialize upload progress tracking
+        const initialProgress: UploadProgress = {
+            statuses: allImages.map(() => 'pending'),
+            percentages: allImages.map(() => 0),
+            errors: allImages.map(() => null),
+        };
+        setUploadProgress(initialProgress);
+
+        let modelId: number | null = null;
+
         try {
-            // Create the model with mode
+            // Create the model first
             const modelRes = await fetch('/api/models', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -126,48 +194,82 @@ export default function CreateModelPage() {
             }
 
             const { model } = await modelRes.json();
+            modelId = model.id;
 
-            // Get all images to upload
-            const allImages = modelMode === 'couple'
-                ? [...womanImages, ...manImages]
-                : images;
+            // Upload images one by one with progress tracking
+            let hasFailure = false;
+            let firstError: string | null = null;
 
-            // Upload sample images one at a time
-            let uploadedCount = 0;
-            const uploadErrors: string[] = [];
+            for (let i = 0; i < allImages.length; i++) {
+                const img = allImages[i];
 
-            for (const img of allImages) {
-                try {
-                    const formData = new FormData();
-                    formData.append('file', img);
-                    formData.append('filename', img.name);
+                // Update status to uploading
+                setUploadProgress(prev => {
+                    if (!prev) return prev;
+                    const newStatuses = [...prev.statuses];
+                    newStatuses[i] = 'uploading';
+                    return { ...prev, statuses: newStatuses };
+                });
 
-                    const samplesRes = await fetch(`/api/models/${model.id}/samples`, {
-                        method: 'POST',
-                        body: formData,
+                const formData = new FormData();
+                formData.append('file', img);
+                formData.append('filename', img.name);
+
+                const result = await uploadWithProgress(
+                    `/api/models/${model.id}/samples`,
+                    formData,
+                    (percent) => {
+                        setUploadProgress(prev => {
+                            if (!prev) return prev;
+                            const newPercentages = [...prev.percentages];
+                            newPercentages[i] = percent;
+                            return { ...prev, percentages: newPercentages };
+                        });
+                    }
+                );
+
+                if (result.ok) {
+                    // Update status to success
+                    setUploadProgress(prev => {
+                        if (!prev) return prev;
+                        const newStatuses = [...prev.statuses];
+                        const newPercentages = [...prev.percentages];
+                        newStatuses[i] = 'success';
+                        newPercentages[i] = 100;
+                        return { ...prev, statuses: newStatuses, percentages: newPercentages };
+                    });
+                } else {
+                    // Update status to failed
+                    hasFailure = true;
+                    if (!firstError) firstError = result.error || 'Upload failed';
+
+                    setUploadProgress(prev => {
+                        if (!prev) return prev;
+                        const newStatuses = [...prev.statuses];
+                        const newErrors = [...prev.errors];
+                        newStatuses[i] = 'failed';
+                        newErrors[i] = result.error || 'Upload failed';
+                        return { ...prev, statuses: newStatuses, errors: newErrors };
                     });
 
-                    const result = await samplesRes.json().catch(() => ({}));
-
-                    if (!samplesRes.ok) {
-                        console.error(`Upload failed for ${img.name}:`, result);
-                        uploadErrors.push(result.error || `Failed to upload ${img.name}`);
-                    } else {
-                        uploadedCount++;
-                    }
-                } catch (err) {
-                    console.error(`Error uploading ${img.name}:`, err);
-                    uploadErrors.push(`Error uploading ${img.name}`);
+                    // Stop uploading further if one fails
+                    break;
                 }
             }
 
-            // Check if we uploaded enough images
-            const minRequired = modelMode === 'couple' ? 6 : 3;
-            if (uploadedCount < minRequired) {
-                throw new Error(uploadErrors[0] || 'Failed to upload enough images');
+            // If any upload failed, rollback by deleting the model
+            if (hasFailure) {
+                // Attempt to delete the orphan model
+                try {
+                    await fetch(`/api/models/${modelId}`, { method: 'DELETE' });
+                } catch (deleteErr) {
+                    console.error('Failed to cleanup orphan model:', deleteErr);
+                }
+
+                throw new Error(firstError || 'Some images failed to upload. Please try again.');
             }
 
-            // Success - redirect to dashboard
+            // All uploads succeeded - redirect to dashboard
             router.push('/dashboard');
         } catch (err) {
             console.error('Error creating model:', err);
@@ -311,17 +413,57 @@ export default function CreateModelPage() {
                                 </div>
 
                                 <div className="grid grid-cols-4 gap-3 mb-4">
-                                    {imagePreviews.map((preview, i) => (
-                                        <div key={i} className="relative aspect-[3/4] rounded-lg overflow-hidden group">
-                                            <img src={preview} className="w-full h-full object-cover" alt="" />
-                                            <button
-                                                onClick={() => removeImage(i)}
-                                                className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
-                                            >
-                                                <X className="w-5 h-5 text-white" />
-                                            </button>
-                                        </div>
-                                    ))}
+                                    {imagePreviews.map((preview, i) => {
+                                        const status = uploadProgress?.statuses[i];
+                                        const percent = uploadProgress?.percentages[i] ?? 0;
+                                        const errorMsg = uploadProgress?.errors[i];
+
+                                        return (
+                                            <div key={i} className="relative aspect-[3/4] rounded-lg overflow-hidden group">
+                                                <img src={preview} className="w-full h-full object-cover" alt="" />
+
+                                                {/* Upload progress overlay */}
+                                                {isLoading && status && (
+                                                    <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center">
+                                                        {status === 'pending' && (
+                                                            <span className="text-xs text-zinc-400">Waiting...</span>
+                                                        )}
+                                                        {status === 'uploading' && (
+                                                            <>
+                                                                <Loader2 className="w-5 h-5 text-white animate-spin mb-2" />
+                                                                <div className="w-3/4 h-1.5 bg-zinc-700 rounded-full overflow-hidden">
+                                                                    <div
+                                                                        className="h-full bg-green-500 transition-all duration-150"
+                                                                        style={{ width: `${percent}%` }}
+                                                                    />
+                                                                </div>
+                                                                <span className="text-xs text-zinc-300 mt-1">{percent}%</span>
+                                                            </>
+                                                        )}
+                                                        {status === 'success' && (
+                                                            <CheckCircle2 className="w-6 h-6 text-green-500" />
+                                                        )}
+                                                        {status === 'failed' && (
+                                                            <div className="flex flex-col items-center">
+                                                                <AlertCircle className="w-6 h-6 text-red-500 mb-1" />
+                                                                <span className="text-[10px] text-red-400 text-center px-1">{errorMsg}</span>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                )}
+
+                                                {/* Remove button - only show when not loading */}
+                                                {!isLoading && (
+                                                    <button
+                                                        onClick={() => removeImage(i)}
+                                                        className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
+                                                    >
+                                                        <X className="w-5 h-5 text-white" />
+                                                    </button>
+                                                )}
+                                            </div>
+                                        );
+                                    })}
                                     {images.length < 4 && (
                                         <label className="aspect-[3/4] border border-zinc-700 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-accent/50 hover:bg-accent/5 transition-colors bg-zinc-800/50">
                                             <Upload className="w-5 h-5 text-zinc-400 mb-1" />
@@ -358,17 +500,58 @@ export default function CreateModelPage() {
                                         </span>
                                     </div>
                                     <div className="grid grid-cols-3 gap-3">
-                                        {womanPreviews.map((preview, i) => (
-                                            <div key={i} className="relative aspect-[3/4] rounded-lg overflow-hidden group">
-                                                <img src={preview} className="w-full h-full object-cover" alt="" />
-                                                <button
-                                                    onClick={() => removeCoupleImage(i, 'woman')}
-                                                    className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
-                                                >
-                                                    <X className="w-5 h-5 text-white" />
-                                                </button>
-                                            </div>
-                                        ))}
+                                        {womanPreviews.map((preview, i) => {
+                                            // Woman images are at index 0-2 in uploadProgress
+                                            const status = uploadProgress?.statuses[i];
+                                            const percent = uploadProgress?.percentages[i] ?? 0;
+                                            const errorMsg = uploadProgress?.errors[i];
+
+                                            return (
+                                                <div key={i} className="relative aspect-[3/4] rounded-lg overflow-hidden group">
+                                                    <img src={preview} className="w-full h-full object-cover" alt="" />
+
+                                                    {/* Upload progress overlay */}
+                                                    {isLoading && status && (
+                                                        <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center">
+                                                            {status === 'pending' && (
+                                                                <span className="text-xs text-zinc-400">Waiting...</span>
+                                                            )}
+                                                            {status === 'uploading' && (
+                                                                <>
+                                                                    <Loader2 className="w-5 h-5 text-white animate-spin mb-2" />
+                                                                    <div className="w-3/4 h-1.5 bg-zinc-700 rounded-full overflow-hidden">
+                                                                        <div
+                                                                            className="h-full bg-pink-500 transition-all duration-150"
+                                                                            style={{ width: `${percent}%` }}
+                                                                        />
+                                                                    </div>
+                                                                    <span className="text-xs text-zinc-300 mt-1">{percent}%</span>
+                                                                </>
+                                                            )}
+                                                            {status === 'success' && (
+                                                                <CheckCircle2 className="w-6 h-6 text-green-500" />
+                                                            )}
+                                                            {status === 'failed' && (
+                                                                <div className="flex flex-col items-center">
+                                                                    <AlertCircle className="w-6 h-6 text-red-500 mb-1" />
+                                                                    <span className="text-[10px] text-red-400 text-center px-1">{errorMsg}</span>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+
+                                                    {/* Remove button - only show when not loading */}
+                                                    {!isLoading && (
+                                                        <button
+                                                            onClick={() => removeCoupleImage(i, 'woman')}
+                                                            className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
+                                                        >
+                                                            <X className="w-5 h-5 text-white" />
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
                                         {womanImages.length < 3 && (
                                             <label className="aspect-[3/4] border border-pink-500/30 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-pink-500/50 hover:bg-pink-500/5 transition-colors bg-zinc-800/50">
                                                 <Upload className="w-5 h-5 text-pink-400 mb-1" />
@@ -397,17 +580,59 @@ export default function CreateModelPage() {
                                         </span>
                                     </div>
                                     <div className="grid grid-cols-3 gap-3">
-                                        {manPreviews.map((preview, i) => (
-                                            <div key={i} className="relative aspect-[3/4] rounded-lg overflow-hidden group">
-                                                <img src={preview} className="w-full h-full object-cover" alt="" />
-                                                <button
-                                                    onClick={() => removeCoupleImage(i, 'man')}
-                                                    className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
-                                                >
-                                                    <X className="w-5 h-5 text-white" />
-                                                </button>
-                                            </div>
-                                        ))}
+                                        {manPreviews.map((preview, i) => {
+                                            // Man images are at index 3-5 in uploadProgress (after woman images)
+                                            const progressIndex = womanImages.length + i;
+                                            const status = uploadProgress?.statuses[progressIndex];
+                                            const percent = uploadProgress?.percentages[progressIndex] ?? 0;
+                                            const errorMsg = uploadProgress?.errors[progressIndex];
+
+                                            return (
+                                                <div key={i} className="relative aspect-[3/4] rounded-lg overflow-hidden group">
+                                                    <img src={preview} className="w-full h-full object-cover" alt="" />
+
+                                                    {/* Upload progress overlay */}
+                                                    {isLoading && status && (
+                                                        <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center">
+                                                            {status === 'pending' && (
+                                                                <span className="text-xs text-zinc-400">Waiting...</span>
+                                                            )}
+                                                            {status === 'uploading' && (
+                                                                <>
+                                                                    <Loader2 className="w-5 h-5 text-white animate-spin mb-2" />
+                                                                    <div className="w-3/4 h-1.5 bg-zinc-700 rounded-full overflow-hidden">
+                                                                        <div
+                                                                            className="h-full bg-blue-500 transition-all duration-150"
+                                                                            style={{ width: `${percent}%` }}
+                                                                        />
+                                                                    </div>
+                                                                    <span className="text-xs text-zinc-300 mt-1">{percent}%</span>
+                                                                </>
+                                                            )}
+                                                            {status === 'success' && (
+                                                                <CheckCircle2 className="w-6 h-6 text-green-500" />
+                                                            )}
+                                                            {status === 'failed' && (
+                                                                <div className="flex flex-col items-center">
+                                                                    <AlertCircle className="w-6 h-6 text-red-500 mb-1" />
+                                                                    <span className="text-[10px] text-red-400 text-center px-1">{errorMsg}</span>
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                    )}
+
+                                                    {/* Remove button - only show when not loading */}
+                                                    {!isLoading && (
+                                                        <button
+                                                            onClick={() => removeCoupleImage(i, 'man')}
+                                                            className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
+                                                        >
+                                                            <X className="w-5 h-5 text-white" />
+                                                        </button>
+                                                    )}
+                                                </div>
+                                            );
+                                        })}
                                         {manImages.length < 3 && (
                                             <label className="aspect-[3/4] border border-blue-500/30 border-dashed rounded-lg flex flex-col items-center justify-center cursor-pointer hover:border-blue-500/50 hover:bg-blue-500/5 transition-colors bg-zinc-800/50">
                                                 <Upload className="w-5 h-5 text-blue-400 mb-1" />
