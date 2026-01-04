@@ -269,8 +269,19 @@ export default function CreateModelPage() {
                 throw new Error(firstError || 'Some images failed to upload. Please try again.');
             }
 
-            // All uploads succeeded - redirect to dashboard
-            router.push('/dashboard');
+            // All uploads succeeded - trigger preview generation and redirect to preview page
+            try {
+                await fetch('/api/preview/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ modelId }),
+                });
+            } catch (previewErr) {
+                console.error('Failed to trigger preview generation:', previewErr);
+                // Don't block the redirect if preview fails - it can be retried
+            }
+
+            router.push(`/preview/${modelId}`);
         } catch (err) {
             console.error('Error creating model:', err);
             setError(err instanceof Error ? err.message : 'Something went wrong');

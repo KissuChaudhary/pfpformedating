@@ -72,8 +72,19 @@ export async function POST(request: NextRequest) {
                 })
                 .eq("id", job.id);
 
+            // If this is a preview job, update the preview_images table
+            if (job.is_preview) {
+                await supabase
+                    .from("preview_images")
+                    .update({
+                        status: "failed",
+                        completed_at: new Date().toISOString(),
+                    })
+                    .eq("job_id", job.id);
+            }
+
             // TODO: Consider refunding credits on failure
-            console.error("Fal generation failed:", { request_id, error: falError, payload });
+            console.error("Fal generation failed:", { request_id, error: falError, payload, isPreview: job.is_preview });
             return NextResponse.json({ received: true, status: "error_recorded" });
         }
 
@@ -125,7 +136,21 @@ export async function POST(request: NextRequest) {
                     })
                     .eq("id", job.id);
 
-                console.log("Fal generation completed:", { request_id, imageId: image?.id });
+                // If this is a preview job, update the preview_images table
+                if (job.is_preview) {
+                    await supabase
+                        .from("preview_images")
+                        .update({
+                            image_url: publicUri,
+                            status: "completed",
+                            completed_at: new Date().toISOString(),
+                        })
+                        .eq("job_id", job.id);
+
+                    console.log("Preview image completed:", { request_id, model_id: job.model_id });
+                }
+
+                console.log("Fal generation completed:", { request_id, imageId: image?.id, isPreview: job.is_preview });
 
             } catch (saveError) {
                 console.error("Failed to save generated image:", saveError);

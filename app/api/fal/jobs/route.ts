@@ -134,6 +134,20 @@ export async function GET(request: NextRequest) {
                                 })
                                 .eq("id", job.id);
 
+                            // If this is a preview job, update the preview_images table
+                            if (job.is_preview) {
+                                await supabase
+                                    .from("preview_images")
+                                    .update({
+                                        image_url: publicUri,
+                                        status: "completed",
+                                        completed_at: new Date().toISOString(),
+                                    })
+                                    .eq("job_id", job.id);
+
+                                console.log(`Preview image completed for job ${job.id}`);
+                            }
+
                             hasNewCompletions = true;
                         } catch (saveError) {
                             console.error("Failed to save generated image:", saveError);
