@@ -18,7 +18,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { motion } from "framer-motion"
-import { ImagePlaceholder } from "./ImagePlaceholder"
+import { LazyGalleryImage } from "./LazyGalleryImage"
+
 
 interface Image {
   id: number
@@ -259,33 +260,33 @@ export default function ImageGallery() {
   if (images.length === 0) {
     return (
       <div className="mx-auto max-w-3xl text-center py-12 px-4">
-    <h2 className="text-2xl sm:text-3xl font-semibold">Ready for Your Stunning AI Headshots?</h2>
-    
-    <p className="mt-2 text-muted-foreground">
-        You haven't generated any photos yet. Your professional AI photoshoots will appear right here.
-    </p>
+        <h2 className="text-2xl sm:text-3xl font-semibold">Ready for Your Stunning AI Headshots?</h2>
 
-    <div className="mt-6 flex items-center justify-center gap-4">
-      <div className="w-[105px] h-[130px] rounded-md overflow-hidden shadow-sm">
-        <img src="/landing/demo-gallery.webp" alt="Before example" className="w-full object-fit" />
-        <p className="mt-1 text-xs text-muted-foreground">Before</p>
-      </div>
-      <div className="w-[105px] h-[130px] rounded-md overflow-hidden shadow-sm">
-        <img src="/landing/black-swan1.webp" alt="After example" className="w-full object-fit" />
-        <p className="mt-1 text-xs text-muted-foreground">After</p>
-      </div>
-    </div>
+        <p className="mt-2 text-muted-foreground">
+          You haven't generated any photos yet. Your professional AI photoshoots will appear right here.
+        </p>
 
-    <div className="mt-8">
-      <Button asChild size="lg" className="px-6">
-        <Link href="/packs">Get My AI Photoshoot Now</Link>
-      </Button>
-      <p className="mt-3 text-sm text-muted-foreground">
-        Packs start at just $9.99 for 20 photos — that’s less than $0.50 each!
-      </p>
-      <p className="mt-1 text-xs text-muted-foreground">Backed by our Quality & Performance Guarantee.</p>
-    </div>
-</div>
+        <div className="mt-6 flex items-center justify-center gap-4">
+          <div className="w-[105px] h-[130px] rounded-md overflow-hidden shadow-sm">
+            <img src="/landing/demo-gallery.webp" alt="Before example" className="w-full object-fit" />
+            <p className="mt-1 text-xs text-muted-foreground">Before</p>
+          </div>
+          <div className="w-[105px] h-[130px] rounded-md overflow-hidden shadow-sm">
+            <img src="/landing/black-swan1.webp" alt="After example" className="w-full object-fit" />
+            <p className="mt-1 text-xs text-muted-foreground">After</p>
+          </div>
+        </div>
+
+        <div className="mt-8">
+          <Button asChild size="lg" className="px-6">
+            <Link href="/packs">Get My AI Photoshoot Now</Link>
+          </Button>
+          <p className="mt-3 text-sm text-muted-foreground">
+            Packs start at just $9.99 for 20 photos — that’s less than $0.50 each!
+          </p>
+          <p className="mt-1 text-xs text-muted-foreground">Backed by our Quality & Performance Guarantee.</p>
+        </div>
+      </div>
     )
   }
 
@@ -301,21 +302,23 @@ export default function ImageGallery() {
               animate={{ opacity: 1, y: 0 }}
               className="break-inside-avoid relative group"
             >
-              <>
-                {image.isLoading && <ImagePlaceholder />}
-                <img
-                  src={`/api/proxy-image?url=${encodeURIComponent(image.image_url)}`}
-                  alt="Generated image"
-                  className={`w-full h-auto rounded-lg ${image.isLoading ? "hidden" : ""}`}
-                  onLoad={() => handleImageLoad(image.id)}
-                  onError={() => handleImageError(image)}
-                />
-                <div className="absolute inset-0 bg-transparent rounded-lg flex flex-col justify-between p-4">
+              {/* Lazy loaded image with intersection observer */}
+              <LazyGalleryImage
+                src={`/api/proxy-image?url=${encodeURIComponent(image.image_url)}`}
+                alt="Generated image"
+                isLoaded={!image.isLoading}
+                onLoad={() => handleImageLoad(image.id)}
+                onError={() => handleImageError(image)}
+              />
+
+              {/* Button overlay - ONLY show when image has loaded */}
+              {!image.isLoading && (
+                <div className="absolute inset-0 bg-transparent rounded-lg flex flex-col justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity">
                   <div className="flex justify-end">
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="text-white hover:text-white hover:bg-white/20"
+                      className="text-white hover:text-white hover:bg-white/20 bg-black/30 backdrop-blur-sm"
                       onClick={() => handleViewFullImage(image.image_url)}
                     >
                       <Eye className="h-4 w-4" />
@@ -326,17 +329,16 @@ export default function ImageGallery() {
                     <Button
                       variant="ghost"
                       size="sm"
-                      className="text-white hover:text-white hover:bg-white/20"
+                      className="text-white hover:text-white hover:bg-white/20 bg-black/30 backdrop-blur-sm"
                       onClick={() => handleDeleteClick(image.id, image.promptId, image.source)}
                       disabled={deletingImageId === image.id}
                     >
                       <Trash2 className="h-4 w-4 mr-2" />
-
                     </Button>
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="text-white hover:text-white hover:bg-white/20"
+                      className="text-white hover:text-white hover:bg-white/20 bg-black/30 backdrop-blur-sm"
                       onClick={() => handleDownload(image.image_url, image.promptId)}
                     >
                       <Download className="h-4 w-4" />
@@ -344,7 +346,7 @@ export default function ImageGallery() {
                     </Button>
                   </div>
                 </div>
-              </>
+              )}
             </motion.div>
           ))}
       </div>
