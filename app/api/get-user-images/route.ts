@@ -36,11 +36,39 @@ export async function GET(request: Request) {
     }
 
 
-    // Fetch from images table with join to models
+    // SECURITY FIX: First get user's model IDs, then filter images by those IDs
+    const { data: userModels, error: modelsError } = await (await supabase)
+      .from("models")
+      .select("id")
+      .eq("user_id", user.id);
+
+    if (modelsError) {
+      console.error("Models fetch error:", modelsError);
+      return NextResponse.json({ error: "Failed to fetch models" }, { status: 500 });
+    }
+
+    // Get array of model IDs that belong to this user
+    const userModelIds = userModels?.map(m => m.id) || [];
+
+    // If user has no models, return only prompts data
+    if (userModelIds.length === 0) {
+      const promptsImages = promptsData.map((prompt) => ({
+        id: prompt.id,
+        image_url: prompt.image_url,
+        promptId: prompt.promptId,
+        user_id: prompt.user_id,
+        created_at: prompt.created_at,
+        source: "prompts",
+      }));
+
+      return NextResponse.json({ images: promptsImages });
+    }
+
+    // Fetch images only for user's models
     let imagesQuery = (await supabase)
       .from("images")
-      .select("id, modelId, uri, created_at, models!modelId(id, user_id)") // Use !modelId to specify the foreign key relationship
-      .eq("models.user_id", user.id); // Filter by user_id in models
+      .select("id, modelId, uri, created_at")
+      .in("modelId", userModelIds); // Only get images for user's models
 
     if (since) {
       imagesQuery = imagesQuery.gt("created_at", since);
@@ -66,7 +94,7 @@ export async function GET(request: Request) {
 
 
     // Map images data
-    const imagesImages = imagesData.map((image) => ({
+    const imagesImages = (imagesData || []).map((image) => ({
       id: image.id,
       image_url: image.uri,
       promptId: image.id.toString(),
