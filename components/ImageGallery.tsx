@@ -296,10 +296,8 @@ export default function ImageGallery() {
         {images
           .filter((image) => image.image_url)
           .map((image) => (
-            <motion.div
+            <div
               key={image.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
               className="break-inside-avoid relative group"
             >
               {/* Lazy loaded image with intersection observer */}
@@ -347,7 +345,7 @@ export default function ImageGallery() {
                   </div>
                 </div>
               )}
-            </motion.div>
+            </div>
           ))}
       </div>
       {fullImageUrl && (
