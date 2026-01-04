@@ -17,6 +17,7 @@ fal.config({ credentials: FAL_KEY || "" });
 const GOLDEN_PROMPTS = {
     MALE: "A hyper-realistic, waist-up professional headshot of a man standing outdoors in a modern tech campus with glass architecture. The lighting is 'Open Shade'—soft, diffuse natural light that eliminates harsh shadows under the eyes. He is wearing a structured charcoal blazer over a crisp white oxford shirt and dark navy chinos. His expression is confident and approachable, shoulders angled slightly. Shot on Canon R5 with the RF 85mm f/1.2 L USM lens at f/1.2. The shallow depth of field keeps his eyes aggressively sharp while rendering the glass building behind into creamy bokeh. Skin texture is high-fidelity, showing pores and stubble.",
     FEMALE: "A hyper-realistic, waist-up professional headshot of a woman standing outdoors in a modern tech campus with glass architecture. The lighting is 'Open Shade'—soft, diffuse natural light that eliminates harsh shadows under the eyes. She is wearing a structured navy blue blazer over a crisp white silk blouse and tailored grey trousers. Her expression is confident and approachable, shoulders angled slightly for a slimming effect. Shot on Canon R5 with the RF 85mm f/1.2 L USM lens at aperture f/1.2. The shallow depth of field keeps her eyes aggressively sharp while rendering the green trees and glass building behind her into a creamy, non-distracting wash of bokeh. Skin texture is high-fidelity, showing pores and natural hydration.",
+    COUPLE: "A hyper-realistic, waist-up professional portrait of a couple standing together outdoors in a modern tech campus with glass architecture. The lighting is 'Open Shade'—soft, diffuse natural light that eliminates harsh shadows. They are dressed in coordinated smart casual attire—he in a structured charcoal blazer over a crisp white oxford shirt, she in a structured navy blue blazer over a crisp white silk blouse. They stand close together with natural, affectionate body language, both with confident and warm expressions. Shot on Canon R5 with the RF 85mm f/1.2 L USM lens at f/1.2. The shallow depth of field keeps their eyes aggressively sharp while rendering the glass building behind into creamy bokeh. Skin texture is high-fidelity and realistic.",
 };
 
 export const dynamic = "force-dynamic";
@@ -75,9 +76,17 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Model has no sample images" }, { status: 400 });
         }
 
-        // Select golden prompt based on gender
-        const gender = (model.type || "Female").toUpperCase();
-        const goldenPrompt = gender === "MALE" ? GOLDEN_PROMPTS.MALE : GOLDEN_PROMPTS.FEMALE;
+        // Select golden prompt based on mode (couple) or gender (solo)
+        let goldenPrompt: string;
+        const mode = (model.mode || "").toLowerCase();
+
+        if (mode === "couple") {
+            goldenPrompt = GOLDEN_PROMPTS.COUPLE;
+        } else {
+            // Solo mode - select based on gender
+            const gender = (model.type || "Female").toUpperCase();
+            goldenPrompt = gender === "MALE" ? GOLDEN_PROMPTS.MALE : GOLDEN_PROMPTS.FEMALE;
+        }
 
         // Submit to fal.ai queue with webhook
         const { request_id } = await fal.queue.submit("fal-ai/bytedance/seedream/v4.5/edit", {

@@ -97,12 +97,21 @@ export async function POST(request: NextRequest) {
                 const imageResponse = await fetch(imageUrl);
                 if (!imageResponse.ok) throw new Error("Failed to fetch image from fal");
 
-                const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
+                let imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
 
-                // Generate R2 key
+                // If this is a preview job, apply watermark (burned into pixels)
+                if (job.is_preview) {
+                    const { applyWatermark } = await import("@/lib/watermark");
+                    console.log(`Applying watermark to preview image for job ${job.id}...`);
+                    const watermarked = await applyWatermark(imageBuffer, 'PREVIEW');
+                    imageBuffer = Buffer.from(watermarked);
+                }
+
+                // Generate R2 key (different path for previews)
                 const timestamp = Date.now();
                 const randomId = crypto.randomUUID();
-                const key = `generated/${job.user_id}/${job.model_id}/${timestamp}-${randomId}.png`;
+                const keyPrefix = job.is_preview ? 'previews' : 'generated';
+                const key = `${keyPrefix}/${job.user_id}/${job.model_id}/${timestamp}-${randomId}.png`;
 
                 // Upload to R2
                 await putR2Object(key, imageBuffer, "image/png");

@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import { fal } from "@fal-ai/client";
 import { putR2Object } from "@/lib/r2";
+import { applyWatermark } from "@/lib/watermark";
 
 const FAL_KEY = process.env.FAL_KEY;
 
@@ -108,15 +109,19 @@ export async function GET(request: NextRequest) {
                         throw new Error(`Failed to fetch from fal: ${imageResponse.status}`);
                     }
 
-                    const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
+                    const originalBuffer = Buffer.from(await imageResponse.arrayBuffer());
+
+                    // Apply watermark to the image (burned into pixels - cannot be removed)
+                    console.log(`Applying watermark to preview image for job ${job.id}...`);
+                    const watermarkedBuffer = await applyWatermark(originalBuffer, 'PREVIEW');
 
                     // Generate R2 key for preview
                     const timestamp = Date.now();
                     const randomId = crypto.randomUUID();
                     const key = `previews/${user.id}/${modelId}/${timestamp}-${randomId}.png`;
 
-                    // Upload to R2
-                    await putR2Object(key, imageBuffer, "image/png");
+                    // Upload watermarked image to R2
+                    await putR2Object(key, watermarkedBuffer, "image/png");
 
                     // Construct public URL
                     const r2BaseUrl = process.env.R2_PUBLIC_URL || "";

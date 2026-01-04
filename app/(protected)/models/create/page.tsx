@@ -10,6 +10,18 @@ const GENDERS = ['Female', 'Male', 'Non-Binary'] as const;
 type Gender = typeof GENDERS[number];
 type ModelMode = 'single' | 'couple';
 
+// Max file size: 8MB (in bytes)
+const MAX_FILE_SIZE = 8 * 1024 * 1024;
+
+// Helper to check if file is too large
+const isFileTooLarge = (file: File): boolean => file.size > MAX_FILE_SIZE;
+
+// Format file size for display
+const formatFileSize = (bytes: number): string => {
+    const mb = bytes / (1024 * 1024);
+    return `${mb.toFixed(1)}MB`;
+};
+
 // Upload progress tracking
 type UploadStatus = 'pending' | 'uploading' | 'success' | 'failed';
 interface UploadProgress {
@@ -155,6 +167,17 @@ export default function CreateModelPage() {
         }
         if (modelMode === 'couple' && (womanImages.length < 3 || manImages.length < 3)) {
             setError('Please upload 3 photos for each person');
+            return;
+        }
+
+        // Check for oversized images
+        const allImagesToCheck = modelMode === 'couple'
+            ? [...womanImages, ...manImages]
+            : images;
+
+        const hasOversizedImages = allImagesToCheck.some(isFileTooLarge);
+        if (hasOversizedImages) {
+            setError('Please remove images that exceed 8MB before continuing');
             return;
         }
 
@@ -428,10 +451,27 @@ export default function CreateModelPage() {
                                         const status = uploadProgress?.statuses[i];
                                         const percent = uploadProgress?.percentages[i] ?? 0;
                                         const errorMsg = uploadProgress?.errors[i];
+                                        const file = images[i];
+                                        const isTooLarge = file && isFileTooLarge(file);
 
                                         return (
-                                            <div key={i} className="relative aspect-[3/4] rounded-lg overflow-hidden group">
+                                            <div key={i} className={`relative aspect-[3/4] rounded-lg overflow-hidden group ${isTooLarge ? 'ring-2 ring-red-500' : ''}`}>
                                                 <img src={preview} className="w-full h-full object-cover" alt="" />
+
+                                                {/* File too large error overlay - always visible */}
+                                                {isTooLarge && !isLoading && (
+                                                    <div className="absolute inset-0 bg-red-900/80 flex flex-col items-center justify-center p-2">
+                                                        <AlertCircle className="w-6 h-6 text-red-300 mb-1" />
+                                                        <span className="text-[10px] text-red-200 text-center font-medium">Image too large</span>
+                                                        <span className="text-[9px] text-red-300 text-center">{formatFileSize(file.size)} / 8MB</span>
+                                                        <button
+                                                            onClick={() => removeImage(i)}
+                                                            className="mt-2 p-1.5 bg-red-600 hover:bg-red-500 rounded-full transition-colors"
+                                                        >
+                                                            <X className="w-4 h-4 text-white" />
+                                                        </button>
+                                                    </div>
+                                                )}
 
                                                 {/* Upload progress overlay */}
                                                 {isLoading && status && (
@@ -463,8 +503,8 @@ export default function CreateModelPage() {
                                                     </div>
                                                 )}
 
-                                                {/* Remove button - only show when not loading */}
-                                                {!isLoading && (
+                                                {/* Remove button - only show when not loading and not too large (too large has its own button) */}
+                                                {!isLoading && !isTooLarge && (
                                                     <button
                                                         onClick={() => removeImage(i)}
                                                         className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
@@ -516,10 +556,27 @@ export default function CreateModelPage() {
                                             const status = uploadProgress?.statuses[i];
                                             const percent = uploadProgress?.percentages[i] ?? 0;
                                             const errorMsg = uploadProgress?.errors[i];
+                                            const file = womanImages[i];
+                                            const isTooLarge = file && isFileTooLarge(file);
 
                                             return (
-                                                <div key={i} className="relative aspect-[3/4] rounded-lg overflow-hidden group">
+                                                <div key={i} className={`relative aspect-[3/4] rounded-lg overflow-hidden group ${isTooLarge ? 'ring-2 ring-red-500' : ''}`}>
                                                     <img src={preview} className="w-full h-full object-cover" alt="" />
+
+                                                    {/* File too large error overlay */}
+                                                    {isTooLarge && !isLoading && (
+                                                        <div className="absolute inset-0 bg-red-900/80 flex flex-col items-center justify-center p-2">
+                                                            <AlertCircle className="w-6 h-6 text-red-300 mb-1" />
+                                                            <span className="text-[10px] text-red-200 text-center font-medium">Image too large</span>
+                                                            <span className="text-[9px] text-red-300 text-center">{formatFileSize(file.size)} / 8MB</span>
+                                                            <button
+                                                                onClick={() => removeCoupleImage(i, 'woman')}
+                                                                className="mt-2 p-1.5 bg-red-600 hover:bg-red-500 rounded-full transition-colors"
+                                                            >
+                                                                <X className="w-4 h-4 text-white" />
+                                                            </button>
+                                                        </div>
+                                                    )}
 
                                                     {/* Upload progress overlay */}
                                                     {isLoading && status && (
@@ -551,8 +608,8 @@ export default function CreateModelPage() {
                                                         </div>
                                                     )}
 
-                                                    {/* Remove button - only show when not loading */}
-                                                    {!isLoading && (
+                                                    {/* Remove button - only show when not loading and not too large */}
+                                                    {!isLoading && !isTooLarge && (
                                                         <button
                                                             onClick={() => removeCoupleImage(i, 'woman')}
                                                             className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
@@ -597,10 +654,27 @@ export default function CreateModelPage() {
                                             const status = uploadProgress?.statuses[progressIndex];
                                             const percent = uploadProgress?.percentages[progressIndex] ?? 0;
                                             const errorMsg = uploadProgress?.errors[progressIndex];
+                                            const file = manImages[i];
+                                            const isTooLarge = file && isFileTooLarge(file);
 
                                             return (
-                                                <div key={i} className="relative aspect-[3/4] rounded-lg overflow-hidden group">
+                                                <div key={i} className={`relative aspect-[3/4] rounded-lg overflow-hidden group ${isTooLarge ? 'ring-2 ring-red-500' : ''}`}>
                                                     <img src={preview} className="w-full h-full object-cover" alt="" />
+
+                                                    {/* File too large error overlay */}
+                                                    {isTooLarge && !isLoading && (
+                                                        <div className="absolute inset-0 bg-red-900/80 flex flex-col items-center justify-center p-2">
+                                                            <AlertCircle className="w-6 h-6 text-red-300 mb-1" />
+                                                            <span className="text-[10px] text-red-200 text-center font-medium">Image too large</span>
+                                                            <span className="text-[9px] text-red-300 text-center">{formatFileSize(file.size)} / 8MB</span>
+                                                            <button
+                                                                onClick={() => removeCoupleImage(i, 'man')}
+                                                                className="mt-2 p-1.5 bg-red-600 hover:bg-red-500 rounded-full transition-colors"
+                                                            >
+                                                                <X className="w-4 h-4 text-white" />
+                                                            </button>
+                                                        </div>
+                                                    )}
 
                                                     {/* Upload progress overlay */}
                                                     {isLoading && status && (
@@ -632,8 +706,8 @@ export default function CreateModelPage() {
                                                         </div>
                                                     )}
 
-                                                    {/* Remove button - only show when not loading */}
-                                                    {!isLoading && (
+                                                    {/* Remove button - only show when not loading and not too large */}
+                                                    {!isLoading && !isTooLarge && (
                                                         <button
                                                             onClick={() => removeCoupleImage(i, 'man')}
                                                             className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity"
