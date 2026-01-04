@@ -120,32 +120,8 @@ export async function POST(request: NextRequest) {
                 const r2BaseUrl = process.env.R2_PUBLIC_URL || "";
                 const publicUri = `${r2BaseUrl}/${key}`;
 
-                // Save to images table
-                const { data: image, error: imageError } = await supabase
-                    .from("images")
-                    .insert({
-                        uri: publicUri,
-                        modelId: job.model_id,
-                    })
-                    .select()
-                    .single();
-
-                if (imageError) {
-                    console.error("Failed to save image to DB:", imageError);
-                }
-
-                // Update job as completed
-                await supabase
-                    .from("generation_jobs")
-                    .update({
-                        status: "completed",
-                        result_url: publicUri,
-                        image_id: image?.id,
-                        completed_at: new Date().toISOString(),
-                    })
-                    .eq("id", job.id);
-
-                // If this is a preview job, update the preview_images table
+                // For preview jobs, ONLY save to preview_images (not images table)
+                // This prevents preview images from appearing in the gallery
                 if (job.is_preview) {
                     await supabase
                         .from("preview_images")
@@ -156,10 +132,45 @@ export async function POST(request: NextRequest) {
                         })
                         .eq("job_id", job.id);
 
+                    // Update job as completed (no image_id for preview jobs)
+                    await supabase
+                        .from("generation_jobs")
+                        .update({
+                            status: "completed",
+                            result_url: publicUri,
+                            completed_at: new Date().toISOString(),
+                        })
+                        .eq("id", job.id);
+
                     console.log("Preview image completed:", { request_id, model_id: job.model_id });
+                } else {
+                    // Regular job - save to images table for gallery
+                    const { data: image, error: imageError } = await supabase
+                        .from("images")
+                        .insert({
+                            uri: publicUri,
+                            modelId: job.model_id,
+                        })
+                        .select()
+                        .single();
+
+                    if (imageError) {
+                        console.error("Failed to save image to DB:", imageError);
+                    }
+
+                    // Update job as completed
+                    await supabase
+                        .from("generation_jobs")
+                        .update({
+                            status: "completed",
+                            result_url: publicUri,
+                            image_id: image?.id,
+                            completed_at: new Date().toISOString(),
+                        })
+                        .eq("id", job.id);
                 }
 
-                console.log("Fal generation completed:", { request_id, imageId: image?.id, isPreview: job.is_preview });
+                console.log("Fal generation completed:", { request_id, model_id: job.model_id, isPreview: job.is_preview });
 
             } catch (saveError) {
                 console.error("Failed to save generated image:", saveError);

@@ -31,7 +31,7 @@ export function PreviewPaymentCards({ plans, userId }: PreviewPaymentCardsProps)
                     Love it? Unlock your photos!
                 </h2>
                 <p className="text-muted-foreground">
-                    Get this photo + {plans[0]?.credits - 1 || 49} more. No subscriptions.
+                    Create your hyper-realistic digital twin. No subscriptions.
                 </p>
             </div>
 
