@@ -20,29 +20,43 @@ export default async function GalleryPage() {
 
   // === STRICT ONBOARDING CONTROL ===
 
-  // 1. Get user profile and payment status
-  const { data: profile } = await supabase
+  // 1. Get user profile
+  let { data: profile } = await supabase
     .from('profiles')
     .select('trial_preview_used, credits')
-    .eq('id', user.id)
+    .eq('user_id', user.id)
     .single()
+
+  // FALLBACK: If profile is missing or flag is false, double check real usage
+  let realTrialUsed = profile?.trial_preview_used === true;
+
+  if (!realTrialUsed) {
+    const { count } = await supabase
+      .from('preview_images')
+      .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id)
+      .eq('status', 'completed');
+
+    if (count && count > 0) {
+      realTrialUsed = true;
+    }
+  }
 
   const { data: payments } = await supabase
     .from('dodo_payments')
     .select('id')
     .eq('user_id', user.id)
-    .eq('status', 'succeeded')
+    .in('status', ['succeeded', 'completed'])
     .limit(1)
 
   // 2. Determine user status
-  const trialUsed = profile?.trial_preview_used === true
   const hasCredits = (profile?.credits || 0) > 0
   const hasPaid = payments && payments.length > 0
   const isUnlockedUser = hasPaid || hasCredits
 
   // 3. Enforce Strict Rules
   if (!isUnlockedUser) {
-    if (trialUsed) {
+    if (realTrialUsed) {
       redirect('/buy-credits')
     } else {
       redirect('/models/create')
