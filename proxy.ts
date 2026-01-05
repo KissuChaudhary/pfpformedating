@@ -61,106 +61,23 @@ export async function proxy(request: NextRequest) {
     user = data.user
   } catch (error) {
     console.error('Proxy Auth Error:', error)
+    // Treat as unauthenticated on error to prevent crashing
   }
 
-  const pathname = request.nextUrl.pathname
+  // Protected routes - these require authentication
+  const protectedRoutes = ['/dashboard', '/account', '/settings', '/models', 'buy-credits']
+  const isProtectedRoute = protectedRoutes.some(route =>
+    request.nextUrl.pathname.startsWith(route)
+  )
 
-  // Public routes that anyone can access
-  const publicRoutes = ['/login', '/signup', '/auth', '/error', '/', '/pricing', '/about', '/terms', '/privacy-policy', '/refund-policy']
-  const isPublicRoute = publicRoutes.some(route => pathname === route || pathname.startsWith('/auth'))
-
-  // API routes should pass through
-  if (pathname.startsWith('/api') || pathname.startsWith('/_next')) {
-    return response
-  }
-
-  // Not authenticated - redirect to login for protected routes
-  if (!user && !isPublicRoute) {
+  // If accessing protected routes and not authenticated, redirect to login
+  if (isProtectedRoute && !user) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
-  // Not authenticated and on public route - allow
-  if (!user) {
-    return response
-  }
-
-  // === AUTHENTICATED USER - STRICT ONBOARDING TUNNEL ===
-
-  // Get user's onboarding status
-  const { data: profile } = await supabase
-    .from('profiles')
-    .select('trial_preview_used, credits')
-    .eq('id', user.id)
-    .single()
-
-  // Check if user has paid
-  const { data: payments } = await supabase
-    .from('dodo_payments')
-    .select('id')
-    .eq('user_id', user.id)
-    .eq('status', 'succeeded')
-    .limit(1)
-
-  const trialUsed = profile?.trial_preview_used === true
-  const hasCredits = (profile?.credits || 0) > 0
-  const hasPaid = payments && payments.length > 0
-  const isUnlockedUser = hasPaid || hasCredits
-
-  // Routes allowed during onboarding tunnel (before payment)
-  const onboardingRoutes = ['/models/create', '/preview']
-  const isOnboardingRoute = onboardingRoutes.some(route => pathname.startsWith(route))
-
-  // Buy credits page is always allowed for authenticated users
-  const isBuyCreditsRoute = pathname.startsWith('/buy-credits')
-
-  // If user is logged in and on login page, redirect appropriately
-  if (pathname === '/login') {
-    if (isUnlockedUser) {
-      return NextResponse.redirect(new URL('/dashboard', request.url))
-    } else if (trialUsed) {
-      // Trial used but no payment - send to buy credits
-      return NextResponse.redirect(new URL('/buy-credits', request.url))
-    } else {
-      // New user - send to create model
-      return NextResponse.redirect(new URL('/models/create', request.url))
-    }
-  }
-
-  // === UNLOCKED USERS (paid or have credits) - Full access ===
-  if (isUnlockedUser) {
-    return response
-  }
-
-  // === TRIAL USED BUT NOT PAID - Only allow buy-credits and existing preview ===
-  if (trialUsed && !isUnlockedUser) {
-    // Allow buy-credits page
-    if (isBuyCreditsRoute) {
-      return response
-    }
-
-    // Allow viewing their existing preview
-    if (pathname.startsWith('/preview/')) {
-      return response
-    }
-
-    // Block everything else - redirect to buy credits
-    return NextResponse.redirect(new URL('/buy-credits', request.url))
-  }
-
-  // === NEW USER (trial not used) - Only allow model creation ===
-  if (!trialUsed) {
-    // Allow model creation
-    if (pathname.startsWith('/models/create')) {
-      return response
-    }
-
-    // Allow preview page (they'll land here after creating model)
-    if (pathname.startsWith('/preview/')) {
-      return response
-    }
-
-    // Block everything else - redirect to model creation
-    return NextResponse.redirect(new URL('/models/create', request.url))
+  // If authenticated and trying to access login, redirect to dashboard
+  if (request.nextUrl.pathname === '/login' && user) {
+    return NextResponse.redirect(new URL('/dashboard', request.url))
   }
 
   return response

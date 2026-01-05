@@ -31,36 +31,43 @@ export default async function DashboardPage() {
     redirect("/models/create")
   }
 
-  // === NEW: Dashboard access control for Preview Tunnel ===
+  // === STRICT ONBOARDING CONTROL ===
 
-  // Check if user has used their free preview
+  // 1. Get user profile and payment status
   const { data: profile } = await supabase
     .from('profiles')
-    .select('trial_preview_used')
-    .eq('user_id', user.id)
+    .select('trial_preview_used, credits')
+    .eq('id', user.id)
     .single()
 
-  // Check if user has ever paid (completed payment)
   const { data: payments } = await supabase
     .from('dodo_payments')
     .select('id')
     .eq('user_id', user.id)
-    .eq('status', 'completed')
+    .eq('status', 'succeeded')
     .limit(1)
 
-  const { balance } = await creditService.getUserCredits(user.id)
+  // 2. Determine user status
+  const trialUsed = profile?.trial_preview_used === true
+  const hasCredits = (profile?.credits || 0) > 0
+  const hasPaid = payments && payments.length > 0
+  const isUnlockedUser = hasPaid || hasCredits
 
-  const hasUsedFreePreview = profile?.trial_preview_used === true
-  const hasPaymentHistory = payments && payments.length > 0
-  const hasCredits = balance > 0
+  // 3. Enforce Strict Rules
 
-  // Only redirect if:
-  // 1. They've used their free preview (saw their image)
-  // 2. AND they've never paid
-  // 3. AND they have 0 credits
-  if (hasUsedFreePreview && !hasPaymentHistory && !hasCredits) {
-    redirect('/buy-credits')
+  // Rule A: If user is NOT unlocked (no pay, no credits)
+  if (!isUnlockedUser) {
+    if (trialUsed) {
+      // User used trial but hasn't paid -> ALWAYS send to buy credits
+      redirect('/buy-credits')
+    } else {
+      // User is NEW (training wheels on) -> ALWAYS send to create model
+      redirect('/models/create')
+    }
   }
+
+  // Rule B: Unlocked users have full access
+  // (dashboard renders below)
 
   // Otherwise, allow dashboard access:
   // - New users who haven't finished preview → Will be on preview page anyway

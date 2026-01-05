@@ -28,7 +28,7 @@ export function PreviewPaymentCards({ plans, userId }: PreviewPaymentCardsProps)
         <div className="w-full max-w-3xl mx-auto">
             <div className="text-center mb-6">
                 <h2 className="text-2xl md:text-3xl font-bold mb-2">
-                    Love it? Unlock your photos!
+                    Love it? Unlock New YOU!
                 </h2>
                 <p className="text-muted-foreground">
                     Create your hyper-realistic digital twin. No subscriptions.

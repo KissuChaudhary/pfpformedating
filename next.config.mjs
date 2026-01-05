@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   experimental: {
+    nodeMiddleware: true,
     serverActions: {
       bodySizeLimit: '50mb',
     },

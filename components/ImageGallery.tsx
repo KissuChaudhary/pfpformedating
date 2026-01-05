@@ -260,29 +260,18 @@ export default function ImageGallery() {
   if (images.length === 0) {
     return (
       <div className="mx-auto max-w-3xl text-center py-12 px-4">
-        <h2 className="text-2xl sm:text-3xl font-semibold">Ready for Your Stunning AI Headshots?</h2>
+        <h2 className="text-2xl sm:text-3xl font-semibold">Ready for see your digital twin?</h2>
 
         <p className="mt-2 text-muted-foreground">
           You haven't generated any photos yet. Your professional AI photoshoots will appear right here.
         </p>
 
-        <div className="mt-6 flex items-center justify-center gap-4">
-          <div className="w-[105px] h-[130px] rounded-md overflow-hidden shadow-sm">
-            <img src="/landing/demo-gallery.webp" alt="Before example" className="w-full object-fit" />
-            <p className="mt-1 text-xs text-muted-foreground">Before</p>
-          </div>
-          <div className="w-[105px] h-[130px] rounded-md overflow-hidden shadow-sm">
-            <img src="/landing/black-swan1.webp" alt="After example" className="w-full object-fit" />
-            <p className="mt-1 text-xs text-muted-foreground">After</p>
-          </div>
-        </div>
-
         <div className="mt-8">
           <Button asChild size="lg" className="px-6">
-            <Link href="/packs">Get My AI Photoshoot Now</Link>
+            <Link href="/buy-credits">Get My AI Photoshoot Now</Link>
           </Button>
           <p className="mt-3 text-sm text-muted-foreground">
-            Packs start at just $9.99 for 20 photos — that’s less than $0.50 each!
+            start at just $8.99 for 15 photos — that’s less than $0.60 each!
           </p>
           <p className="mt-1 text-xs text-muted-foreground">Backed by our Quality & Performance Guarantee.</p>
         </div>
