@@ -67,9 +67,9 @@ export const LightingLabSection: React.FC = () => {
             <div className="grid grid-cols-2 bg-black">
                 {[
                     { title: "Flash Mode", k: "FLASH", desc: "Hard light, red eyes, 3am party energy.", img: "/showcase18.png" },
-                    { title: "Golden Mode", k: "GOLDEN", desc: "Soft sunlight, dreamy skin tones.", img: "/showcase16.png" },
-                    { title: "Gritty Mode", k: "GRITTY", desc: "High contrast, raw documentary feel.", img: "/showcase14.png" },
-                    { title: "Cine Mode", k: "CINE", desc: "Neon lights, cinematic color grading.", img: "/showcase19.png" },
+                    { title: "Golden Mode", k: "GOLDEN", desc: "Soft sunlight, dreamy skin tones.", img: "/images/golden-photo.webp" },
+                    { title: "Gritty Mode", k: "GRITTY", desc: "High contrast, raw documentary feel.", img: "/images/gritty-photo.webp" },
+                    { title: "Cine Mode", k: "CINE", desc: "Neon lights, cinematic color grading.", img: "/images/cinematic-photo.webp" },
                 ].map((item, i) => (
                     <div key={i} className={`group cursor-pointer relative aspect-[3/4] overflow-hidden border-foreground/10 bg-[#111]
                             ${i % 2 === 0 ? 'border-r' : ''} 
@@ -78,7 +78,7 @@ export const LightingLabSection: React.FC = () => {
                         {/* Interactive Card */}
                         <div className="w-full h-full relative">
                             {/* Dark Overlay that vanishes on hover */}
-                            <div className="absolute inset-0 bg-black/20 z-10 transition-opacity duration-300 group-hover:opacity-0 pointer-events-none"></div>
+                            <div className="absolute inset-0  z-10 transition-opacity duration-300 pointer-events-none"></div>
 
                             <img
                                 src={item.img}

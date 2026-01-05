@@ -32,7 +32,7 @@ export const ConsistencySection: React.FC = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {[
                             { title: 'MACRO_SCAN // PORES_VISIBLE', img: '/pores-visible.png' },
-                            { title: 'FULL_BODY // CONTEXT_AWARE', img: '/full-body.jpg' },
+                            { title: 'FULL_BODY // CONTEXT_AWARE', img: '/images/full-body-photo.webp' },
                             { title: 'PROFILE // OFF_AXIS', img: '/profile.png' }
                         ].map((item, i) => (
                             <div key={i} className="relative group">

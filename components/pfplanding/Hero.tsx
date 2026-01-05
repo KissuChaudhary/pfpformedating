@@ -51,7 +51,7 @@ export const Hero: React.FC = () => {
           {/* Image 2 */}
           <div className="relative overflow-hidden h-full w-full">
             <img
-              src="/hero3.png"
+              src="/images/hero4.webp"
               alt="Messy Bun Morning"
               className="w-full h-full object-cover opacity-90 hover:grayscale-100 hover:opacity-100 transition-all duration-100 ease-linear cursor-none"
             />

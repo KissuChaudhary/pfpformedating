@@ -4,7 +4,7 @@ const cases = [
     {
         title: 'The "Candid" Solo',
         desc: 'Laughing at a cafe, messy hair, waiting for subway.',
-        img: '/candid-solo.png'
+        img: '/images/candid-solo.webp'
     },
     {
         title: 'The "Power Couple"',
@@ -14,12 +14,12 @@ const cases = [
     {
         title: 'The "Vintage" Roll',
         desc: 'Kodak Portra simulation. Nostalgic soul.',
-        img: '/roll.jpg'
+        img: '/images/vintage-roll.webp'
     },
     {
         title: 'The "Hinge" Fix',
         desc: 'Not staged. Not corporate. Just vibes.',
-        img: '/hinge.png'
+        img: '/images/hinge.webp'
     },
 ];
 
