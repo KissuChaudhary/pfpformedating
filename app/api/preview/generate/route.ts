@@ -44,13 +44,25 @@ export async function POST(request: NextRequest) {
         }
 
         // CRITICAL: Check if user has already used their ONE free trial preview
-        const { data: profile } = await supabase
+        const { data: profile, error: profileError } = await supabase
             .from("profiles")
             .select("trial_preview_used")
             .eq("id", user.id)
             .single();
 
-        if (profile?.trial_preview_used === true) {
+        // Log for debugging
+        console.log("Preview generate check:", {
+            userId: user.id,
+            modelId,
+            profile,
+            profileError: profileError?.message,
+            trial_preview_used: profile?.trial_preview_used
+        });
+
+        // Only block if EXPLICITLY true - allow for new users (null/undefined/missing)
+        const hasUsedTrial = profile?.trial_preview_used === true;
+
+        if (hasUsedTrial) {
             // User already used their free preview - check if they have existing preview for this model
             const { data: existingPreview } = await supabase
                 .from("preview_images")

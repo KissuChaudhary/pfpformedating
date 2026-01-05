@@ -131,6 +131,21 @@ export default function PreviewPageClient({
         );
     }
 
+    // Not found state - preview generation wasn't triggered properly
+    if (status.status === 'not_found') {
+        return (
+            <div className="min-h-[80vh] flex flex-col items-center justify-center px-4">
+                <div className="text-center max-w-lg mx-auto space-y-4">
+                    <h1 className="text-2xl font-bold">Preview Not Ready</h1>
+                    <p className="text-muted-foreground">
+                        Your preview is being prepared. This page will refresh automatically.
+                    </p>
+                    <Loader2 className="h-8 w-8 animate-spin mx-auto text-primary" />
+                </div>
+            </div>
+        );
+    }
+
     // Reveal phase (image ready!)
     return (
         <div className="min-h-[80vh] px-4 py-8">
