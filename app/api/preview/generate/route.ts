@@ -43,6 +43,39 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "modelId is required" }, { status: 400 });
         }
 
+        // CRITICAL: Check if user has already used their ONE free trial preview
+        const { data: profile } = await supabase
+            .from("profiles")
+            .select("trial_preview_used")
+            .eq("id", user.id)
+            .single();
+
+        if (profile?.trial_preview_used === true) {
+            // User already used their free preview - check if they have existing preview for this model
+            const { data: existingPreview } = await supabase
+                .from("preview_images")
+                .select("id, status, image_url")
+                .eq("model_id", modelId)
+                .eq("user_id", user.id)
+                .single();
+
+            if (existingPreview) {
+                // Return existing preview for this model
+                return NextResponse.json({
+                    success: true,
+                    exists: true,
+                    status: existingPreview.status,
+                    imageUrl: existingPreview.image_url,
+                });
+            }
+
+            // No preview for this model and user already used trial - deny
+            return NextResponse.json({
+                error: "Free preview already used. Please purchase credits to generate more images.",
+                code: "TRIAL_USED"
+            }, { status: 403 });
+        }
+
         // Verify model belongs to user and get model info
         const { data: model, error: modelError } = await supabase
             .from("models")
@@ -54,11 +87,12 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Model not found or forbidden" }, { status: 404 });
         }
 
-        // Check if preview already exists (idempotent)
+        // Check if preview already exists for THIS model (idempotent for same model)
         const { data: existingPreview } = await supabase
             .from("preview_images")
             .select("id, status, image_url")
             .eq("model_id", modelId)
+            .eq("user_id", user.id)
             .single();
 
         if (existingPreview) {
@@ -135,6 +169,13 @@ export async function POST(request: NextRequest) {
             console.error("Failed to create preview record:", previewError);
             // Continue anyway - the job is submitted
         }
+
+        // CRITICAL: Mark trial preview as used IMMEDIATELY when job is submitted
+        // This prevents creating multiple models to get multiple free previews
+        await supabase
+            .from("profiles")
+            .update({ trial_preview_used: true })
+            .eq("id", user.id);
 
         return NextResponse.json({
             success: true,
