@@ -4,10 +4,10 @@ import { useEffect, useState } from 'react';
 
 const MESSAGES = [
     "Analyzing your facial features...",
-    "Training AI on your unique characteristics...",
-    "Generating your digital twin...",
+    "AI is learning your facial identity...",
+    "Thinking of a cinematic shot for you...",
     "Applying professional lighting...",
-    "Fine-tuning skin textures...",
+    "Fine-tuning your features...",
     "Almost there...",
 ];
 

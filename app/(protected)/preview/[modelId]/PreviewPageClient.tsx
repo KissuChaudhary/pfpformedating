@@ -88,9 +88,9 @@ export default function PreviewPageClient({
                     {/* Main headline */}
                     <div className="space-y-2">
                         <Sparkles className="h-12 w-12 mx-auto text-primary animate-pulse" />
-                        <h1 className="text-3xl md:text-4xl font-bold">
-                            Building your digital twin...
-                        </h1>
+                        <h2 className="text-2xl md:text-4xl font-bold">
+                            Creating your Free AI twin...
+                        </h2>
                     </div>
 
                     {/* Smart text loader */}
@@ -99,7 +99,7 @@ export default function PreviewPageClient({
                     {/* Progress indicator */}
                     <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
                         <Loader2 className="h-4 w-4 animate-spin" />
-                        <span>This usually takes 60-90 seconds</span>
+                        <span>Please don't close the page. This usually takes 60-90 seconds</span>
                     </div>
                 </div>
 
