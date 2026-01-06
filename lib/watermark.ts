@@ -109,8 +109,8 @@ export async function applyWatermark(
                 <rect width="100%" height="100%" fill="url(#diagonalStripes)"/>
 
                 <!-- Main Big Watermark: UNREALSHOT -->
-                <!-- Translating to center, rotating -45deg, then centering text relative to itself -->
-                <g transform="translate(${width / 2}, ${height / 2}) rotate(-45)" opacity="0.35">
+                <!-- Translating to center-bottom, horizontal (no rotation) -->
+                <g transform="translate(${width / 2}, ${height * 0.65}) rotate(0)" opacity="0.35">
                     <g transform="translate(-${bigTextWidth / 2}, -${(14 * bigTextScale) / 2})">
                         ${[...'UNREALSHOT'].map((char, i) =>
             getLetterPath(char, i * 12 * bigTextScale, 0, bigTextScale)
