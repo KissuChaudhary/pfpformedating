@@ -11,7 +11,7 @@ export const Hero: React.FC = () => {
           // DESIGNED FOR <span className="text-red-500/70 font-bold">REALISM</span>
         </div>
 
-        <h1 className="font-display text-4xl sm:text-8xl font-bold leading-[0.9] tracking-tighter uppercase mb-8">
+        <h1 className="font-display text-4xl sm:text-8xl font-bold sm:leading-[0.9] sm:tracking-tighter uppercase mb-8">
           The Hyper-Realistic <br />
           <span className="text-transparent stroke-text">Anti-AI Photoshoot</span>.
         </h1>

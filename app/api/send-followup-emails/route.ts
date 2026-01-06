@@ -1,4 +1,4 @@
-import { createAdminClient } from "@/utils/supabase/admin"; // Updated import
+import { createAdminClient } from "@/utils/supabase/admin";
 import { Resend } from "resend";
 import { NextResponse } from "next/server";
 import { Receiver } from "@upstash/qstash";
@@ -10,127 +10,138 @@ const receiver = new Receiver({
 
 const resend = new Resend(process.env.RESEND_API_KEY!);
 
-function generateEmailHtml(email: string) {
-  const name = email.split("@")[0];
+// --- Email Templates ---
+
+function getEmailTemplate30Min(name: string) {
   return `
-    <div style="font-family: Arial, sans-serif; background-color: #ffffff; padding: 24px; color:#111;">
-  <table align="center" width="600" cellpadding="0" cellspacing="0" style="background: #ffffff; border: 1px solid #eee;">
-    <tr>
-      <td style="padding: 24px; text-align: center;">
-        <h1 style="color: #111; margin: 0; font-size: 24px;">Unrealshot AI</h1>
-      </td>
-    </tr>
-    <tr>
-      <td style="padding: 24px; color: #111;">
-        <p style="font-size: 16px; margin: 0;">Hi ${name},</p>
-        
-        <p style="font-size: 16px; margin-top: 12px;">
-          I noticed you signed up but haven't started your <strong>AI Personalization</strong> yet.
-        </p>
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 20px; color: #333; line-height: 1.6;">
+      <p style="margin-bottom: 16px;">Hey,</p>
+      
+      <p style="margin-bottom: 16px;">I'm Harvansh. I’m the solo developer building Unrealshot AI from my laptop here in Mumbai.</p>
+      
+      <p style="margin-bottom: 16px;">I saw you created an account a little while ago but didn't start your photoshoot yet.</p>
+      
+      <p style="margin-bottom: 16px;">To be honest, since I'm a one-person team, I'm constantly stressing over whether the onboarding is too confusing or if the pricing is scary.</p>
+      
+      <p style="margin-bottom: 16px;">Did you get stuck somewhere? Or were you just looking around?</p>
+      
+      <p style="margin-bottom: 16px;">If you have a specific worry about how the photos will turn out, just reply to this email. I read every single one and I'd love to help you out personally.</p>
+      
+      <p style="margin-top: 32px;">Best,</p>
+      <p>Harvansh<br>Founder, Unrealshot.com</p>
+    </div>
+  `;
+}
 
-        <p style="font-size: 16px; margin-top: 12px;">
-          If you're hesitating, you're probably asking the biggest question: <strong>Will the photo actually look like me?</strong>
-        </p>
-
-        <div style="margin: 20px 0; text-align: center;">
-            <p style="font-size: 14px; color: #555; margin-bottom: 10px;">Here is a real result from a recent user:</p>
-            <img src="https://unrealshot.com/best-before-after.png" alt="Before and After AI Photoshoot Example" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); display: block; margin: 0 auto;">
-        </div>
-
-        <div style="background:#f0faff; border:1px solid #cce8ff; padding:14px; border-radius:8px; margin:18px 0; color:#111;">
-          <p style="font-size: 16px; margin:0 0 6px 0;">
-            <strong style="color:#007bff;">Your Purchase is 100% Protected.</strong>
-          </p>
-          <p style="font-size: 16px; margin:0;">
-            We back every pack with our <strong>Quality & Performance Guarantee</strong>. If the professional shots from our packs don't meet your expectations, we'll give you a full refund. <strong>Zero risk for you.</strong>
-          </p>
-        </div>
-
-        <p style="font-size: 16px; margin-top: 18px;">
-          To help you finalize that decision today, here is your limited-time welcome offer:
-        </p>
-        
-        <div style="background:#fff7ed; border:1px solid #ffd3a6; padding:14px; border-radius:8px; margin:18px 0; color:#111;">
-          <p style="font-size: 16px; margin:0 0 6px 0;">
-            <strong>Limited-Time Offer:</strong>
-          </p>
-          <p style="font-size: 16px; margin:0;">
-            Use code <strong style="color:#ff6a00;">WELCOME15</strong> for <strong15% OFF</strong> any pack. This code **expires in 48 hours.**
-          </p>
-        </div>
-
-        <div style="text-align: center; margin: 30px 0;">
-          <a href="https://www.unrealshot.com/login" style="background-color: #ff6a00; color: #fff; padding: 12px 24px; text-decoration: none; font-size: 18px; font-weight: bold; border-radius: 6px; display:inline-block;">
-            Unlock My Guaranteed Photoshoot
-          </a>
-        </div>
-        
-        <p style="font-size: 16px; margin-top: 24px;">
-          Any questions about which pack to choose? Just reply to this email!
-        </p>
-        <p style="font-size: 16px;">
-          Warm regards,<br>Harvansh<br>Founder, Unrealshot AI
-        </p>
-      </td>
-    </tr>
-    <tr>
-      <td style="background-color: #f7f7f7; padding: 15px; text-align: center; font-size: 12px; color: #777;">
-        <p>© ${new Date().getFullYear()} Unrealshot AI. All rights reserved. <a href="#" style="color:#ff6a00;">Unsubscribe</a></p>
-      </td>
-    </tr>
-  </table>
-</div>
+function getEmailTemplate4Hour(name: string) {
+  return `
+    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 20px; color: #333; line-height: 1.6;">
+      <p style="margin-bottom: 16px;">Hey,</p>
+      
+      <p style="margin-bottom: 16px;">You didn't reply to my last note, so I’m guessing you’re either super busy (totally get it) or the pricing felt a little steep for something you haven't tried yet.</p>
+      
+      <p style="margin-bottom: 16px;">I really want you to see the quality of the AI I've built. I’m confident that once you see the results, you’ll love them.</p>
+      
+      <p style="margin-bottom: 16px;">So, I created a hidden code to lower the barrier for you:</p>
+      
+      <div style="background: #f0f0f0; padding: 12px; border-radius: 6px; text-align: center; margin: 20px 0;">
+        <strong>Code: WELCOME20</strong> (Save 20%)
+      </div>
+      
+      <p style="margin-bottom: 16px;">You can use this at checkout: <a href="https://unrealshot.com/buy-credits" style="color: #007bff;">unrealshot.com/buy-credits</a></p>
+      
+      <p style="margin-bottom: 16px;">My only ask: If you like the photos, would you mind sending me a quick reply? I'm desperately looking for feedbacks.</p>
+      
+      <p style="margin-top: 32px;">Cheers,</p>
+      <p>Harvansh</p>
+    </div>
   `;
 }
 
 export async function POST(request: Request) {
   try {
-    // Verify Upstash signature (QStash POST calls will include this)
+    // 1. Verify Upstash Signature
     const signature =
       request.headers.get("Upstash-Signature") ||
       request.headers.get("upstash-signature") ||
       "";
 
-    const body = await request.text(); // QStash signs the raw body (may be empty string)
+    const body = await request.text();
 
+    // Skip verification in development if needed, but recommended to keep
     if (!receiver.verify({ body, signature })) {
       return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
     }
 
-    // Proceed with the same logic as GET, but skip CRON_SECRET check since signature is valid
     const supabase = createAdminClient();
-    const resend = new Resend(process.env.RESEND_API_KEY!);
 
-    const { data: users, error } = await supabase.rpc("get_eligible_users");
+    // --- Batch 1: 30-Minute Email ---
+    // Target: Signed up 30m - 1.5h ago
+    const batch30Min = await supabase.rpc("get_eligible_users_for_followup", {
+      start_offset: "30 minutes",
+      end_offset: "1 hour 30 minutes",
+      target_email_type: "30min"
+    });
 
-    if (error) {
-      console.error("Supabase RPC error:", error);
-      if (error instanceof Error) {
-        throw error;
+    if (batch30Min.error) {
+      console.error("Error fetching 30min batch:", batch30Min.error);
+      // Continue to next batch instead of failing completely
+    } else if (batch30Min.data && batch30Min.data.length > 0) {
+      for (const user of batch30Min.data) {
+        try {
+          await resend.emails.send({
+            from: "Harvansh from Unrealshot <harvansh@unrealshot.com>", // Updated sender
+            to: user.email,
+            subject: "quick question?",
+            html: getEmailTemplate30Min(user.email),
+          });
+
+          await supabase.from("followup_email_logs").insert({
+            user_id: user.id,
+            email_type: "30min"
+          });
+        } catch (e) {
+          console.error(`Failed to send 30min email to ${user.id}`, e);
+        }
       }
-      throw new Error("Unknown Supabase error");
     }
 
+    // --- Batch 2: 4-Hour Email ---
+    // Target: Signed up 4h - 6h ago
+    const batch4Hour = await supabase.rpc("get_eligible_users_for_followup", {
+      start_offset: "4 hours",
+      end_offset: "6 hours",
+      target_email_type: "4hour"
+    });
 
-    if (!users || users.length === 0) {
-      return NextResponse.json({ message: "No eligible users found" }, { status: 200 });
+    if (batch4Hour.error) {
+      console.error("Error fetching 4hour batch:", batch4Hour.error);
+    } else if (batch4Hour.data && batch4Hour.data.length > 0) {
+      for (const user of batch4Hour.data) {
+        try {
+          await resend.emails.send({
+            from: "Harvansh from Unrealshot <harvansh@unrealshot.com>",
+            to: user.email,
+            subject: "I have a small idea",
+            html: getEmailTemplate4Hour(user.email),
+          });
+
+          await supabase.from("followup_email_logs").insert({
+            user_id: user.id,
+            email_type: "4hour"
+          });
+        } catch (e) {
+          console.error(`Failed to send 4hour email to ${user.id}`, e);
+        }
+      }
     }
 
-    for (const user of users) {
-      await resend.emails.send({
-        from: "Harvansh from Unrealshot AI <support@noreply.unrealshot.com>",
-        to: user.email,
-        subject: "Your 15% OFF Welcome Code Expires in 48 Hours",
-        html: generateEmailHtml(user.email),
-      });
+    return NextResponse.json({
+      message: "Emails processed",
+      sent_30min_count: batch30Min.data?.length || 0,
+      sent_4hour_count: batch4Hour.data?.length || 0
+    }, { status: 200 });
 
-
-      await supabase.from("one_day_followup_emails").insert({
-        user_id: user.id,
-      });
-    }
-
-    return NextResponse.json({ message: "Emails sent successfully" }, { status: 200 });
   } catch (error) {
     console.error("Detailed error (POST):", error);
     return NextResponse.json(
