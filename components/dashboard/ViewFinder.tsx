@@ -323,7 +323,7 @@ export const Viewfinder: React.FC = () => {
                                 const singleModels = models.filter(m => m.mode === 'single' || !m.mode);
                                 if (singleModels.length > 0) setSelectedModel(singleModels[0]);
                             }}
-                            className={`flex-1 py-2 text-xs font-medium rounded-md transition-all ${viewMode === 'single'
+                            className={`cursor-pointer flex-1 py-2 text-xs font-medium rounded-md transition-all ${viewMode === 'single'
                                 ? 'bg-white text-black shadow-sm'
                                 : 'text-zinc-400 hover:text-white'
                                 }`}
@@ -338,7 +338,7 @@ export const Viewfinder: React.FC = () => {
                                 if (coupleModels.length > 0) setSelectedModel(coupleModels[0]);
                                 else setSelectedModel(null);
                             }}
-                            className={`flex-1 py-2 text-xs font-medium rounded-md transition-all ${viewMode === 'couple'
+                            className={`cursor-pointer flex-1 py-2 text-xs font-medium rounded-md transition-all ${viewMode === 'couple'
                                 ? 'bg-white text-black shadow-sm'
                                 : 'text-zinc-400 hover:text-white'
                                 }`}
@@ -354,7 +354,7 @@ export const Viewfinder: React.FC = () => {
                         <div className="relative">
                             <button
                                 onClick={() => setIsModelDropdownOpen(!isModelDropdownOpen)}
-                                className="w-full flex items-center justify-between gap-2 px-4 py-3 bg-zinc-800/50 rounded-lg border border-zinc-700 hover:border-zinc-600 transition-colors"
+                                className="cursor-pointer w-full flex items-center justify-between gap-2 px-4 py-3 bg-zinc-800/50 rounded-lg border border-zinc-700 hover:border-zinc-600 transition-colors"
                             >
                                 <div className="flex items-center gap-3">
                                     <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-zinc-700 to-zinc-800 border border-zinc-600 flex items-center justify-center overflow-hidden">
@@ -387,7 +387,7 @@ export const Viewfinder: React.FC = () => {
                                                 setSelectedModel(model);
                                                 setIsModelDropdownOpen(false);
                                             }}
-                                            className={`w-full px-4 py-3 text-left text-sm hover:bg-zinc-700 transition-colors flex items-center gap-3 ${selectedModel?.id === model.id ? 'bg-zinc-700 text-white' : 'text-zinc-300'
+                                            className={`cursor-pointer w-full px-4 py-3 text-left text-sm hover:bg-zinc-700 transition-colors flex items-center gap-3 ${selectedModel?.id === model.id ? 'bg-zinc-700 text-white' : 'text-zinc-300'
                                                 }`}
                                         >
                                             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-zinc-700 to-zinc-800 border border-zinc-600 flex items-center justify-center overflow-hidden shrink-0">

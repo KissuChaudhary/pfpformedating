@@ -21,17 +21,17 @@ export async function signInWithMagicLink(
   if (!isValidCSRF) {
     return { error: 'Security validation failed. Please refresh the page and try again.' }
   }
-  
+
   // Apply rate limiting based on email only if enabled
   const email = formData.get('email') as string
   if (isRateLimitingEnabled()) {
     const rateLimitResult = await checkRateLimit(`magic-link:${email}`, authRateLimit)
-    
+
     if (!rateLimitResult.success) {
       return { error: 'Too many login attempts. Please try again in 15 minutes.' }
     }
   }
-  
+
   const supabase = await createClient()
 
   try {
@@ -40,6 +40,7 @@ export async function signInWithMagicLink(
       options: {
         shouldCreateUser: true,
         emailRedirectTo: `${process.env.NEXT_PUBLIC_APP_URL}/auth/callback?next=/dashboard`,
+        captchaToken: formData.get('cf-turnstile-response') as string,
       },
     })
 
@@ -47,7 +48,7 @@ export async function signInWithMagicLink(
       console.error('Magic link error:', error.code || 'UNKNOWN_ERROR')
       return { error: 'Failed to send magic link. Please try again.' }
     }
-    
+
     console.log('Magic link sent successfully')
     return { success: 'Check your email for the magic link!' }
   } catch (err) {
@@ -62,16 +63,16 @@ export async function signInWithGoogle(formData: FormData): Promise<void> {
   if (!isValidCSRF) {
     redirect('/error?message=Security validation failed. Please refresh the page and try again.')
   }
-  
+
   // Apply rate limiting for OAuth attempts only if enabled
   if (isRateLimitingEnabled()) {
     const rateLimitResult = await checkRateLimit('google-oauth', authRateLimit)
-    
+
     if (!rateLimitResult.success) {
       redirect('/error?message=Too many login attempts. Please try again in 15 minutes.')
     }
   }
-  
+
   const supabase = await createClient()
 
   const { data, error } = await supabase.auth.signInWithOAuth({
