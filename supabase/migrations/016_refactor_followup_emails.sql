@@ -11,6 +11,16 @@ create table public.followup_email_logs (
   unique(user_id, email_type) -- Ensure we don't send the same type twice
 );
 
+-- Enable Row Level Security (RLS)
+alter table public.followup_email_logs enable row level security;
+
+-- Create policy to DENY all access by default (Authenticated and Anon users)
+-- Only the Service Role (used by the API) can bypass this.
+create policy "Service role only"
+  on public.followup_email_logs
+  for all
+  using ( false ); -- Explicitly deny everyone else
+
 -- Step 3: Create flexible function to finding users
 -- Parameters:
 --   start_offset: e.g. '30 minutes'
@@ -57,6 +67,6 @@ as $$
       select 1 
       from public.dodo_payments dp 
       where dp.user_id = au.id 
-      and dp.status = 'succeeded'
+      and dp.status = 'completed'
     )
 $$;
