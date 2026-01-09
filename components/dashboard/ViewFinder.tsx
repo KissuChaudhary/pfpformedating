@@ -138,7 +138,7 @@ export const Viewfinder: React.FC = () => {
 
     // Fetch generated images when model changes (limit to latest 10)
     useEffect(() => {
-        if (!selectedModel) return;
+        if (!selectedModel?.id) return;
 
         const fetchImages = async () => {
             try {
@@ -152,11 +152,11 @@ export const Viewfinder: React.FC = () => {
             }
         };
         fetchImages();
-    }, [selectedModel]);
+    }, [selectedModel?.id]); // Use ID not object to prevent duplicate fetches
 
     // Fetch pending jobs from database on mount/model change (restores after refresh)
     useEffect(() => {
-        if (!selectedModel) return;
+        if (!selectedModel?.id) return;
 
         const fetchPendingJobs = async () => {
             try {
@@ -177,7 +177,7 @@ export const Viewfinder: React.FC = () => {
             }
         };
         fetchPendingJobs();
-    }, [selectedModel]);
+    }, [selectedModel?.id]); // Use ID not object to prevent duplicate fetches
 
     // Poll for pending job updates - runs every 5s when jobs are pending
     useEffect(() => {
@@ -219,7 +219,7 @@ export const Viewfinder: React.FC = () => {
         const interval = setInterval(pollJobs, 5000);
 
         return () => clearInterval(interval);
-    }, [selectedModel]); // Removed pendingJobs to prevent infinite loop
+    }, [selectedModel?.id]); // Use ID not object to prevent duplicate fetches
 
     // Main Logic: The Shutter - Now uses fal.ai queue for background processing
     const handleShutter = async () => {
