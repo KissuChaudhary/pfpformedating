@@ -4,7 +4,7 @@ export const HowItWorks: React.FC = () => {
     return (
         <section className="grid md:grid-cols-12 border-b border-foreground/10">
             <div className="col-span-12 md:col-span-4 p-8 md:p-12 border-b md:border-b-0 md:border-r border-foreground/10 flex flex-col justify-between">
-                <h2 className="font-display text-4xl font-bold uppercase leading-tight">
+                <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-8">
                     3 Steps to <br />
                     <span className="text-foreground/30">The Vibe.</span>
                 </h2>
@@ -18,7 +18,7 @@ export const HowItWorks: React.FC = () => {
                     {
                         step: '01',
                         title: 'Upload Selfies',
-                        desc: 'Upload 4-5 clear photos of yourself. The AI learns your unique features to create your personal model.',
+                        desc: 'Upload 4 different & clear photos of yourself (avoid only selfie). The AI learns your unique features to create your personal model.',
                         meta: 'MODEL_TRAINING'
                     },
                     {
@@ -30,7 +30,7 @@ export const HowItWorks: React.FC = () => {
                     {
                         step: '03',
                         title: 'Get Photos',
-                        desc: 'AI generates hyper-realistic photos in under 60 seconds. Download instantly. No plastic AI look—real skin, real texture.',
+                        desc: 'AI generates hyper-realistic photos in under 60 seconds. Download instantly. No plastic AI look. Real skin, real texture.',
                         meta: 'INSTANT_RENDER'
                     }
                 ].map((item, i) => (

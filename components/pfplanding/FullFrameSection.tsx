@@ -23,14 +23,13 @@ export const FullFrameSection: React.FC = () => {
         <section className="h-screen min-h-[800px] grid md:grid-cols-2 border-b border-foreground/10 bg-[#080808] overflow-hidden">
             {/* Copy Side (Left) */}
             <div className="flex flex-col justify-center p-8 md:p-20 border-r border-foreground/10 relative z-10 bg-[#080808]">
-                <h2 className="font-display text-4xl md:text-6xl font-bold uppercase leading-[0.9] mb-8">
-                    BUILT FOR THE FEED.
-                    <span className="text-foreground/50"> NOT JUST THE PROFILE</span>
+                <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-8">
+                    STOP BEING GHOSTED.
+                    <span className="text-foreground/50"> START BEING FOLLOWED.</span>
                 </h2>
 
                 <p className="font-mono text-foreground/70 mb-10 text-sm md:text-base max-w-md leading-relaxed">
-                    Traditional headshots are useless on Instagram or Hinge. We generate{" "}
-                    <strong className="text-white">Full-Frame Vertical (9:16)</strong> images so you have complete control.
+                    Stop posting stiff, corporate headshots on apps meant for real life. We generate candid, lifestyle photos that look like <strong className="text-white">your best friend took them on a night out.</strong>
                 </p>
 
                 <div className="space-y-6">
@@ -39,7 +38,7 @@ export const FullFrameSection: React.FC = () => {
                             01
                         </div>
                         <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            9:16 VERTICAL RATIO (Story Ready)
+                            Ditch the stiff, corporate headshot look.
                         </div>
                     </div>
                     <div className="flex items-center gap-4 group">
@@ -47,7 +46,7 @@ export const FullFrameSection: React.FC = () => {
                             02
                         </div>
                         <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            FULL BODY & OUTFIT (Not just a face)
+                            Authentic vibes that get more matches.
                         </div>
                     </div>
                     <div className="flex items-center gap-4 group">
@@ -55,7 +54,15 @@ export const FullFrameSection: React.FC = () => {
                             03
                         </div>
                         <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            HIGH-RES DOWNLOAD (Print quality)
+                            Candid shots your friends will believe.
+                        </div>
+                    </div>
+                    <div className="flex items-center gap-4 group">
+                        <div className="w-8 h-8 flex items-center justify-center border border-foreground/20 font-mono text-xs text-accent">
+                            04
+                        </div>
+                        <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
+                            Flawless skin, natural grain, zero "plastic."
                         </div>
                     </div>
                 </div>

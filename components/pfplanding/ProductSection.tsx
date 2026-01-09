@@ -1,4 +1,6 @@
-import React from 'react';
+'use client';
+
+import React, { useRef, useState } from 'react';
 
 const cases = [
     {
@@ -24,27 +26,71 @@ const cases = [
 ];
 
 export const ProductSection: React.FC = () => {
+    const scrollRef = useRef<HTMLDivElement>(null);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        if (!scrollRef.current) return;
+        setIsDragging(true);
+        setStartX(e.pageX - scrollRef.current.offsetLeft);
+        setScrollLeft(scrollRef.current.scrollLeft);
+    };
+
+    const handleMouseUp = () => {
+        setIsDragging(false);
+    };
+
+    const handleMouseLeave = () => {
+        setIsDragging(false);
+    };
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        if (!isDragging || !scrollRef.current) return;
+        e.preventDefault();
+        const x = e.pageX - scrollRef.current.offsetLeft;
+        const walk = (x - startX) * 1.5; // Scroll speed multiplier
+        scrollRef.current.scrollLeft = scrollLeft - walk;
+    };
+
     return (
         <section className="py-24 border-b border-foreground/10 overflow-hidden relative">
-            <div className="container mx-auto px-6 mb-12">
-                <div className="flex flex-col md:flex-row justify-between items-end gap-8">
-                    <div>
-                        <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-4">
-                            THE ULTIMATE PHOTO DUMP
-                        </h2>
-                        <p className="font-mono text-foreground/60 max-w-2xl">
-                            Stop posting stiff, staged selfies. We generate the kind of candid, "caught-in-the-moment" shots that belong in your monthly carousel. From harsh flash to soft motion blur, get the photos that make people ask, "Who took this?"                        </p>
-                    </div>
-                    <div className="text-right hidden md:block">
-                        <div className="font-mono text-accent text-xs mb-2 animate-pulse">● LIVE PREVIEW</div>
-                        <div className="h-[1px] w-32 bg-accent ml-auto"></div>
-                    </div>
+
+            <div className="flex flex-col md:flex-row justify-between items-end gap-8 p-8 md:px-24">
+                <div>
+                    <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-4">
+                        THE ULTIMATE PHOTO DUMP
+                    </h2>
+                    <p className="font-mono text-foreground/60 max-w-2xl">
+                        Stop posting stiff, staged selfies. We generate the kind of candid, "caught-in-the-moment" shots that belong in your monthly carousel. From harsh flash to soft motion blur, get the photos that make people ask, "Who took this?"                        </p>
                 </div>
+                <div className="text-right hidden md:block">
+                    <div className="font-mono text-accent text-xs mb-2 animate-pulse">● LIVE PREVIEW</div>
+                    <div className="h-[1px] w-32 bg-accent ml-auto"></div>
+                </div>
+
             </div>
 
             {/* Film Strip Container */}
-            <div className="w-full overflow-x-auto no-scrollbar pb-12 cursor-grab active:cursor-grabbing">
-                <div className="flex gap-0 w-max pl-6 md:pl-24">
+            <div
+                ref={scrollRef}
+                className={`w-full overflow-x-auto pb-12 select-none ${isDragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+                style={{
+                    scrollbarWidth: 'none',
+                    msOverflowStyle: 'none',
+                }}
+                onMouseDown={handleMouseDown}
+                onMouseUp={handleMouseUp}
+                onMouseLeave={handleMouseLeave}
+                onMouseMove={handleMouseMove}
+            >
+                <style jsx>{`
+                    div::-webkit-scrollbar {
+                        display: none;
+                    }
+                `}</style>
+                <div className="flex gap-0 w-max pl-12 md:pl-24">
                     {cases.map((item, index) => (
                         <div key={index} className="relative group w-[300px] md:w-[400px] flex-shrink-0 mr-12">
                             {/* Film Sprockets Top */}
@@ -62,7 +108,8 @@ export const ProductSection: React.FC = () => {
                                 <img
                                     src={item.img}
                                     alt={item.title}
-                                    className="w-full h-full object-cover opacity-100 group-hover:grayscale-80 group-hover:opacity-80 transition-all duration-100 ease-out hover:brightness-110"
+                                    className="w-full h-full object-cover opacity-100 group-hover:grayscale-80 group-hover:opacity-80 transition-all duration-100 ease-out hover:brightness-110 pointer-events-none"
+                                    draggable={false}
                                 />
                             </div>
 
