@@ -14,19 +14,28 @@ const nextConfig = {
   },
   images: {
     unoptimized: true,
-    domains: [
-      "blog.unrealshot.com",
-      "localhost",
-      "astria.ai",
-      "api.astria.ai",
-      "sdbooth2-production.s3.amazonaws.com",
-      "xdka2sdembhhqc3o.public.blob.vercel-storage.com",
-      "norpsr0wtvuo7qpe.public.blob.vercel-storage.com",
-      "replicate.delivery",
-      "replicate.com",
-      "fal.ai",
-      "fal.media",
-      "v3.fal.media",
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'blog.unrealshot.com',
+        pathname: '/wp-content/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'localhost',
+      },
+      {
+        protocol: 'https',
+        hostname: 'fal.ai',
+      },
+      {
+        protocol: 'https',
+        hostname: 'fal.media',
+      },
+      {
+        protocol: 'https',
+        hostname: 'v3.fal.media',
+      },
     ],
   },
   async headers() {
@@ -47,13 +56,44 @@ const nextConfig = {
     ];
   },
   async redirects() {
-    return [
-      {
-        source: "/ai-influencer-generator/",
-        destination: "/ai-influencer-generator",
-        permanent: true,
-      },
+    // Old landing pages that should redirect to homepage (301 permanent)
+    const oldLandingPages = [
+      'ai-botanic-photoshoot',
+      'ai-chef-headshots',
+      'ai-christmas-photoshoot',
+      'ai-dating-photoshoot',
+      'ai-fantasy-photoshoot',
+      'ai-glamour-photoshoot',
+      'ai-halloween-photoshoot',
+      'ai-influencer-generator',
+      'ai-instagram-photoshoot',
+      'ai-maternity-photoshoot',
+      'ai-real-estate-headshots',
+      'ai-speaker-photoshoot',
+      'ai-yearbook',
+      'black-swan-photoshoot',
+      'corporate-headshots',
+      'denim-wear-photoshoot',
+      'doctor-headshots',
+      'founder-headshots',
+      'lawyer-headshots',
+      'linkedin-headshots',
+      'natural-looks-photoshoot',
+      'neutral-muse-photoshoot',
+      'office-outfit-photoshoot',
+      'personal-branding-photoshoot',
+      'professional-headshots',
+      'resume-headshots',
+      'street-style-photoshoot',
+      'stylish-ai-portraits',
+      'vintage-photoshoot',
     ];
+
+    return oldLandingPages.map(page => ({
+      source: `/${page}`,
+      destination: '/',
+      permanent: true, // 301 redirect
+    }));
   },
 }
 
