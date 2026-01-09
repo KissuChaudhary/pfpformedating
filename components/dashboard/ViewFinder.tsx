@@ -79,6 +79,12 @@ export const Viewfinder: React.FC = () => {
 
     const gridEndRef = useRef<HTMLDivElement>(null);
     const galleryRef = useRef<HTMLDivElement>(null);
+    const pendingJobsRef = useRef<PendingJob[]>([]);
+
+    // Keep ref in sync with state (avoids stale closures in polling)
+    useEffect(() => {
+        pendingJobsRef.current = pendingJobs;
+    }, [pendingJobs]);
 
     // Fetch models on mount
     useEffect(() => {
@@ -175,9 +181,13 @@ export const Viewfinder: React.FC = () => {
 
     // Poll for pending job updates - runs every 5s when jobs are pending
     useEffect(() => {
-        if (!selectedModel || pendingJobs.filter(j => j.status === 'pending').length === 0) return;
+        if (!selectedModel) return;
 
         const pollJobs = async () => {
+            // Check ref (not state) to avoid infinite loop
+            const currentPending = pendingJobsRef.current.filter(j => j.status === 'pending');
+            if (currentPending.length === 0) return;
+
             try {
                 const res = await fetch(`/api/fal/jobs?modelId=${selectedModel.id}&limit=10`);
                 if (!res.ok) return;
@@ -205,12 +215,11 @@ export const Viewfinder: React.FC = () => {
             }
         };
 
-        // Poll every 5 seconds
+        // Poll every 5 seconds (don't call immediately - initial fetch handles it)
         const interval = setInterval(pollJobs, 5000);
-        pollJobs(); // Initial poll
 
         return () => clearInterval(interval);
-    }, [selectedModel, pendingJobs]);
+    }, [selectedModel]); // Removed pendingJobs to prevent infinite loop
 
     // Main Logic: The Shutter - Now uses fal.ai queue for background processing
     const handleShutter = async () => {

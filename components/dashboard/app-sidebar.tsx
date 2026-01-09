@@ -94,26 +94,22 @@ export function AppSidebar({
     avatar: "/placeholder-user.jpg",
   }
 
-  const supabase = createClient()
+  const supabaseRef = React.useRef(createClient())
   const [hasTrainedModel, setHasTrainedModel] = React.useState(false)
 
   React.useEffect(() => {
     let active = true
       ; (async () => {
         try {
-          let uid = userData.id
-          if (!uid) {
-            const { data: { user } } = await supabase.auth.getUser()
-            uid = user?.id
-          }
-          if (!uid) {
+          // User ID is already passed from server, no need to call getUser()
+          if (!userData.id) {
             if (active) setHasTrainedModel(false)
             return
           }
-          const { data } = await supabase
+          const { data } = await supabaseRef.current
             .from("models")
             .select("id")
-            .eq("user_id", uid)
+            .eq("user_id", userData.id)
             .eq("status", "finished")
             .limit(1)
           if (active) setHasTrainedModel(!!data && data.length > 0)
@@ -122,7 +118,7 @@ export function AppSidebar({
         }
       })()
     return () => { active = false }
-  }, [supabase, userData.id])
+  }, [userData.id]) // Removed supabase from deps
 
   const navItems = React.useMemo(() => [
     {

@@ -90,7 +90,7 @@ export async function POST(request: Request) {
       for (const user of batch30Min.data) {
         try {
           await resend.emails.send({
-            from: "Harvansh from Unrealshot <harvansh@unrealshot.com>", // Updated sender
+            from: "Harvansh from Unrealshot <harvansh@noreply.unrealshot.com>", // Updated sender
             to: user.email,
             subject: "quick question?",
             html: getEmailTemplate30Min(user.email),
@@ -120,7 +120,7 @@ export async function POST(request: Request) {
       for (const user of batch4Hour.data) {
         try {
           await resend.emails.send({
-            from: "Harvansh from Unrealshot <harvansh@unrealshot.com>",
+            from: "Harvansh from Unrealshot <harvansh@noreply.unrealshot.com>",
             to: user.email,
             subject: "I have a small idea",
             html: getEmailTemplate4Hour(user.email),

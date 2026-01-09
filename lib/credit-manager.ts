@@ -18,6 +18,7 @@ class CreditManager {
   private listeners: Set<(event: CreditUpdateEvent) => void> = new Set()
   private userCredits: Map<string, number> = new Map()
   private subscriptions: Map<string, any> = new Map()
+  private initializingUsers: Set<string> = new Set() // Prevent duplicate fetches
 
   private constructor() {
     // Singleton pattern
@@ -32,6 +33,29 @@ class CreditManager {
 
   // Initialize credit tracking for a user
   async initializeUser(userId: string): Promise<number> {
+    // If already cached, return immediately (prevents duplicate fetches)
+    if (this.userCredits.has(userId)) {
+      return this.userCredits.get(userId)!
+    }
+
+    // If already initializing, wait for it (prevents concurrent fetches)
+    if (this.initializingUsers.has(userId)) {
+      return new Promise((resolve) => {
+        const check = () => {
+          if (this.userCredits.has(userId)) {
+            resolve(this.userCredits.get(userId)!)
+          } else if (!this.initializingUsers.has(userId)) {
+            // Initialization finished but no cache - return 0
+            resolve(0)
+          } else {
+            setTimeout(check, 50)
+          }
+        }
+        check()
+      })
+    }
+
+    this.initializingUsers.add(userId)
     try {
       // Fetch current balance
       const { data, error } = await this.supabase
@@ -57,6 +81,8 @@ class CreditManager {
     } catch (error) {
       console.error('Error initializing user credits:', error)
       return 0
+    } finally {
+      this.initializingUsers.delete(userId)
     }
   }
 
