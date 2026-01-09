@@ -136,7 +136,6 @@ export const Viewfinder: React.FC = () => {
         return () => window.removeEventListener('creditUpdate', handleCreditUpdate as EventListener);
     }, []);
 
-    // Fetch generated images when model changes (limit to latest 10)
     useEffect(() => {
         if (!selectedModel?.id) return;
 
