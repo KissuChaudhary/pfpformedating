@@ -3,6 +3,7 @@ import type { Metadata } from "next"
 import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google"
 import "./globals.css"
 import { Suspense } from "react"
+import Script from "next/script"
 import ErrorBoundary from "@/components/error-boundary"
 import { generateMetadata } from "@/lib/seo"
 import { StructuredData } from "@/components/seo/StructuredData"
@@ -68,7 +69,7 @@ export default async function RootLayout({
         {/* Apple-specific meta tags */}
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-        <meta name="apple-mobile-web-app-title" content="DodoStarter" />
+        <meta name="apple-mobile-web-app-title" content="UnrealShot" />
 
         {/* Microsoft tiles */}
         <meta name="msapplication-TileColor" content="#000000" />
@@ -99,6 +100,20 @@ export default async function RootLayout({
         </ErrorBoundary>
         <Toaster richColors closeButton />
         <ShadcnToaster />
+
+        {/* Google Analytics */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-XGFT46LL3J"
+          strategy="afterInteractive"
+        />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XGFT46LL3J');
+          `}
+        </Script>
       </body>
     </html>
   )

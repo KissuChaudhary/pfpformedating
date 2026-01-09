@@ -84,7 +84,7 @@ export function NavUser({
             <DropdownMenuSeparator className="bg-white/10" />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10">
-                <Link href="/buy-credits" className="flex items-center">
+                <Link href="/buy-credits" prefetch={false} className="flex items-center">
                   <Sparkles className="mr-2 h-4 w-4" />
                   Buy Credits
                 </Link>
@@ -94,11 +94,11 @@ export function NavUser({
             <DropdownMenuGroup>
               <DropdownMenuItem className="cursor-pointer hover:bg-white/10 focus:bg-white/10">
                 <Home className="mr-2 h-4 w-4" />
-                <Link href="/dashboard">Dashboard</Link>
+                <Link href="/dashboard" prefetch={false}>Dashboard</Link>
               </DropdownMenuItem>
               <DropdownMenuItem className="cursor-pointer hover:bg-white/10 focus:bg-white/10">
                 <BadgeCheck className="mr-2 h-4 w-4" />
-                <Link href="/account">Account</Link>
+                <Link href="/account" prefetch={false}>Account</Link>
               </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator className="bg-white/10" />
