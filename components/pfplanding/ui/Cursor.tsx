@@ -72,10 +72,7 @@ export const Cursor: React.FC = () => {
             }`}
         />
 
-        {/* Technical readout that follows cursor - Made smaller and less intrusive */}
-        <div className={`absolute top-4 left-4 font-mono text-[9px] text-accent/80 whitespace-nowrap hidden md:block transition-opacity duration-300 ${isHovering ? 'opacity-100' : 'opacity-0'}`}>
-          TARGET_LOCKED
-        </div>
+
       </div>
     </div>
   );

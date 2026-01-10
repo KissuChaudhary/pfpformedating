@@ -165,10 +165,10 @@ export default function BlogPage() {
           <div className="max-w-7xl mx-auto px-6 md:px-12">
             <div className="mb-12">
               <div className="font-mono text-[10px] text-foreground/40 mb-4">LOADING...</div>
-              <h1 className="font-display text-4xl md:text-6xl font-bold uppercase leading-[0.95] mb-4">
+              <div className="font-display text-4xl md:text-6xl font-bold uppercase leading-[0.95] mb-4">
                 The<br />
                 <span className="text-foreground/30">Studio.</span>
-              </h1>
+              </div>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[...Array(6)].map((_, i) => (

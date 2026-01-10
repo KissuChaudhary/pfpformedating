@@ -228,7 +228,7 @@ export const Viewfinder: React.FC = () => {
         setTimeout(() => setFlashTrigger(false), 200);
 
         setIsDeveloping(true);
-        setStatusMessage('Submitting job...');
+        setStatusMessage('Please wait...Submitting job...');
 
         try {
             const gender = selectedModel.type || 'Female';
@@ -567,7 +567,7 @@ export const Viewfinder: React.FC = () => {
                                         Processing
                                     </div>
                                     <div className="text-[10px] text-zinc-500 mt-1 px-4 text-center truncate max-w-full">
-                                        {job.prompt.slice(0, 30)}...
+                                        You can now leave this page if needed
                                     </div>
                                     <div className="flex gap-1 mt-2">
                                         <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
