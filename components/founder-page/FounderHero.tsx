@@ -3,42 +3,33 @@ import { Button } from "@/components/pfplanding/ui/Button";
 
 export const FounderHero = () => {
     return (
-        <section className="relative min-h-[90vh] flex flex-col md:grid md:grid-cols-12 border-b border-foreground/10 bg-background">
+        <section className="relative min-h-screen flex flex-col md:grid md:grid-cols-12 border-b border-foreground/10 bg-background">
             {/* Left Content */}
             <div className="md:col-span-7 flex flex-col justify-center p-6 md:p-12 lg:p-20 border-r border-foreground/10 relative z-10">
-                <div className="mb-6 font-mono text-xs text-accent uppercase tracking-widest">
-          // FOR FOUNDERS & CREATIVES
+                <div className="mb-6 font-mono text-xs text-foreground/40">
+                  // FOR <span className="text-red-500/70 font-bold">FOUNDERS & CREATIVES</span>
                 </div>
 
-                <h1 className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold leading-[0.9] tracking-tighter uppercase mb-6">
+                <h1 className="font-display text-4xl sm:text-8xl font-bold sm:leading-[0.9] sm:tracking-tighter uppercase mb-8">
                     Non-Corporate <br />
                     Headshots for <br />
                     <span className="text-transparent stroke-text">Founders & Creatives.</span>
                 </h1>
 
-                <div className="font-mono text-xl text-accent mb-8 font-bold uppercase">
-                    Stop looking like a banker.
-                </div>
-
-                <p className="font-mono text-foreground/70 text-sm md:text-base max-w-xl mb-10 leading-relaxed">
+                <p className="font-mono text-foreground/70 text-sm md:text-base max-w-xl mb-12 leading-relaxed">
                     Your profile picture should have as much personality as your work. Get gritty, flash-lit, or cinematic headshots perfect for your Twitter, Substack, or Portfolio.
                 </p>
 
-                <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+                <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
                     <Link href="/login">
-                        <Button size="lg" className="w-full sm:w-auto px-8 py-6 text-lg">
+                        <Button size="lg" className="w-full sm:w-auto">
                             UPGRADE MY PERSONAL BRAND
                         </Button>
                     </Link>
 
-                    <div className="flex flex-col gap-1">
-                        <span className="font-mono text-[10px] text-foreground/40 uppercase tracking-wider">
-                            No Suits Required
-                        </span>
-                        <span className="font-mono text-[10px] text-foreground/40 uppercase tracking-wider">
-                            100% Candid Vibes
-                        </span>
-                    </div>
+                    <span className="font-mono text-xs text-foreground/40 sm:max-w-[200px] max-w-full">
+                        [!] No Suits Required. 100% Candid Vibes.
+                    </span>
                 </div>
             </div>
 

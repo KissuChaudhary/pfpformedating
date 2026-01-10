@@ -28,7 +28,7 @@ export const Hero: React.FC = () => {
           </Link>
 
           <span className="font-mono text-xs text-foreground/40 sm:max-w-[200px] max-w-full">
-            [!] No plastic skin. No fake smiles. 100% Aesthetic.
+            [!] No plastic skin. No fake smiles.
           </span>
         </div>
       </div>

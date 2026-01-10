@@ -1,31 +1,68 @@
 
 export const FounderManifesto = () => {
     return (
-        <section className="py-20 px-6 md:px-12 border-b border-foreground/10 bg-[#080808]">
-            <div className="max-w-4xl mx-auto text-center">
-                <h2 className="font-display text-3xl md:text-5xl font-bold uppercase mb-8 leading-none">
-                    The &quot;Grey Backdrop&quot; <span className="text-foreground/30">is Dead.</span>
-                </h2>
-
-                <p className="font-mono text-foreground/70 mb-12 max-w-2xl mx-auto leading-relaxed text-lg">
-                    Traditional AI headshot generators are trained on one thing: LinkedIn in 2010.
-                    They put you in a suit, smooth your skin until you look like plastic, and place you in front of a fake office window.
-                    <br /><br />
-                    <strong className="text-white">If you are a writer, a builder, or a creative, that look doesn&apos;t build trust. It destroys it.</strong>
-                </p>
-
-                <div className="grid md:grid-cols-2 gap-8 text-left mt-16 border-t border-foreground/10 pt-12">
-                    <div className="space-y-4 p-8 border border-foreground/10 bg-white/5">
-                        <h3 className="font-display text-2xl font-bold uppercase text-accent">Texture over Smoothness</h3>
-                        <p className="font-mono text-sm text-foreground/60">
-                            We keep the pores, the stubble, and the real skin details.
-                        </p>
+        <section className="relative border-b border-foreground/10 bg-[#080808]">
+            <div className="md:grid md:grid-cols-2 min-h-[600px]">
+                {/* Left Column: The Statement */}
+                <div className="relative p-8 md:p-20 flex flex-col justify-center border-b md:border-b-0 md:border-r border-foreground/10">
+                    <div className="absolute top-6 left-6 md:top-10 md:left-10 font-mono text-[10px] text-accent/50 uppercase tracking-widest">
+                        // 01_MANIFESTO.TXT
                     </div>
-                    <div className="space-y-4 p-8 border border-foreground/10 bg-white/5">
-                        <h3 className="font-display text-2xl font-bold uppercase text-accent">Street over Studio</h3>
-                        <p className="font-mono text-sm text-foreground/60">
-                            We replace the office background with neon lights, brick walls, and city streets.
-                        </p>
+
+                    <h2 className="font-display text-5xl md:text-7xl font-bold uppercase leading-[0.85] tracking-tighter mb-8">
+                        The Suit <br />
+                        is a <span className="text-transparent stroke-text">Costume.</span>
+                    </h2>
+
+                    <p className="font-mono text-foreground/70 text-sm md:text-base leading-relaxed max-w-md">
+                        Investors don&apos;t buy the suit. They buy the builder.
+                        <br /><br />
+                        Traditional headshots look like they were made for LinkedIn in 2010. We built an engine for the rest of us.
+                    </p>
+                </div>
+
+                {/* Right Column: The "Git Diff" Evidence */}
+                <div className="relative bg-[#050505] p-8 md:p-20 flex flex-col justify-center">
+                    <div className="absolute top-6 right-6 md:top-10 md:right-10 font-mono text-[10px] text-foreground/20 uppercase tracking-widest text-right">
+                        // DIFF_CHECK_V2
+                    </div>
+
+                    <div className="space-y-8 font-mono">
+                        {/* Item 1 */}
+                        <div className="group">
+                            <div className="flex items-center gap-4 mb-2 opacity-40 group-hover:opacity-100 transition-opacity">
+                                <span className="text-red-500 text-xs">[ - ]</span>
+                                <span className="text-red-500 line-through decoration-red-500/50 text-sm md:text-lg">SMOOTH SKIN TEXTURE</span>
+                            </div>
+                            <div className="flex items-center gap-4 pl-8 border-l border-accent/20">
+                                <span className="text-accent text-xs">[ + ]</span>
+                                <span className="text-white font-bold text-lg md:text-2xl uppercase tracking-tighter">SCARS & PORES</span>
+                            </div>
+                        </div>
+
+                        {/* Item 2 */}
+                        <div className="group">
+                            <div className="flex items-center gap-4 mb-2 opacity-40 group-hover:opacity-100 transition-opacity">
+                                <span className="text-red-500 text-xs">[ - ]</span>
+                                <span className="text-red-500 line-through decoration-red-500/50 text-sm md:text-lg">OFFICE BACKDROP</span>
+                            </div>
+                            <div className="flex items-center gap-4 pl-8 border-l border-accent/20">
+                                <span className="text-accent text-xs">[ + ]</span>
+                                <span className="text-white font-bold text-lg md:text-2xl uppercase tracking-tighter">BRICK & FILM GRAIN</span>
+                            </div>
+                        </div>
+
+                        {/* Item 3 */}
+                        <div className="group">
+                            <div className="flex items-center gap-4 mb-2 opacity-40 group-hover:opacity-100 transition-opacity">
+                                <span className="text-red-500 text-xs">[ - ]</span>
+                                <span className="text-red-500 line-through decoration-red-500/50 text-sm md:text-lg">FAKE SMILE</span>
+                            </div>
+                            <div className="flex items-center gap-4 pl-8 border-l border-accent/20">
+                                <span className="text-accent text-xs">[ + ]</span>
+                                <span className="text-white font-bold text-lg md:text-2xl uppercase tracking-tighter">DEADPAN STARE</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

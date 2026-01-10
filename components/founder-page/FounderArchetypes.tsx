@@ -29,13 +29,8 @@ export const FounderArchetypes = () => {
     ];
 
     return (
-        <section className="py-24 border-b border-foreground/10">
-            <div className="container mx-auto px-6 md:px-12 mb-16">
-                <Badge className="mb-6 w-fit">YOUR PERSONA</Badge>
-                <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-4">
-                    Define Your <br /> Internet Archetype.
-                </h2>
-            </div>
+        <section className="border-b border-foreground/10">
+
 
             <div className="flex flex-col md:flex-row border-y border-foreground/10">
                 {archetypes.map((item, i) => (
