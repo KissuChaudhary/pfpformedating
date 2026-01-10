@@ -37,7 +37,12 @@ const plans = [
     },
 ]
 
-export const Pricing: React.FC = () => {
+interface PricingProps {
+    asH1?: boolean; // When true, renders main heading as H1 (for dedicated pricing page)
+}
+
+export const Pricing: React.FC<PricingProps> = ({ asH1 = false }) => {
+    const HeadingTag = asH1 ? 'h1' : 'h2';
     return (
         <section className="border-b border-foreground/10">
             {/* Plans Grid */}
@@ -49,10 +54,10 @@ export const Pricing: React.FC = () => {
                         <div className="font-mono text-xs text-foreground/40 mb-4">
                             PRICING // SINGLE_PAYMENT
                         </div>
-                        <h2 className="font-display text-4xl md:text-5xl font-bold uppercase leading-[0.95] mb-3">
+                        <HeadingTag className="font-display text-4xl md:text-5xl font-bold uppercase leading-[0.95] mb-3">
                             Pick Your<br />
                             <span className="text-foreground/30">Film Roll.</span>
-                        </h2>
+                        </HeadingTag>
                         <p className="font-mono text-foreground/60 text-sm">
                             No subscriptions. Pay once, own forever.
                         </p>

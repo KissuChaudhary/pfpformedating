@@ -12,7 +12,10 @@ export const Footer: React.FC = () => {
                     </p>
                 </div>
 
-                <div className="flex gap-8 font-mono text-xs text-foreground/60">
+                <div className="flex flex-wrap justify-center md:justify-end gap-x-8 gap-y-2 font-mono text-xs text-foreground/60">
+                    <a href="/use-case/couple-photos" className="hover:text-accent uppercase">Couple Photos</a>
+                    <a href="/use-case/dating-photos" className="hover:text-accent uppercase">Dating Photos</a>
+                    <a href="/use-case/creative-headshots" className="hover:text-accent uppercase">Creative Headshots</a>
                     <a href="/privacy-policy" className="hover:text-accent uppercase">Privacy</a>
                     <a href="/terms" className="hover:text-accent uppercase">Terms</a>
                     <a href="/refund-policy" className="hover:text-accent uppercase">Refund</a>

@@ -41,7 +41,7 @@ export default function PrivacyPolicy() {
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
                 At <strong className="text-foreground">UnrealShot AI</strong>, accessible from{' '}
                 <a href="https://www.unrealshot.com" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">
-                  https://www.unrealshot.com
+                  unrealshot.com
                 </a>
                 , we are committed to protecting your privacy. This Privacy Policy explains what information we collect, how we use it, how we process user data, and your rights under <strong className="text-foreground">applicable privacy laws, including the General Data Protection Regulation (GDPR)</strong>. By using our services, you agree to the practices described in this Privacy Policy.
               </p>
@@ -182,15 +182,15 @@ export default function PrivacyPolicy() {
               <ul className="space-y-2 font-mono text-sm text-foreground/70">
                 <li className="flex items-start">
                   <span className="w-1.5 h-1.5 bg-foreground/40 mr-3 mt-1.5 flex-shrink-0"></span>
-                  <span><strong className="text-foreground">Cloud Storage & AI Processing:</strong> Vercel Blob, Astria API (for AI model training).</span>
+                  <span><strong className="text-foreground">Cloud Storage & AI Processing:</strong> Cloudflare (for storage), FAL.ai (for AI image generation).</span>
                 </li>
                 <li className="flex items-start">
                   <span className="w-1.5 h-1.5 bg-foreground/40 mr-3 mt-1.5 flex-shrink-0"></span>
-                  <span><strong className="text-foreground">Payment Processors:</strong> Stripe, PayPal (for secure transactions).</span>
+                  <span><strong className="text-foreground">Payment Processors:</strong> <a href="https://dodopayments.com" className="text-accent hover:underline">Dodopayemnts</a> (for secure transactions).</span>
                 </li>
                 <li className="flex items-start">
                   <span className="w-1.5 h-1.5 bg-foreground/40 mr-3 mt-1.5 flex-shrink-0"></span>
-                  <span><strong className="text-foreground">Analytics & Performance Monitoring:</strong> Google Analytics, Hotjar (to improve user experience).</span>
+                  <span><strong className="text-foreground">Analytics & Performance Monitoring:</strong> Google Analytics (to improve user experience).</span>
                 </li>
                 <li className="flex items-start">
                   <span className="w-1.5 h-1.5 bg-foreground/40 mr-3 mt-1.5 flex-shrink-0"></span>
@@ -270,7 +270,7 @@ export default function PrivacyPolicy() {
                 <strong className="text-foreground">Email:</strong>{' '}
                 <a href="mailto:support@unrealshot.com" className="text-accent hover:underline">support@unrealshot.com</a><br />
                 <strong className="text-foreground">Website:</strong>{' '}
-                <a href="https://www.unrealshot.com" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">https://www.unrealshot.com</a>
+                <a href="https://www.unrealshot.com" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">unrealshot.com</a>
               </p>
             </div>
           </div>

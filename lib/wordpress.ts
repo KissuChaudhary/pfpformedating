@@ -174,7 +174,7 @@ async function fetchGraphQL(query: string, variables: Record<string, any> = {}, 
     }
 
     const json = await response.json()
-    
+
     if (json.errors) {
       // GraphQL layer errors are usually transient; retry a couple times
       if (retries > 0) {
@@ -187,13 +187,13 @@ async function fetchGraphQL(query: string, variables: Record<string, any> = {}, 
     return json
   } catch (error) {
     clearTimeout(timeoutId)
-    
+
     // Retry logic for network errors and timeouts
     if (retries > 0 && (error instanceof TypeError || (error as Error).name === 'AbortError')) {
       await new Promise(resolve => setTimeout(resolve, 500))
       return fetchGraphQL(query, variables, retries - 1)
     }
-    
+
     throw error
   }
 }
@@ -220,10 +220,10 @@ export async function getAllPosts(first: number = 10, after?: string): Promise<{
     }
   } catch (error) {
     console.warn('Failed to fetch posts from WordPress, using fallback data:', error)
-    
+
     // Import fallback data dynamically to avoid circular dependencies
     const { fallbackBlogPosts } = await import('./fallback-data')
-    
+
     return {
       posts: fallbackBlogPosts.slice(0, first),
       pageInfo: {
@@ -278,10 +278,62 @@ export function calculateReadingTime(content: string): string {
 // Helper function to extract excerpt from content if not provided
 export function extractExcerpt(content: string, length: number = 160): string {
   if (!content) return ''
-  const textContent = content.replace(/<[^>]*>/g, '') // Strip HTML tags
-  return textContent.length > length 
+  // Strip HTML tags
+  let textContent = content.replace(/<[^>]*>/g, '')
+  // Remove "Read more", "Continue reading", etc. and trailing ellipsis
+  textContent = textContent
+    .replace(/Read more\.?\.?\.?$/i, '')
+    .replace(/Continue reading\.?\.?\.?$/i, '')
+    .replace(/\[\.\.\.\.?\]$/g, '')
+    .replace(/\.\.\.$/g, '')
+    .replace(/…$/g, '')
+    .trim()
+
+  if (!textContent) return ''
+
+  return textContent.length > length
     ? textContent.substring(0, length).trim() + '...'
     : textContent
+}
+
+/**
+ * Clean WordPress excerpt by removing "Read more" links and other auto-generated content.
+ * Returns empty string if excerpt is only auto-generated boilerplate.
+ */
+export function cleanWordPressExcerpt(excerpt: string): string {
+  if (!excerpt) return ''
+
+  // Strip all HTML tags first
+  let text = excerpt.replace(/<[^>]*>/g, '')
+
+  // Remove common WordPress auto-excerpt patterns
+  text = text
+    .replace(/Read more\.?\.?\.?$/i, '')
+    .replace(/Continue reading\.?\.?\.?$/i, '')
+    .replace(/\[\.\.\.\.?\]$/g, '')
+    .replace(/\.\.\.$/g, '')
+    .replace(/…$/g, '')
+    .replace(/&hellip;$/g, '')
+    .replace(/&#8230;$/g, '')
+    .trim()
+
+  // If after cleaning, the excerpt is too short (likely just boilerplate), return empty
+  if (text.length < 20) return ''
+
+  return text
+}
+
+/**
+ * Check if WordPress post has a native/custom excerpt (not auto-generated from content).
+ * WordPress auto-generated excerpts typically end with "Read more" or are truncated from content.
+ */
+export function hasNativeExcerpt(post: WordPressPost): boolean {
+  if (!post.excerpt) return false
+
+  const cleaned = cleanWordPressExcerpt(post.excerpt)
+
+  // If the cleaned excerpt is empty or too short, it's likely auto-generated
+  return cleaned.length >= 20
 }
 
 export type { WordPressPost }

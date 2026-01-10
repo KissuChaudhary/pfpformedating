@@ -39,7 +39,7 @@ export default function TermsOfService() {
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">1. Introduction</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
                 Welcome to <strong className="text-foreground">UnrealShot AI</strong> ("we," "our," "us"). By accessing or using our website at
-                <a href="https://www.unrealshot.com" className="text-accent hover:underline ml-1">https://www.unrealshot.com</a>
+                <a href="https://www.unrealshot.com" className="text-accent hover:underline ml-1">unrealshot.com</a>
                 ("Site"), you agree to comply with and be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use the Site.
               </p>
             </div>
@@ -82,9 +82,9 @@ export default function TermsOfService() {
             <div>
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">6. Third-Party Services</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
-                <strong className="text-foreground">UnrealShot AI</strong> uses third-party services, including the <strong className="text-foreground">Astria API</strong> for image generation. By using our service, you agree to be bound by the terms and policies of these third parties.
-                Please review <strong className="text-foreground">Astria API's</strong> terms at
-                <a href="https://www.astria.ai/terms" className="text-accent hover:underline ml-1">https://www.astria.ai/terms</a>.
+                <strong className="text-foreground">UnrealShot AI</strong> uses third-party services, including <strong className="text-foreground">FAL.ai</strong> for AI image generation. By using our service, you agree to be bound by the terms and policies of these third parties.
+                Please review <strong className="text-foreground">FAL.ai's</strong> terms at
+                <a href="https://fal.ai/terms" className="text-accent hover:underline ml-1">FAL.ai Terms of Service</a>.
               </p>
             </div>
 

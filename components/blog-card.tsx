@@ -70,10 +70,12 @@ export default function BlogCard({
               {title}
             </h2>
 
-            {/* Excerpt */}
-            <p className="font-mono text-xs text-foreground/60 mb-4 leading-relaxed line-clamp-2">
-              {excerpt}
-            </p>
+            {/* Excerpt - only show if native excerpt exists */}
+            {excerpt && (
+              <p className="font-mono text-xs text-foreground/60 mb-4 leading-relaxed line-clamp-2">
+                {excerpt}
+              </p>
+            )}
 
             {/* Read More */}
             <div className="flex items-center font-mono text-xs text-foreground/50 group-hover:text-accent transition-colors uppercase tracking-wider">

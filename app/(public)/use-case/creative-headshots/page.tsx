@@ -11,17 +11,37 @@ import { FounderCTA } from '@/components/founder-page/FounderCTA';
 import { SocialProof } from '@/components/pfplanding/SocialProof';
 import { Pricing } from '@/components/pfplanding/Pricing';
 import { Footer } from '@/components/pfplanding/Footer';
-import { commonPageMetadata } from '@/lib/seo'
+import { commonPageMetadata, generateWebPageJsonLd } from '@/lib/seo'
+import { MultipleStructuredData } from '@/components/seo/StructuredData'
 
 export const metadata: Metadata = {
     ...commonPageMetadata.home(),
     title: "Casual AI Headshots for Founders & Creatives | Non-Corporate Styles",
     description: "Stop looking like a banker. Get gritty, flash-lit, or cinematic headshots perfect for your Twitter, Substack, or Portfolio.",
+    alternates: {
+        canonical: "https://www.unrealshot.com/use-case/creative-headshots",
+    },
 }
 
 export default function CreativeHeadshotsPage() {
     return (
         <div className="relative min-h-screen bg-background text-foreground">
+            <MultipleStructuredData
+                schemas={[
+                    {
+                        id: 'webpage-creative-headshots',
+                        data: JSON.parse(generateWebPageJsonLd({
+                            name: 'Casual AI Headshots for Founders & Creatives | Non-Corporate Styles',
+                            description: 'Stop looking like a banker. Get gritty, flash-lit, or cinematic headshots perfect for your Twitter, Substack, or Portfolio.',
+                            url: 'https://www.unrealshot.com/use-case/creative-headshots',
+                            breadcrumbs: [
+                                { name: 'Home', url: 'https://www.unrealshot.com' },
+                                { name: 'Creative Headshots', url: 'https://www.unrealshot.com/use-case/creative-headshots' }
+                            ]
+                        }))
+                    }
+                ]}
+            />
             <Navbar />
             <main className="pt-16">
                 <FounderHero />
@@ -38,3 +58,4 @@ export default function CreativeHeadshotsPage() {
         </div>
     )
 }
+

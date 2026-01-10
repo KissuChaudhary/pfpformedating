@@ -3,7 +3,7 @@ import { Navbar } from "@/components/pfplanding/Navbar"
 import { Footer } from "@/components/pfplanding/Footer"
 import BlogCard from "@/components/blog-card"
 import { OfflineBanner } from "@/components/network-status"
-import { getAllPosts, formatDate, calculateReadingTime, extractExcerpt, type WordPressPost } from "@/lib/wordpress"
+import { getAllPosts, formatDate, calculateReadingTime, cleanWordPressExcerpt, type WordPressPost } from "@/lib/wordpress"
 import { Suspense } from "react"
 import Link from "next/link"
 
@@ -15,6 +15,9 @@ export const metadata: Metadata = {
   description:
     "Actionable guides and insights on AI photography. Get the latest tips for creating stunning AI headshots, professional photos for LinkedIn, and authentic, high-quality images for your social and dating profiles.",
   robots: "index, follow",
+  alternates: {
+    canonical: "https://www.unrealshot.com/blog",
+  },
   openGraph: {
     title: "The Unrealshot AI Blog",
     description: "Your definitive guide to mastering your digital identity. In The Studio, we share expert tips, creative inspiration, and deep dives into the art of the perfect AI photoshoot.",
@@ -30,9 +33,13 @@ export const metadata: Metadata = {
 
 // Transform WordPress post to blog card format
 function transformWordPressPost(post: WordPressPost, index: number) {
+  // Only use native WordPress excerpt (cleaned of "Read more" etc.)
+  // If no native excerpt exists, don't show any excerpt
+  const excerpt = cleanWordPressExcerpt(post.excerpt || '')
+
   return {
     title: post.title,
-    excerpt: post.excerpt ? extractExcerpt(post.excerpt, 160) : extractExcerpt(post.content, 160),
+    excerpt, // Will be empty string if no native excerpt
     slug: post.slug,
     publishedAt: formatDate(post.date),
     readTime: calculateReadingTime(post.content),

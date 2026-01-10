@@ -98,21 +98,21 @@ export function generateMetadata(props: PageSEOProps = {}): Metadata {
       images: [ogImageUrl],
     },
     ...(defaultSEO.googleSiteVerification && {
-       verification: {
-         google: defaultSEO.googleSiteVerification,
-         ...(defaultSEO.bingSiteVerification || defaultSEO.yandexVerification ? {
-           other: {
-             ...(defaultSEO.bingSiteVerification && {
-               'msvalidate.01': defaultSEO.bingSiteVerification,
-             }),
-             ...(defaultSEO.yandexVerification && {
-               'yandex-verification': defaultSEO.yandexVerification,
-             }),
-           },
-         } : {}),
-       },
-     }),
-     other: {
+      verification: {
+        google: defaultSEO.googleSiteVerification,
+        ...(defaultSEO.bingSiteVerification || defaultSEO.yandexVerification ? {
+          other: {
+            ...(defaultSEO.bingSiteVerification && {
+              'msvalidate.01': defaultSEO.bingSiteVerification,
+            }),
+            ...(defaultSEO.yandexVerification && {
+              'yandex-verification': defaultSEO.yandexVerification,
+            }),
+          },
+        } : {}),
+      },
+    }),
+    other: {
       'theme-color': '#000000',
       'color-scheme': 'light dark',
       'format-detection': 'telephone=no',
@@ -209,22 +209,22 @@ export function generateWebApplicationJsonLd(props?: { title?: string; descripti
         "url": `${process.env.NEXT_PUBLIC_APP_URL}/site-logo.png`
       }
     },
-   "offers": [
-    {
-      "@type": "Offer",
-      "name": "Starter Pack",
-      "price": "9.99",
-      "priceCurrency": "USD",
-      "description": "Includes 30 credits for one AI model training and 20 AI-generated photos."
-    },
-    {
-      "@type": "Offer",
-      "name": "Pro Pack",
-      "price": "17.99",
-      "priceCurrency": "USD",
-      "description": "Includes 60 credits for 80 photos with one model, or 40 photos with two separate models."
-    }
-],
+    "offers": [
+      {
+        "@type": "Offer",
+        "name": "Starter Pack",
+        "price": "9.99",
+        "priceCurrency": "USD",
+        "description": "Includes 30 credits for one AI model training and 20 AI-generated photos."
+      },
+      {
+        "@type": "Offer",
+        "name": "Pro Pack",
+        "price": "17.99",
+        "priceCurrency": "USD",
+        "description": "Includes 60 credits for 80 photos with one model, or 40 photos with two separate models."
+      }
+    ],
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.8",
@@ -344,6 +344,50 @@ export function generateBreadcrumbJsonLd(items: Array<{ name: string; url: strin
       item: item.url,
     })),
   };
+  return generateJsonLd(schema);
+}
+
+/**
+ * Generate WebPage JSON-LD for use-case and landing pages
+ */
+export function generateWebPageJsonLd(page: {
+  name: string;
+  description: string;
+  url: string;
+  breadcrumbs?: Array<{ name: string; url: string }>;
+}): string {
+  const schema: Record<string, any> = {
+    '@context': 'https://schema.org',
+    '@type': 'WebPage',
+    '@id': page.url,
+    name: page.name,
+    description: page.description,
+    url: page.url,
+    isPartOf: {
+      '@type': 'WebSite',
+      '@id': 'https://www.unrealshot.com',
+      name: 'Unrealshot AI',
+      url: 'https://www.unrealshot.com'
+    },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Unrealshot AI',
+      url: 'https://www.unrealshot.com'
+    }
+  };
+
+  if (page.breadcrumbs && page.breadcrumbs.length > 0) {
+    schema.breadcrumb = {
+      '@type': 'BreadcrumbList',
+      itemListElement: page.breadcrumbs.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.name,
+        item: item.url
+      }))
+    };
+  }
+
   return generateJsonLd(schema);
 }
 
@@ -560,5 +604,5 @@ export const commonPageMetadata = {
     });
   },
 
- 
+
 };

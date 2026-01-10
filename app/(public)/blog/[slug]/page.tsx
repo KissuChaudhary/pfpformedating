@@ -102,8 +102,15 @@ export default async function BlogArticlePage({ params }: { params: Promise<{ sl
 
 function BlogPostContent({ post }: { post: WordPressPost }) {
   const readTime = calculateReadingTime(post.content)
-  const publishedDate = formatDate(post.date)
+  // Show modified date instead of published date
+  const displayDate = formatDate(post.modified || post.date)
   const category = post.categories.nodes[0]?.name || "General"
+
+  // Format dates with timezone for schema (ISO 8601 with Z suffix)
+  const formatDateWithTimezone = (dateString: string) => {
+    const date = new Date(dateString)
+    return date.toISOString() // Returns format like 2025-10-23T23:18:19.000Z
+  }
 
   const blogPostJsonLd = {
     '@context': 'https://schema.org',
@@ -112,8 +119,8 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
     headline: post.title,
     description: post.excerpt ? post.excerpt.replace(/<[^>]*>/g, '') : post.title,
     image: post.featuredImage?.node?.sourceUrl || 'https://www.unrealshot.com/placeholder.svg',
-    datePublished: post.date,
-    dateModified: post.modified,
+    datePublished: formatDateWithTimezone(post.date),
+    dateModified: formatDateWithTimezone(post.modified || post.date),
     author: {
       '@type': 'Organization',
       name: 'Unrealshot Team',
@@ -177,7 +184,7 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
                 <span className="bg-accent text-background px-2 py-1 font-bold">{category}</span>
                 <div className="flex items-center gap-2 text-foreground/50">
                   <Calendar className="w-3 h-3" />
-                  <span>{publishedDate}</span>
+                  <span>{displayDate}</span>
                 </div>
                 <div className="flex items-center gap-2 text-foreground/50">
                   <Clock className="w-3 h-3" />
