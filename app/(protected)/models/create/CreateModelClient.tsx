@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Upload, X, Loader2, Camera, Sparkles, Users, User, CheckCircle2, AlertCircle } from 'lucide-react';
 
-const GENDERS = ['Female', 'Male', 'Non-Binary'] as const;
+const GENDERS = ['Female', 'Male'] as const;
 type Gender = typeof GENDERS[number];
 type ModelMode = 'single' | 'couple';
 

@@ -5,11 +5,9 @@ export const FounderManifesto = () => {
             <div className="md:grid md:grid-cols-2 min-h-[600px]">
                 {/* Left Column: The Statement */}
                 <div className="relative p-8 md:p-20 flex flex-col justify-center border-b md:border-b-0 md:border-r border-foreground/10">
-                    <div className="absolute top-6 left-6 md:top-10 md:left-10 font-mono text-[10px] text-accent/50 uppercase tracking-widest">
-                        // 01_MANIFESTO.TXT
-                    </div>
 
-                    <h2 className="font-display text-5xl md:text-7xl font-bold uppercase leading-[0.85] tracking-tighter mb-8">
+
+                    <h2 className="font-display text-5xl md:text-7xl font-bold uppercase tracking-tighter mb-8">
                         The Suit <br />
                         is a <span className="text-transparent stroke-text">Costume.</span>
                     </h2>
@@ -24,7 +22,7 @@ export const FounderManifesto = () => {
                 {/* Right Column: The "Git Diff" Evidence */}
                 <div className="relative bg-[#050505] p-8 md:p-20 flex flex-col justify-center">
                     <div className="absolute top-6 right-6 md:top-10 md:right-10 font-mono text-[10px] text-foreground/20 uppercase tracking-widest text-right">
-                        // DIFF_CHECK_V2
+                        // DIFF_CHECK
                     </div>
 
                     <div className="space-y-8 font-mono">
