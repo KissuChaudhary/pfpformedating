@@ -126,6 +126,8 @@ export default async function BuyCreditsPage() {
         />
       )}
       <div className="container mx-auto px-4 py-8 text-center">
+        
+        {/* 
         <div className="mx-auto mb-6 max-w-3xl">
           <div className="relative rounded-lg border border-primary/10 bg-muted/30 p-4 text-left md:text-center">
             <p className="text-xs font-semibold uppercase tracking-wider text-primary">Exclusive Offer</p>
@@ -137,7 +139,9 @@ export default async function BuyCreditsPage() {
             </p>
             <ShineBorder shineColor={["#A07CFE", "#FE8FB5", "#FFBE7B"]} borderWidth={2} />
           </div>
-        </div>
+        </div> 
+        */}
+
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold mb-4">Pick Your Film Roll</h1>
           <p className="text-muted-foreground max-w-2xl mx-auto">

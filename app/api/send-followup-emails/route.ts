@@ -17,7 +17,7 @@ function getEmailTemplate30Min(name: string) {
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 20px; color: #333; line-height: 1.6;">
       <p style="margin-bottom: 16px;">Hey,</p>
       
-      <p style="margin-bottom: 16px;">I'm Harvansh. I’m the solo developer building Unrealshot AI from my laptop here in Mumbai.</p>
+      <p style="margin-bottom: 16px;">I'm Harvansh. I’m the solo founder building Unrealshot AI.</p>
       
       <p style="margin-bottom: 16px;">I saw you created an account a little while ago but didn't start your photoshoot yet.</p>
       
@@ -90,10 +90,11 @@ export async function POST(request: Request) {
       for (const user of batch30Min.data) {
         try {
           await resend.emails.send({
-            from: "Harvansh from Unrealshot <harvansh@noreply.unrealshot.com>", // Updated sender
+            from: "Harvansh from Unrealshot <harvansh@noreply.unrealshot.com>",
             to: user.email,
             subject: "quick question?",
             html: getEmailTemplate30Min(user.email),
+            replyTo: "support@unrealshot.com",
           });
 
           await supabase.from("followup_email_logs").insert({
@@ -124,6 +125,7 @@ export async function POST(request: Request) {
             to: user.email,
             subject: "I have a small idea",
             html: getEmailTemplate4Hour(user.email),
+            replyTo: "support@unrealshot.com",
           });
 
           await supabase.from("followup_email_logs").insert({
