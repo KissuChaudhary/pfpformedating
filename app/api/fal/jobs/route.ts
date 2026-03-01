@@ -52,7 +52,7 @@ export async function GET(request: NextRequest) {
 
         for (const job of pendingJobs.slice(0, 5)) {
             try {
-                const falStatus = await fal.queue.status("fal-ai/bytedance/seedream/v4.5/edit", {
+                const falStatus = await fal.queue.status("fal-ai/nano-banana-2/edit", {
                     requestId: job.fal_request_id,
                 });
 
@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
                     console.log(`Polling claimed job ${job.id}, fetching result...`);
 
                     // Fetch the result
-                    const result = await fal.queue.result("fal-ai/bytedance/seedream/v4.5/edit", {
+                    const result = await fal.queue.result("fal-ai/nano-banana-2/edit", {
                         requestId: job.fal_request_id,
                     });
 

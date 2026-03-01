@@ -107,13 +107,15 @@ export async function POST(request: NextRequest) {
         }
 
         // Submit to fal.ai queue with webhook
-        const { request_id } = await fal.queue.submit("fal-ai/bytedance/seedream/v4.5/edit", {
+        const { request_id } = await fal.queue.submit("fal-ai/nano-banana-2/edit", {
             input: {
                 prompt: enhancedPrompt,
                 image_urls: referenceImageUrls,
-                image_size: imageSize,
+                aspect_ratio: imageSize,
                 num_images: 1,
-                enable_safety_checker: true,
+                output_format: "png",
+                safety_tolerance: "4",
+                resolution: "1K"
             },
             webhookUrl: WEBHOOK_URL || undefined,
         });
