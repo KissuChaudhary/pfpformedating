@@ -92,6 +92,13 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
         currency?: string
     } | null>(null)
     const [paymentProcessing, setPaymentProcessing] = useState(false)
+    const [latestPayment, setLatestPayment] = useState<{
+        id?: string
+        amount?: number
+        currency?: string
+        status?: string
+        timestamp?: string | null
+    } | null>(null)
     const router = useRouter()
     const [localCancelAtPeriodEnd, setLocalCancelAtPeriodEnd] = useState(!!subscription.cancel_at_period_end)
     const [localNextBillingDate, setLocalNextBillingDate] = useState<string | undefined>(subscription.next_billing_date)
@@ -229,6 +236,41 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
         }
         checkProcessing()
     }, [userEmail])
+
+    useEffect(() => {
+        async function fetchLatestPayment() {
+            try {
+                const supabase = createSupabaseClient()
+                let uid: string | undefined = undefined
+                if (userEmail) {
+                    const { data: prof } = await supabase.from('profiles').select('id').eq('email', userEmail).maybeSingle()
+                    uid = (prof as any)?.id
+                }
+                if (!uid) return
+                const { data } = await (createSupabaseClient() as any)
+                    .from('dodo_payments')
+                    .select('dodo_payment_id, amount, currency, status, metadata')
+                    .eq('user_id', uid)
+                    .order('metadata->>payment_timestamp', { ascending: false })
+                    .limit(1)
+                const row = Array.isArray(data) ? (data[0] as any) : (data as any)
+                if (row) {
+                    setLatestPayment({
+                        id: row.dodo_payment_id,
+                        amount: typeof row.amount === 'number' ? row.amount : Number(String(row.amount || '0').replace(/[^0-9.\-]/g, '')),
+                        currency: row.currency || 'USD',
+                        status: String(row.status || '').toLowerCase(),
+                        timestamp: row?.metadata?.payment_timestamp ?? null,
+                    })
+                }
+            } catch { }
+        }
+        fetchLatestPayment()
+        if (paymentProcessing) {
+            const t = setInterval(fetchLatestPayment, 5000)
+            return () => clearInterval(t)
+        }
+    }, [userEmail, paymentProcessing])
 
     const onRestore = useCallback(async () => {
         if (!subscription.subscription_id) return
@@ -370,6 +412,35 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
                     isPlanEnding={localCancelAtPeriodEnd}
                 >
                     <>
+                        {latestPayment && (
+                            <div className="w-full border border-zinc-700 bg-zinc-900 px-3 py-2 flex items-center justify-between">
+                                <div className="flex flex-col">
+                                    <span className="text-xs text-zinc-400">Latest payment</span>
+                                    <span className="text-sm font-semibold text-zinc-100">
+                                        {currencySymbol(latestPayment.currency)}{Number(latestPayment.amount ?? 0).toFixed(2)}
+                                    </span>
+                                    {latestPayment.timestamp && (
+                                        <span className="text-[10px] text-zinc-500">
+                                            {new Date(latestPayment.timestamp).toLocaleString()}
+                                        </span>
+                                    )}
+                                </div>
+                                <div>
+                                    <span
+                                        className={[
+                                            'inline-flex items-center rounded-sm px-2 py-0.5 text-[11px] font-semibold border',
+                                            latestPayment.status === 'processing'
+                                                ? 'bg-yellow-900/20 text-yellow-300 border-yellow-700'
+                                                : latestPayment.status === 'successful' || latestPayment.status === 'succeeded' || latestPayment.status === 'completed'
+                                                    ? 'bg-emerald-900/20 text-emerald-300 border-emerald-700'
+                                                    : 'bg-red-900/20 text-red-300 border-red-700',
+                                        ].join(' ')}
+                                    >
+                                        {String(latestPayment.status || 'unknown')}
+                                    </span>
+                                </div>
+                            </div>
+                        )}
                         {paymentProcessing && (
                             <div className="w-full rounded-none border border-yellow-700 bg-yellow-900/20 px-3 py-2 text-yellow-300">
                                 Payment is processing. Plan will finalize after confirmation.
