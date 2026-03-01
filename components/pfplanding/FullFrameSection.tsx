@@ -20,81 +20,66 @@ const COLUMN_2_IMAGES = [
 
 export const FullFrameSection: React.FC = () => {
     return (
-        <section className="h-screen min-h-[800px] grid md:grid-cols-2 border-b border-foreground/10 bg-[#080808] overflow-hidden">
+        <section className="h-screen min-h-[800px] grid md:grid-cols-2 border-b border-[#333] bg-black overflow-hidden">
             {/* Copy Side (Left) */}
-            <div className="flex flex-col justify-center p-8 md:p-20 border-r border-foreground/10 relative z-10 bg-[#080808]">
-                <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-8">
-                    STOP BEING GHOSTED.
-                    <span className="text-foreground/50"> START GETTING MATCHES.</span>
-                </h2>
+            <div className="flex flex-col justify-center p-8 md:p-20 border-r border-[#333] relative z-10 bg-black">
+                <div className="mb-12">
+                    <div className="inline-flex items-center gap-2 border border-[#CCFF00] text-[#CCFF00] px-3 py-1.5 font-mono text-[10px] uppercase w-fit mb-6 shadow-[0_0_15px_rgba(204,255,0,0.15)] bg-[#CCFF00]/5 rounded-full">
+                        <span className="w-1.5 h-1.5 bg-[#CCFF00] animate-pulse rounded-full"></span>
+                        Social Proof // Verified
+                    </div>
+                    <h2 className="font-display text-4xl md:text-6xl font-bold uppercase leading-[0.9]">
+                        Stop Being Ghosted. <br/>
+                        <span className="text-transparent stroke-text-lime">Start Getting Matches.</span>
+                    </h2>
+                </div>
 
-                <p className="font-mono text-foreground/70 mb-10 text-sm md:text-base max-w-md leading-relaxed">
+                <p className="font-mono text-[#888] mb-12 text-sm md:text-base max-w-md leading-relaxed border-l-2 border-[#333] pl-6">
                    Stop losing matches to bad selfies and awkward angles. We generate candid, lifestyle photos that look like <strong className="text-white">your best friend took them on a night out.</strong>
                 </p>
 
                 <div className="space-y-6">
-                    <div className="flex items-center gap-4 group">
-                        <div className="w-8 h-8 flex items-center justify-center border border-foreground/20 font-mono text-xs text-accent">
-                            01
+                    {[
+                        "More Matches, Less Effort.",
+                        "Pass the \"Vibe Check\" Instantly.",
+                        "Photos that don't look like \"AI\".",
+                        "Optimized for Hinge, Tinder & Bumble."
+                    ].map((text, i) => (
+                        <div key={i} className="flex items-center gap-4 group cursor-default">
+                            <div className="w-8 h-8 flex items-center justify-center border border-[#333] font-mono text-xs text-[#666] group-hover:border-[#CCFF00] group-hover:text-[#CCFF00] transition-colors">
+                                0{i + 1}
+                            </div>
+                            <div className="font-mono text-sm uppercase text-[#666] group-hover:text-white transition-colors">
+                                {text}
+                            </div>
                         </div>
-                        <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            More Matches, Less Effort.
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4 group">
-                        <div className="w-8 h-8 flex items-center justify-center border border-foreground/20 font-mono text-xs text-accent">
-                            02
-                        </div>
-                        <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            Pass the "Vibe Check" Instantly.
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4 group">
-                        <div className="w-8 h-8 flex items-center justify-center border border-foreground/20 font-mono text-xs text-accent">
-                            03
-                        </div>
-                        <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            Photos that don't look like "AI".
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4 group">
-                        <div className="w-8 h-8 flex items-center justify-center border border-foreground/20 font-mono text-xs text-accent">
-                            04
-                        </div>
-                        <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            Optimized for Hinge, Tinder & Bumble.
-                        </div>
-                    </div>
+                    ))}
                 </div>
 
             </div>
 
             {/* Visual Side (Right) - Vertical Masonry */}
-            <div className="relative bg-black/50 overflow-hidden h-full">
-                {/* Context Overlay */}
-                <div className="absolute top-4 right-4 z-20 font-mono text-[10px] text-foreground/30 text-right mix-blend-difference">
-                    SCROLL_AXIS: Y-VERTICAL <br />
-                    GRID_LAYOUT: MASONRY
-                </div>
+            <div className="relative bg-[#050505] overflow-hidden h-full border-l border-[#333]">
+               
 
                 {/* Gradient Masks (Top/Bottom) */}
-                <div className="absolute left-0 top-0 right-0 h-32 bg-gradient-to-b from-[#080808] to-transparent z-10 pointer-events-none"></div>
-                <div className="absolute left-0 bottom-0 right-0 h-32 bg-gradient-to-t from-[#080808] to-transparent z-10 pointer-events-none"></div>
+                <div className="absolute left-0 top-0 right-0 h-32 bg-gradient-to-b from-black to-transparent z-10 pointer-events-none"></div>
+                <div className="absolute left-0 bottom-0 right-0 h-32 bg-gradient-to-t from-black to-transparent z-10 pointer-events-none"></div>
 
-                <div className="grid grid-cols-2 gap-4 h-[150%] -mt-[10%] px-4">
+                <div className="grid grid-cols-2 gap-4 h-[150%] -mt-[10%] px-4 opacity-60 hover:opacity-100 transition-opacity duration-700">
                     {/* Column 1 - Scrolls Up */}
                     <div className="flex flex-col gap-4 animate-scroll-up hover:[animation-play-state:paused]">
                         {[...COLUMN_1_IMAGES, ...COLUMN_1_IMAGES, ...COLUMN_1_IMAGES].map((img, i) => (
                             <div
                                 key={`col1-${i}`}
-                                className={`relative group w-full ${img.aspect} bg-foreground/5 border border-foreground/10 overflow-hidden hover:grayscale-80 transition-all duration-500`}
+                                className={`relative group w-full ${img.aspect} bg-[#111] border border-[#333] overflow-hidden grayscale hover:grayscale-0 transition-all duration-500`}
                             >
                                 <img src={img.src} className="w-full h-full object-cover" alt={`Result Col 1 ${i}`} />
-                                <div className="absolute top-2 left-2 font-mono text-[9px] text-white/50 bg-black/50 px-1">
+                                <div className="absolute top-2 left-2 font-mono text-[9px] text-[#CCFF00] bg-black/80 px-1 border border-[#CCFF00]/20">
                                     {i < 9 ? `0${i + 1}` : i + 1}A
                                 </div>
                                 {/* Selection Marker */}
-                                <div className="absolute inset-0 border-4 border-accent/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none mix-blend-screen"></div>
+                                <div className="absolute inset-0 border-2 border-[#CCFF00] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
                             </div>
                         ))}
                     </div>
@@ -104,14 +89,14 @@ export const FullFrameSection: React.FC = () => {
                         {[...COLUMN_2_IMAGES, ...COLUMN_2_IMAGES, ...COLUMN_2_IMAGES].map((img, i) => (
                             <div
                                 key={`col2-${i}`}
-                                className={`relative group w-full ${img.aspect} bg-foreground/5 border border-foreground/10 overflow-hidden hover:grayscale-80 transition-all duration-500`}
+                                className={`relative group w-full ${img.aspect} bg-[#111] border border-[#333] overflow-hidden grayscale hover:grayscale-0 transition-all duration-500`}
                             >
                                 <img src={img.src} className="w-full h-full object-cover" alt={`Result Col 2 ${i}`} />
-                                <div className="absolute bottom-2 right-2 font-mono text-[9px] text-white/50 bg-black/50 px-1">
+                                <div className="absolute bottom-2 right-2 font-mono text-[9px] text-[#CCFF00] bg-black/80 px-1 border border-[#CCFF00]/20">
                                     {i + 1}B
                                 </div>
                                 {/* Selection Marker */}
-                                <div className="absolute inset-0 border-4 border-accent/50 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none mix-blend-screen"></div>
+                                <div className="absolute inset-0 border-2 border-[#CCFF00] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"></div>
                             </div>
                         ))}
                     </div>

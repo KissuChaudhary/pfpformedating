@@ -5,7 +5,7 @@ import { useState } from "react"
 const datingFaqData = [
     {
         q: "Can I use AI photos on Hinge and Tinder?",
-        a: "Yes, but only if they look realistic. Apps and users punish 'fake-looking' content. Unrealshot specializes in 'hyper-realistic' AI dating photos that mimic film photography (grain, texture, lighting flaws), making them indistinguishable from real camera roll snapshots."
+        a: "Yes, but only if they look realistic. Apps and users punish 'fake-looking' content. PFPforME specializes in 'hyper-realistic' AI dating photos that mimic film photography (grain, texture, lighting flaws), making them indistinguishable from real camera roll snapshots."
     },
     {
         q: "What is the best AI generator for dating profiles?",
@@ -13,7 +13,7 @@ const datingFaqData = [
     },
     {
         q: "How do I get natural looking AI photos?",
-        a: "Avoid 'Headshot' generators. Use a tool like Unrealshot that offers 'Flash' and 'Candid' modes. These introduce natural imperfections (like skin texture and messy hair) which trick the eye into believing the photo is authentic."
+        a: "Avoid 'Headshot' generators. Use a tool like PFPforME that offers 'Flash' and 'Candid' modes. These introduce natural imperfections (like skin texture and messy hair) which trick the eye into believing the photo is authentic."
     }
 ]
 

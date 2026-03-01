@@ -1194,3 +1194,33 @@ input[type="range"].slider::-moz-range-thumb {
   border: none;
   box-shadow: none;
 }
+
+
+/* Unique Brutalist Utilities */
+.stroke-text-lime {
+  -webkit-text-stroke: 1px #CCFF00;
+  color: transparent;
+}
+
+.stroke-text-white {
+  -webkit-text-stroke: 1px #FFFFFF;
+  color: transparent;
+}
+
+.bg-grid-pattern {
+  background-image: linear-gradient(to right, #111 1px, transparent 1px),
+    linear-gradient(to bottom, #111 1px, transparent 1px);
+  background-size: 2rem 2rem;
+}
+
+/* Custom Scrollbar for technical feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #000;
+  border-left: 1px solid #333;
+}
+::-webkit-scrollbar-thumb {
+  background: #CCFF00;
+}

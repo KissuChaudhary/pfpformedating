@@ -14,9 +14,9 @@ import { MultipleStructuredData } from '@/components/seo/StructuredData'
 export const metadata: Metadata = {
     ...commonPageMetadata.home(),
     title: "Best AI Photos for Hinge & Tinder | Candid Dating Profile Generator",
-    description: "Dating apps are allergic to 'LinkedIn energy.' Stop using stiff headshots. Use Unrealshot to generate candid, messy, 'friend-took-this' photos.",
+    description: "Dating apps are allergic to 'LinkedIn energy.' Stop using stiff headshots. Use PFPforME to generate candid, messy, 'friend-took-this' photos.",
     alternates: {
-        canonical: "https://www.unrealshot.com/use-case/dating-photos",
+        canonical: "https://pfpfor.me/use-case/dating-photos",
     },
 }
 
@@ -29,11 +29,11 @@ export default function DatingPhotosPage() {
                         id: 'webpage-dating-photos',
                         data: JSON.parse(generateWebPageJsonLd({
                             name: 'Best AI Photos for Hinge & Tinder | Candid Dating Profile Generator',
-                            description: "Dating apps are allergic to 'LinkedIn energy.' Stop using stiff headshots. Use Unrealshot to generate candid, messy, 'friend-took-this' photos.",
-                            url: 'https://www.unrealshot.com/use-case/dating-photos',
+                            description: "Dating apps are allergic to 'LinkedIn energy.' Stop using stiff headshots. Use PFPforME to generate candid, messy, 'friend-took-this' photos.",
+                            url: 'https://pfpfor.me/use-case/dating-photos',
                             breadcrumbs: [
-                                { name: 'Home', url: 'https://www.unrealshot.com' },
-                                { name: 'Dating Photos', url: 'https://www.unrealshot.com/use-case/dating-photos' }
+                                { name: 'Home', url: 'https://pfpfor.me' },
+                                { name: 'Dating Photos', url: 'https://pfpfor.me/use-case/dating-photos' }
                             ]
                         }))
                     }

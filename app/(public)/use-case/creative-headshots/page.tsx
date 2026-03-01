@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     title: "Casual AI Headshots for Founders & Creatives | Non-Corporate Styles",
     description: "Stop looking like a banker. Get gritty, flash-lit, or cinematic headshots perfect for your Twitter, Substack, or Portfolio.",
     alternates: {
-        canonical: "https://www.unrealshot.com/use-case/creative-headshots",
+        canonical: "https://pfpfor.me/use-case/creative-headshots",
     },
 }
 
@@ -33,10 +33,10 @@ export default function CreativeHeadshotsPage() {
                         data: JSON.parse(generateWebPageJsonLd({
                             name: 'Casual AI Headshots for Founders & Creatives | Non-Corporate Styles',
                             description: 'Stop looking like a banker. Get gritty, flash-lit, or cinematic headshots perfect for your Twitter, Substack, or Portfolio.',
-                            url: 'https://www.unrealshot.com/use-case/creative-headshots',
+                            url: 'https://pfpfor.me/use-case/creative-headshots',
                             breadcrumbs: [
-                                { name: 'Home', url: 'https://www.unrealshot.com' },
-                                { name: 'Creative Headshots', url: 'https://www.unrealshot.com/use-case/creative-headshots' }
+                                { name: 'Home', url: 'https://pfpfor.me' },
+                                { name: 'Creative Headshots', url: 'https://pfpfor.me/use-case/creative-headshots' }
                             ]
                         }))
                     }

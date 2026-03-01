@@ -1,112 +1,154 @@
-import React from 'react';
+"use client"
+import React, { useState, useEffect } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { X, Check, Heart, Sparkles, Zap, Flame } from "lucide-react"
 
 export const MoatSection: React.FC = () => {
+    const [sliderPosition, setSliderPosition] = useState(50)
+    const [isDragging, setIsDragging] = useState(false)
+
+    // Handle slider drag
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!isDragging) return
+        const rect = e.currentTarget.getBoundingClientRect()
+        const x = Math.max(0, Math.min(e.clientX - rect.left, rect.width))
+        const percent = Math.max(0, Math.min((x / rect.width) * 100, 100))
+        setSliderPosition(percent)
+    }
+
+    const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+        if (!isDragging) return
+        const rect = e.currentTarget.getBoundingClientRect()
+        const x = Math.max(0, Math.min(e.touches[0].clientX - rect.left, rect.width))
+        const percent = Math.max(0, Math.min((x / rect.width) * 100, 100))
+        setSliderPosition(percent)
+    }
+
+    // Auto-animate slider when not interacting
+    useEffect(() => {
+        let interval: NodeJS.Timeout
+        if (!isDragging) {
+            interval = setInterval(() => {
+                setSliderPosition((prev) => {
+                    // Simple oscillation for demo purposes
+                    const time = Date.now() / 1000
+                    return 50 + Math.sin(time) * 30
+                })
+            }, 50)
+        }
+        return () => clearInterval(interval)
+    }, [isDragging])
+
     return (
-        <section className="grid md:grid-cols-2 border-b border-foreground/10">
-            {/* Manifesto / Text Side */}
-            <div className="p-8 md:p-20 border-r border-foreground/10 bg-[#0a0a0a] flex flex-col justify-center">
-                <h2 className="font-display text-4xl md:text-5xl font-bold uppercase leading-none mb-2">
-                    Stop Being <br /> Ignored.
-                </h2>
-                <h2 className="font-display text-4xl md:text-5xl font-bold uppercase leading-none text-foreground/50 mb-16">
-                    Start Getting <br /> Matches.
-                </h2>
-
-                {/* Comparison Logic - Replaced Cards with "Git Diff" Style Layout */}
-                <div className="relative pl-6 md:pl-8 border-l border-foreground/10">
-
-                    {/* 1. The Competitors (Deprecated) */}
-                    <div className="mb-12 relative transition-opacity duration-300">
-                        {/* Node Dot */}
-                        <div className="absolute -left-[31px] md:-left-[39px] top-0 w-3 h-3 bg-red-900/50 border border-red-500/30 rounded-full"></div>
-
-                        <div className="flex items-center gap-3 mb-4">
-                            <span className="font-mono text-[10px] uppercase tracking-widest text-red-500/50">BEFORE (Your Current Profile)</span>
-                            <span className="h-[1px] w-8 bg-red-500/20"></span>
-                        </div>
-
-                        <ul className="space-y-4 font-mono text-sm text-foreground/40">
-                            <li className="flex items-baseline gap-3">
-                                <span className="text-red-500/50">[x]</span>
-                                <span className="line-through decoration-red-500/30">Blurry, Bad Lighting Selfies</span>
-                            </li>
-                            <li className="flex items-baseline gap-3">
-                                <span className="text-red-500/50">[x]</span>
-                                <span className="line-through decoration-red-500/30">Zero Matches in 2 Weeks</span>
-                            </li>
-                            <li className="flex items-baseline gap-3">
-                                <span className="text-red-500/50">[x]</span>
-                                <span className="line-through decoration-red-500/30">"He looks boring"</span>
-                            </li>
-                        </ul>
+        <section className="relative min-h-screen bg-black overflow-hidden flex flex-col md:grid md:grid-cols-12 border-b border-[#333]">
+            
+            {/* --- Left Panel: The Problem (Before Image) --- */}
+            <div className="md:col-span-4 h-[50vh] md:h-full relative border-r border-[#333] overflow-hidden group">
+                 {/* Image */}
+                <img 
+                    src="/images/demo10.jpg" 
+                    alt="Standard Selfie Before" 
+                    className="w-full h-full object-cover object-center filter grayscale contrast-125 brightness-75 transition-transform duration-700 group-hover:scale-105" 
+                />
+                
+                {/* Overlay Content */}
+                <div className="absolute inset-0 bg-black/40 flex flex-col justify-end p-8">
+                    <div className="inline-flex items-center gap-2 bg-red-900/80 border border-red-500/30 text-white px-3 py-1 mb-4 w-fit backdrop-blur-md">
+                        <X className="w-3 h-3" />
+                        <span className="font-mono text-[10px] uppercase tracking-widest">Low Visibility</span>
                     </div>
-
-                    <div className="relative">
-                        <div className="absolute -left-[31px] md:-left-[39px] top-1 w-3 h-3 bg-accent border border-accent shadow-[0_0_10px_rgba(255,77,0,0.5)] rounded-full animate-pulse"></div>
-
-                        <div className="flex items-center gap-3 mb-6">
-                            <span className="font-mono text-[10px] uppercase tracking-widest text-accent">AFTER (With PFPforME)</span>
-                            <span className="h-[1px] w-8 bg-accent/50"></span>
+                    <h3 className="font-display text-4xl md:text-5xl font-bold text-white/50 mb-4 line-through decoration-red-500/50 decoration-4">
+                        Friend<br/>Zone
+                    </h3>
+                    <div className="space-y-2">
+                        <div className="flex items-center gap-2 text-red-200/60 font-mono text-xs">
+                            <X className="w-3 h-3 text-red-500" /> 0 Matches/Week
                         </div>
-
-                        <div className="space-y-8">
-                            <div>
-                                <h3 className="font-display text-xl md:text-2xl text-foreground font-bold uppercase mb-1 flex items-center gap-2">
-                                    <span className="text-accent text-sm">01 //</span> The "Hobby" Shot
-                                </h3>
-                                <p className="font-mono text-xs text-foreground/60 pl-8 border-l border-foreground/10 ml-1">
-                                    Show you have a life. Hiking, cooking, or just looking cool at a bar.
-                                </p>
-                            </div>
-
-                            <div>
-                                <h3 className="font-display text-xl md:text-2xl text-foreground font-bold uppercase mb-1 flex items-center gap-2">
-                                    <span className="text-accent text-sm">02 //</span> 10x More Matches
-                                </h3>
-                                <p className="font-mono text-xs text-foreground/60 pl-8 border-l border-foreground/10 ml-1">
-                                    High-quality photos trigger the algorithm to show you to more people.
-                                </p>
-                            </div>
-
-                            <div>
-                                <h3 className="font-display text-xl md:text-2xl text-foreground font-bold uppercase mb-1 flex items-center gap-2">
-                                    <span className="text-accent text-sm">03 //</span> Instant Trust
-                                </h3>
-                                <p className="font-mono text-xs text-foreground/60 pl-8 border-l border-foreground/10 ml-1">
-                                    Look like a high-value man who takes care of himself.
-                                </p>
-                            </div>
+                        <div className="flex items-center gap-2 text-red-200/60 font-mono text-xs">
+                            <X className="w-3 h-3 text-red-500" /> "He looks boring"
                         </div>
                     </div>
-
                 </div>
             </div>
 
-            {/* Visual Comparison Grid (Right Side) */}
-            <div className="grid grid-cols-2 h-[50vh] md:h-auto">
-                <div className="border-r border-foreground/10 relative group h-full">
-                    <div className="absolute top-0 left-0 w-full p-2 text-center text-sm font-mono text-foreground/80 bg-black/50 backdrop-blur-sm z-10">// BEFORE</div>
-                    <img
-                        src="/images/demo10.jpg"
-                        className="w-full h-full object-cover opacity-60 grayscale group-hover:grayscale-0 transition-all duration-500"
-                        alt="Bad Selfie"
-                    />
-                    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                        <span className="font-display text-2xl md:text-4xl text-foreground/40 font-bold -rotate-12 border-4 border-foreground/20 p-4 opacity-80">IGNORED</span>
+            {/* --- Center Panel: Content & CTA --- */}
+            <div className="md:col-span-4 h-auto md:h-full bg-black flex flex-col justify-center items-start p-8 md:p-16 text-left relative z-20 border-r border-[#333]">
+                <div className="mb-12 w-full">
+                    <div className="inline-flex items-center gap-2 border border-[#CCFF00] text-[#CCFF00] px-3 py-1.5 font-mono text-[10px] uppercase w-fit mb-6 shadow-[0_0_15px_rgba(204,255,0,0.15)] bg-[#CCFF00]/5">
+                        <span className="w-1.5 h-1.5 bg-[#CCFF00] animate-pulse"></span>
+                        Reality Check
                     </div>
+                    <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase leading-[0.9] text-white mb-6">
+                        Stop Being <span className="text-[#CCFF00]">Ignored</span>.
+                    </h2>
+                    <p className="font-mono text-[#888] text-sm leading-relaxed max-w-md">
+                        The dating app algorithm is simple: <strong>Better Photos = More Matches.</strong> <br/><br/>
+                        Right now, your selfies are signaling "low effort." You need photos that signal "high value" without looking like you hired a wedding photographer.
+                    </p>
                 </div>
-                <div className="relative group h-full overflow-hidden">
-                    <div className="absolute top-0 left-0 w-full p-2 text-center text-sm font-mono text-accent bg-black/50 backdrop-blur-sm z-10 font-bold tracking-wider">// AFTER</div>
-                    <img
-                        src="/images/demo14.jpg"
-                        className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-700"
-                        alt="Good AI Photo"
-                    />
-                     <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                        <span className="font-display text-2xl md:text-4xl text-accent font-bold rotate-12 border-4 border-accent p-4 shadow-[0_0_20px_rgba(255,77,0,0.5)] bg-black/50 backdrop-blur-sm">MATCHED</span>
+
+                {/* Arrow Graphic */}
+                <div className="hidden md:flex items-center gap-4 text-[#333] mb-12 w-full">
+                    <div className="h-[1px] flex-grow bg-current"></div>
+                    <div className="font-mono text-[10px] whitespace-nowrap">THE PFPFORME UPGRADE</div>
+                    <div className="h-[1px] flex-grow bg-current"></div>
+                </div>
+
+                 {/* Features List */}
+                 <div className="space-y-4 w-full">
+                    {[
+                        { 
+                            title: "Instant Trust", 
+                            desc: "High-quality photos subconsciously signal that you take care of yourself. It's the ultimate green flag." 
+                        },
+                        { 
+                            title: "The 'Vibe' Check", 
+                            desc: "We don't just generate a face; we generate a lifestyle. Travel, fitness, social proof—all in one click." 
+                        },
+                        { 
+                            title: "Algorithm Hack", 
+                            desc: "Apps push profiles with high engagement. Better photos stop the scroll, boosting your ELO score instantly." 
+                        }
+                    ].map((item, i) => (
+                        <div key={i} className="group border-l-2 border-[#333] pl-6 py-2 hover:border-[#CCFF00] transition-colors">
+                            <h4 className="font-display text-lg text-white uppercase mb-2 group-hover:text-[#CCFF00] transition-colors">{item.title}</h4>
+                            <p className="font-mono text-xs text-[#666] leading-relaxed group-hover:text-[#888] transition-colors">{item.desc}</p>
+                        </div>
+                    ))}
+                 </div>
+            </div>
+
+            {/* --- Right Panel: The Solution (After Image) --- */}
+            <div className="md:col-span-4 h-[50vh] md:h-full relative overflow-hidden group">
+                 {/* Image */}
+                <img 
+                    src="/images/demo14.jpg" 
+                    alt="PFPforME After" 
+                    className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105" 
+                />
+                
+                {/* Overlay Content */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-8 text-right">
+                    <div className="flex justify-end">
+                        <div className="inline-flex items-center gap-2 bg-[#CCFF00] text-black border border-[#CCFF00] px-3 py-1 mb-4 w-fit font-bold">
+                            <Flame className="w-3 h-3 fill-black animate-pulse" />
+                            <span className="font-mono text-[10px] uppercase tracking-widest">High ELO Score</span>
+                        </div>
+                    </div>
+                    <h3 className="font-display text-4xl md:text-5xl font-bold text-white mb-4">
+                        Match<br/>Magnet
+                    </h3>
+                    <div className="space-y-2 flex flex-col items-end">
+                        <div className="flex items-center gap-2 text-[#CCFF00] font-mono text-xs bg-black/50 px-2 py-1 backdrop-blur-sm border border-[#CCFF00]/20">
+                            <Check className="w-3 h-3" /> 99+ Likes/Week
+                        </div>
+                        <div className="flex items-center gap-2 text-[#CCFF00] font-mono text-xs bg-black/50 px-2 py-1 backdrop-blur-sm border border-[#CCFF00]/20">
+                            <Check className="w-3 h-3" /> "You look fun!" DMs
+                        </div>
                     </div>
                 </div>
             </div>
+
         </section>
-    );
-};
+    )
+}

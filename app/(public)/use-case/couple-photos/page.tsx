@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     title: "AI Couple Photo Generator | Cute Aesthetic Photos (No Photographer Needed)",
     description: "Generate cute couple photos with AI. No third wheel needed. Perfect for hard launching your relationship.",
     alternates: {
-        canonical: "https://www.unrealshot.com/use-case/couple-photos",
+        canonical: "https://pfpfor.me/use-case/couple-photos",
     },
 }
 
@@ -33,10 +33,10 @@ export default function CouplePhotosPage() {
                         data: JSON.parse(generateWebPageJsonLd({
                             name: 'AI Couple Photo Generator | Cute Aesthetic Photos',
                             description: 'Generate cute couple photos with AI. No third wheel needed. Perfect for hard launching your relationship.',
-                            url: 'https://www.unrealshot.com/use-case/couple-photos',
+                            url: 'https://pfpfor.me/use-case/couple-photos',
                             breadcrumbs: [
-                                { name: 'Home', url: 'https://www.unrealshot.com' },
-                                { name: 'Couple Photos', url: 'https://www.unrealshot.com/use-case/couple-photos' }
+                                { name: 'Home', url: 'https://pfpfor.me' },
+                                { name: 'Couple Photos', url: 'https://pfpfor.me/use-case/couple-photos' }
                             ]
                         }))
                     }

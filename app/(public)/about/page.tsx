@@ -10,7 +10,7 @@ import { Button } from "@/components/pfplanding/ui/Button"
 export const metadata: Metadata = generateMetadata({
   title: 'About Us',
   description:
-    'Learn more about the journey and team behind PFPForMe AI, the AI headshot generator helping users create professional-grade headshots worldwide.',
+    'Learn more about the journey and team behind PFPForMe AI, the AI photo generator helping users create candid, realistic dating photos worldwide.',
   canonical: '/about',
 })
 
@@ -62,13 +62,13 @@ export default function AboutUs() {
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">The Birth of PFPfor.Me AI</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
                 One evening, after weeks of brainstorming and countless cups of coffee, it hit us—what if AI could make something
-                as personal as a headshot? What if you didn't need an expensive photographer or a studio setup to get that
-                professional, polished look? That's when PFPForMe AI was born.
+                as personal as a dating profile photo? What if you didn't need an expensive photographer or a studio setup to get that
+                perfect, candid look? That's when PFPForMe AI was born.
               </p>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed mt-4">
                 We wanted to build something that made it effortless for people to present themselves in the best light, whether
-                for their LinkedIn profile, job applications, or business websites. So, we started developing an AI headshot
-                generator that could do just that—deliver high-quality, professional-grade images in just a few clicks.
+                for their dating profile, social media, or professional brand. So, we started developing an AI photo
+                generator that could do just that—deliver high-quality, realistic images in just a few clicks.
               </p>
             </div>
 
@@ -84,9 +84,9 @@ export default function AboutUs() {
             <div>
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">Today and Tomorrow</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
-                Today, PFPfor.Me AI is serving users worldwide, helping them create stunning and professional AI headshots that
-                look like they've been shot in a studio. From freelancers looking to stand out, to business owners crafting a
-                professional brand, we're proud to be a part of your journey.
+                Today, PFPfor.Me AI is serving users worldwide, helping them create stunning and realistic AI photos that
+                look like they've been shot by a friend. From singles looking to stand out, to creators crafting a
+                personal brand, we're proud to be a part of your journey.
               </p>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed mt-4">
                 Our story is far from over. We continue to innovate, improve, and grow with every bit of feedback we receive. But

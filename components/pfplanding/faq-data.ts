@@ -1,35 +1,35 @@
 // FAQ data - used by both FAQ component and structured data schema
 export const faqData = [
     {
-        q: "How does AI model training work?",
-        a: "Upload 4-5 clear photos of yourself. Our AI learns your unique facial features and creates a personalized model. Training takes about 30-45 minutes using H100 GPU clusters for maximum quality.",
+        q: "Will people know I used AI?",
+        a: "Not unless you tell them. Unlike other apps that give you 'plastic skin' and 'dead eyes', PFPforME is engineered for imperfection. We add film grain, motion blur, and realistic skin texture. Our photos are designed to pass the 'friend test'—if your best friend can't tell, your matches won't either.",
     },
     {
-        q: "What are the 5 film modes?",
-        a: "Night Flash (hard shadows, flash photography), Golden Hour (warm sunlight), Gritty Vintage (B&W street style), Cine Shoot (cinematic look), and Headshot (professional LinkedIn-style portraits).",
+        q: "Can I use these on Hinge, Tinder, and Bumble?",
+        a: "Absolutely. That is exactly what they are built for. The algorithm favors profiles with high-quality, varied photos. Our users typically see a 3x increase in match rate because their profiles signal 'high effort' and 'social proof' without looking staged.",
     },
     {
-        q: "Why don't these look like typical AI photos?",
-        a: "We use a Nano-Texture Engine that focuses on real skin texture, natural lighting dynamics, and candid expressions. No plastic AI look—just hyper-realistic results.",
+        q: "What if I don't look like my photos?",
+        a: "We train our models to be accurate, not just flattering. The goal is to make you look like your best self on your best day—good lighting, good angle, good outfit—not a different person. We avoid the 'yassified' filter look completely.",
     },
     {
-        q: "How long does photo generation take?",
-        a: "Each photo generates in under 60 seconds. Describe your scene, pick your film mode and lighting, and watch the magic happen.",
+        q: "How does the 'Vibe' system work?",
+        a: "Instead of generic prompts, we use curated 'Vibe Styles'. Want a moody, flash-lit photo for your Hinge main? Choose 'The After Party'. Need a warm, approachable shot? Choose 'Golden Hour'. You control the aesthetic, we handle the lighting.",
     },
     {
-        q: "Do I own the photos? Can I use them commercially?",
-        a: "Yes! You get full commercial license for all generated photos. Use them for LinkedIn, dating apps, business websites, or anywhere else.",
-    },
-    {
-        q: "What happens to my photos after I'm done?",
-        a: "We auto-delete all your uploaded photos and AI models after 7 days for your privacy. You can also request immediate deletion anytime.",
+        q: "How many photos do I need to upload?",
+        a: "Just 10-20 clear selfies. You don't need professional headshots. In fact, simple selfies work best because they show your true facial structure. Our AI learns your face in about 30 minutes.",
     },
     {
         q: "Is this a subscription?",
-        a: "No subscriptions. We offer one-time film roll purchases: Standard Roll (10 photos) or Pro Roll (25 photos). Credits never expire.",
+        a: "Yes, but you can cancel instantly. We offer a simple monthly plan because training AI models on high-end GPUs is expensive. Most users subscribe for one month, generate their perfect dating portfolio, and then cancel. We're cool with that.",
     },
     {
-        q: "Can I get a refund?",
-        a: "Yes! We offer refunds for technical issues, undelivered service, or duplicate charges within 7 days. Check our refund policy for details.",
+        q: "What about my privacy?",
+        a: "Your photos are yours. We auto-delete your uploaded photos and your custom AI model after 14 days of inactivity. We never sell your biometric data or use your face for anything other than generating your requested images.",
+    },
+    {
+        q: "Do you offer refunds?",
+        a: "Yes. If the AI completely messes up your face (it happens rarely, but it's tech), we'll refund you. We want you to be happy with your new profile, not ripped off.",
     },
 ]

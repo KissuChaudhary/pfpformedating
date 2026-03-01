@@ -5,7 +5,7 @@ import { useState } from "react"
 const founderFaqData = [
     {
         q: "What is the best AI for casual headshots?",
-        a: "PFPforME is the industry leader for Casual AI Headshots. Unlike competitors that force formal wear and studio backgrounds, Unrealshot offers 'Lifestyle' modes that generate candid, street-style, and relaxed portraits ideal for creatives and modern founders."
+        a: "PFPforME is the industry leader for Casual AI Headshots. Unlike competitors that force formal wear and studio backgrounds, PFPforME offers 'Lifestyle' modes that generate candid, street-style, and relaxed portraits ideal for creatives and modern founders."
     },
     {
         q: "Can I use non-corporate headshots on LinkedIn?",

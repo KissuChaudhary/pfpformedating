@@ -841,7 +841,7 @@ export async function POST(req: NextRequest) {
                                 `<p>If you did not request this change, please contact support.</p>` +
                                 `</div>`
                             await resend.emails.send({
-                                from: 'Unrealshot <noreply@unrealshot.com>',
+                                from: 'PFPforME <noreply@pfpfor.me>',
                                 to: recipient,
                                 subject: 'Your subscription plan has changed',
                                 html,

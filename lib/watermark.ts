@@ -7,12 +7,12 @@ import sharp from 'sharp';
  * Uses SVG path-based text (pre-rendered) to avoid font dependency issues.
  * 
  * @param imageBuffer - The original image as a Buffer
- * @param text - Text to display (default: "Unrealshot")
+ * @param text - Text to display (default: "PFPforME")
  * @returns The watermarked image as a Buffer
  */
 export async function applyWatermark(
     imageBuffer: Buffer,
-    text: string = 'Unrealshot'
+    text: string = 'PFPforME'
 ): Promise<Buffer> {
     try {
         // Get image dimensions
@@ -60,6 +60,12 @@ export async function applyWatermark(
                     return r(0, 2, 2, 10) + r(8, 2, 2, 10) + r(2, 0, 6, 2) + r(2, 12, 6, 2);
                 case 'T':
                     return r(4, 2, 2, 12) + r(0, 0, 10, 2);
+                case 'P':
+                    return r(0, 0, 2, 14) + r(2, 0, 6, 2) + r(8, 2, 2, 4) + r(2, 6, 6, 2);
+                case 'F':
+                    return r(0, 0, 2, 14) + r(2, 0, 6, 2) + r(2, 6, 4, 2);
+                case 'M':
+                    return r(0, 0, 2, 14) + r(8, 0, 2, 14) + `<path d="M ${2 * s} ${2 * s} L ${5 * s} ${8 * s} L ${8 * s} ${2 * s} L ${8 * s} ${5 * s} L ${5 * s} ${11 * s} L ${2 * s} ${5 * s} Z" fill="white" transform="translate(${x},${y})" />`;
                 default:
                     return '';
             }
@@ -81,7 +87,7 @@ export async function applyWatermark(
         };
 
         // Create watermark SVG
-        // "Unrealshot" has 10 letters.
+        // "PFPforME" has 8 letters.
         // Approx width = 10 * 12 * scale = 120 * scale units
 
         // Large diagonal from bottom-left to top-right
@@ -108,11 +114,11 @@ export async function applyWatermark(
                 </defs>
                 <rect width="100%" height="100%" fill="url(#diagonalStripes)"/>
 
-                <!-- Main Big Watermark: UNREALSHOT -->
+                <!-- Main Big Watermark: PFPforME -->
                 <!-- Translating to center-bottom, horizontal (no rotation) -->
                 <g transform="translate(${width / 2}, ${height * 0.65}) rotate(0)" opacity="0.35">
                     <g transform="translate(-${bigTextWidth / 2}, -${(14 * bigTextScale) / 2})">
-                        ${[...'UNREALSHOT'].map((char, i) =>
+                        ${[...'PFPforME'].map((char, i) =>
             getLetterPath(char, i * 12 * bigTextScale, 0, bigTextScale)
         ).join('')}
                     </g>

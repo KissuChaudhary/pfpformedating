@@ -47,7 +47,7 @@ export default function TermsOfService() {
             <div>
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">2. Use of Our Service</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
-                <strong className="text-foreground">PFPforME</strong> is an AI-powered headshot generator that allows users to create professional images.
+                <strong className="text-foreground">PFPforME</strong> is an AI-powered photo generator that allows users to create candid, realistic images.
                 Users must adhere to all applicable laws and agree not to misuse our services. Any violations of these rules can result in the termination of access to the platform.
               </p>
             </div>

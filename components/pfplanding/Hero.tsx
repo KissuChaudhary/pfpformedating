@@ -1,119 +1,144 @@
-import type React from "react"
-import { Button } from "./ui/Button"
-import Link from "next/link"
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Crosshair, Fingerprint } from 'lucide-react';
 
 export const Hero: React.FC = () => {
   return (
-    <section className="relative min-h-screen pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-[#050505] border-b border-foreground/10">
+    <div className="min-h-screen bg-black text-white font-sans selection:bg-[#CCFF00] selection:text-black flex flex-col w-full overflow-x-hidden">
       
-      {/* Background Gradient Effects */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-red-500/10 blur-[120px] rounded-full pointer-events-none opacity-50" />
-      <div className="absolute bottom-0 left-0 w-full h-[300px] bg-gradient-to-t from-background to-transparent pointer-events-none z-10" />
+      {/* Ticker Tape / Marquee */}
+      <div className="w-full border-b border-[#333] bg-[#CCFF00] text-black overflow-hidden flex whitespace-nowrap py-1.5 font-mono text-[10px] uppercase font-bold tracking-widest">
+        <div 
+          className="flex gap-8"
+        >
+          {[...Array(10)].map((_, i) => (
+            <span key={i} className="flex items-center gap-8">
+              <span>// PFPFORME_ACTIVE</span>
+              <span>NO PLASTIC SKIN</span>
+              <span>10X MATCH RATE</span>
+              <span>BEAT THE ALGORITHM</span>
+            </span>
+          ))}
+        </div>
+      </div>
 
-      {/* Hero Content */}
-      <div className="relative z-20 max-w-7xl mx-auto px-4 text-center flex flex-col items-center">
+      {/* Main Hero Area */}
+      <div className="flex flex-col xl:flex-row w-full min-h-[90vh] border-b border-[#333]">
         
-        {/* Badge */}
-           <div className="font-mono items-center text-xs text-foreground/80 mb-4 mb-8 ">
-                             // #1 AI DATING PHOTO APP FOR MEN
-                        </div>
-
-        {/* Headline */}
-        <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9] mb-8 uppercase text-foreground">
-           <span className="text-transparent stroke-text relative">
-            Hyper-Realistic AI Photos
-          
-          </span> <br className="hidden lg:block" />for 10x More Matches
-        </h1>
-
-        {/* Subhead */}
-        <p className="font-mono text-foreground/60 text-sm md:text-lg max-w-2xl mb-10 leading-relaxed">
-          Stop getting banned for fake photos. Our hyper-realism engine generates dating pics so real, even your mom won't know. Perfect for <span className="text-foreground border-b border-foreground/20">Tinder</span>, <span className="text-foreground border-b border-foreground/20">Hinge</span>, & <span className="text-foreground border-b border-foreground/20">Bumble</span>.
-        </p>
-
-        {/* CTA */}
-        <div className="flex flex-col gap-6 w-full items-center justify-center mb-20">
-            <Link href="/login">
-            <Button size="lg" className="px-8 py-4 text-lg h-auto w-full sm:w-auto rounded-none border border-foreground/20 hover:border-red-500/50 hover:bg-red-500/10 transition-all duration-300 uppercase font-bold tracking-wider">
-              Generate My Dating Photos
-            </Button>
-            </Link>
-            <div className="flex items-center justify-center gap-2 text-xs font-mono text-foreground/40 uppercase tracking-widest">
-                <span>[!] 100% Ban-Proof</span>
-                <span>//</span>
-                <span>No Plastic Skin</span>
-            </div>
+        {/* Left Rail (Desktop Only) */}
+        <div className="hidden xl:flex w-16 border-r border-[#333] flex-col items-center justify-between py-8 font-mono text-[10px] text-[#666]">
+          <Crosshair className="w-5 h-5 text-[#CCFF00]" />
+        
+          <Fingerprint className="w-5 h-5" />
         </div>
 
-        {/* Visuals - The "Cards" */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-5xl px-4 md:px-0">
-            
-            {/* Card 1 - Tinder Style */}
-            <div className="relative aspect-[9/16] md:aspect-[3/4] group overflow-hidden border border-foreground/10 bg-foreground/5 rounded-none md:rotate-[-3deg] md:hover:rotate-0 transition-all duration-500 hover:z-30 hover:scale-105">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
-                <img src="/images/demo14.jpg" alt="Candid Photo" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                <div className="absolute top-4 left-4 z-20 bg-black/50 backdrop-blur px-2 py-1 border border-white/10">
-                    <span className="text-[10px] font-mono text-green-400 uppercase tracking-widest">● Active Now</span>
-                </div>
+        {/* Center Pane: Copy & CTA */}
+        <div className="w-full xl:w-[55%] p-6 md:p-12 lg:p-16 xl:p-20 flex flex-col justify-center relative z-10">
+          
+          <div className="inline-flex items-center gap-3 border border-[#CCFF00] text-[#CCFF00] px-3 py-1.5 font-mono text-[10px] md:text-xs uppercase w-fit mb-8 shadow-[0_0_15px_rgba(204,255,0,0.15)] bg-[#CCFF00]/5">
+            <span className="w-2 h-2 bg-[#CCFF00] animate-pulse"></span>
+            Target: Maximum Conversion
+          </div>
 
-                <div className="absolute bottom-0 left-0 w-full p-6 z-20 text-left">
-                    <div className="flex items-end gap-2 mb-2">
-                        <span className="text-2xl font-bold text-white font-display">Josh</span>
-                        <span className="text-lg text-white/80 font-mono mb-1">27</span>
-                    </div>
-                    <div className="flex gap-2">
-                        <span className="px-2 py-1 bg-white/10 backdrop-blur rounded text-[10px] font-mono text-white/80 border border-white/10">
-                            ☕ Coffee
-                        </span>
-                        <span className="px-2 py-1 bg-white/10 backdrop-blur rounded text-[10px] font-mono text-white/80 border border-white/10">
-                            ✈️ Travel
-                        </span>
-                    </div>
-                </div>
+          <h1 className="font-display text-6xl md:text-8xl lg:text-[5.5rem] leading-[0.85] tracking-wide uppercase mb-8">
+            <span className="text-white">Hyper-Realistic AI Photos</span><br />
+            <span className="stroke-text-lime">for 10x More Matches</span>
+          </h1>
+
+          <p className="font-mono text-[#888] text-sm md:text-base max-w-xl mb-12 leading-relaxed">
+            Stop losing to guys with better cameras. Our engine generates field-tested, hyper-realistic dating photos engineered to mathematically increase your match rate.
+          </p>
+
+          <button className="bg-[#CCFF00] text-black font-display text-2xl md:text-3xl uppercase py-5 px-8 hover:bg-white transition-colors duration-300 flex items-center justify-between group w-full max-w-xl">
+            <span>Generate Your Photos</span>
+            <span className="font-mono text-sm md:text-lg tracking-widest group-hover:translate-x-2 transition-transform">-&gt;</span>
+          </button>
+        </div>
+
+        {/* Right Pane: 4 Showcase Photos Grid */}
+        <div className="w-full xl:w-[45%] relative min-h-[60vh] xl:min-h-full border-t xl:border-t-0 xl:border-l border-[#333] bg-grid-pattern overflow-hidden">
+          
+          {/* Ambient Glow */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-[#CCFF00]/5 blur-[120px] rounded-full pointer-events-none z-0"></div>
+
+          {/* 2x2 Grid - Full Bleed */}
+          <div className="absolute inset-0 z-10 grid grid-cols-2 grid-rows-2 w-full h-full">
+            {/* Photo 1 */}
+            <div className="relative w-full h-full overflow-hidden border-r border-b border-[#333] group bg-[#050505]">
+              <img src="https://picsum.photos/seed/showcase1/600/800" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100" alt="Showcase 1" referrerPolicy="no-referrer" />
+              <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md border border-[#333] text-white font-mono text-[9px] px-2 py-1 uppercase tracking-widest">
+                Vibe: Cinematic
+              </div>
             </div>
-
-            {/* Card 2 - Hinge Style (Center Highlight) */}
-             <div className="relative aspect-[9/16] md:aspect-[3/4] group overflow-hidden border border-foreground/10 bg-foreground/5 rounded-none z-20 md:-mt-12 shadow-2xl shadow-red-500/10 hover:scale-105 transition-all duration-500">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 z-10" />
-                <img src="/images/demo13.jpg" alt="Couple Photo" className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                 <div className="absolute top-4 right-4 z-20">
-                    <div className="bg-white text-black px-3 py-1 text-[10px] font-bold tracking-wider uppercase transform rotate-3">
-                        Hinge Standout
-                    </div>
-                </div>
-
-                 <div className="absolute bottom-0 left-0 w-full p-6 z-20 text-left">
-                    <div className="font-mono text-[10px] text-white/60 mb-2 uppercase tracking-widest">My simple pleasure</div>
-                    <div className="text-white font-display text-2xl leading-tight mb-4">
-                        Weekend trips to nowhere with a film camera 📸
-                    </div>
-                    <div className="h-1 w-12 bg-red-500 rounded-full"></div>
-                </div>
+            {/* Photo 2 */}
+            <div className="relative w-full h-full overflow-hidden border-b border-[#333] group bg-[#050505]">
+              <img src="https://picsum.photos/seed/showcase2/600/800" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100" alt="Showcase 2" referrerPolicy="no-referrer" />
+              <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md border border-[#333] text-white font-mono text-[9px] px-2 py-1 uppercase tracking-widest">
+                Vibe: Golden Hour
+              </div>
             </div>
-
-            {/* Card 3 - Bumble/Insta Style */}
-             <div className="relative aspect-[9/16] md:aspect-[3/4] group overflow-hidden border border-foreground/10 bg-foreground/5 rounded-none md:rotate-[3deg] md:hover:rotate-0 transition-all duration-500 hover:z-30 hover:scale-105">
-                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
-                <img src="/images/demo12.jpg" alt="Messy Bun" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
-                
-                <div className="absolute top-4 left-4 z-20">
-                     <div className="bg-red-500 text-white px-2 py-1 text-[10px] font-mono font-bold tracking-wider uppercase">
-                        12 New Likes
-                    </div>
-                </div>
-
-                <div className="absolute bottom-6 left-0 w-full px-6 z-20 text-center">
-                    <div className="bg-[#FFC629] text-black p-3 font-bold uppercase tracking-wider text-xs transform -rotate-2 shadow-lg">
-                        "You made the first move!"
-                    </div>
-                </div>
+            {/* Photo 3 */}
+            <div className="relative w-full h-full overflow-hidden border-r border-[#333] group bg-[#050505]">
+              <img src="https://picsum.photos/seed/showcase3/600/800" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100" alt="Showcase 3" referrerPolicy="no-referrer" />
+              <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md border border-[#333] text-white font-mono text-[9px] px-2 py-1 uppercase tracking-widest">
+                Vibe: Candid
+              </div>
             </div>
+            {/* Photo 4 */}
+            <div className="relative w-full h-full overflow-hidden group bg-[#050505]">
+              <img src="https://picsum.photos/seed/showcase4/600/800" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-90 group-hover:opacity-100" alt="Showcase 4" referrerPolicy="no-referrer" />
+              <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md border border-[#333] text-white font-mono text-[9px] px-2 py-1 uppercase tracking-widest">
+                Vibe: Studio
+              </div>
+            </div>
+          </div>
 
+        </div>
+      </div>
+
+      {/* 3 Processing Nodes (Replaces standard 3 steps) */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 w-full bg-black border-b border-[#333]">
+        
+        {/* Node 1 */}
+        <div className="p-8 md:p-12 border-b lg:border-b-0 lg:border-r border-[#333] relative group hover:bg-[#050505] transition-colors">
+          <div className="flex justify-between items-start mb-12">
+            <div className="font-display text-6xl text-[#333] group-hover:text-white transition-colors">01</div>
+            <div className="font-mono text-[9px] text-[#CCFF00] border border-[#CCFF00]/30 bg-[#CCFF00]/5 px-2 py-1 uppercase tracking-widest">
+              Upload_Photos
+            </div>
+          </div>
+          <h3 className="font-display text-3xl uppercase mb-3 text-white">Provide Base Photos</h3>
+          <p className="font-mono text-[#888] text-xs md:text-sm leading-relaxed">
+Upload 4 different & clear photos of yourself (avoid only selfie). The AI learns your unique features to create your personal model.          </p>
+        </div>
+
+        {/* Node 2 */}
+        <div className="p-8 md:p-12 border-b lg:border-b-0 lg:border-r border-[#333] relative group hover:bg-[#050505] transition-colors">
+          <div className="flex justify-between items-start mb-12">
+            <div className="font-display text-6xl text-[#333] group-hover:text-white transition-colors">02</div>
+            <div className="font-mono text-[9px] text-[#CCFF00] border border-[#CCFF00]/30 bg-[#CCFF00]/5 px-2 py-1 uppercase tracking-widest">
+              Choose_Vibe
+            </div>
+          </div>
+          <h3 className="font-display text-3xl uppercase mb-3 text-white">Pick Your Vibe</h3>
+          <p className="font-mono text-[#888] text-xs md:text-sm leading-relaxed">
+Choose from 4 film modes: Night Flash, Golden Hour, Gritty Vintage, or Cineamtic Shoot. Set lighting and describe your scene.          </p>
+        </div>
+
+        {/* Node 3 */}
+        <div className="p-8 md:p-12 relative group hover:bg-[#050505] transition-colors">
+          <div className="flex justify-between items-start mb-12">
+            <div className="font-display text-6xl text-[#333] group-hover:text-[#CCFF00] transition-colors">03</div>
+            <div className="font-mono text-[9px] text-[#CCFF00] border border-[#CCFF00]/30 bg-[#CCFF00]/5 px-2 py-1 uppercase tracking-widest">
+              Get_Results
+            </div>
+          </div>
+          <h3 className="font-display text-3xl uppercase mb-3 text-white">Get Your Matches</h3>
+          <p className="font-mono text-[#888] text-xs md:text-sm leading-relaxed">
+AI generates hyper-realistic photos ready for dating apps in under 60 seconds. Download instantly. No plastic AI look. Real skin, real texture.          </p>
         </div>
 
       </div>
-    </section>
-  )
-}
+    </div>
+  );
+};

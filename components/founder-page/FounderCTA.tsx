@@ -9,7 +9,7 @@ export const FounderCTA = () => {
                     Your Work Isn&apos;t Generic. <br /> Your Photo Shouldn&apos;t Be Either.
                 </h2>
                 <p className="font-mono text-background/70 mb-10 text-lg font-bold">
-                    Join thousands of founders, writers, and artists using Unrealshot to upgrade their digital presence.
+                    Join thousands of founders, writers, and artists using PFPforME to upgrade their digital presence.
                 </p>
 
                 <Link href="/login">

@@ -7,28 +7,47 @@ export const FAQ: React.FC = () => {
     const [openIndex, setOpenIndex] = useState<number | null>(0)
 
     return (
-        <section className="grid md:grid-cols-12 border-b border-foreground/10 min-h-[50vh]">
-            <div className="col-span-12 md:col-span-4 p-8 border-b md:border-b-0 md:border-r border-foreground/10">
-                <h2 className="font-display text-4xl font-bold uppercase mb-4">Frequently Asked Questions</h2>
-                <p className="font-mono text-xs text-foreground/50">Everything you need to know about PFPforME.</p>
+        <section className="grid md:grid-cols-12 border-b border-[#333] bg-black text-white min-h-[50vh]">
+            <div className="col-span-12 md:col-span-4 p-8 md:p-12 border-b md:border-b-0 md:border-r border-[#333] flex flex-col justify-between">
+                <div>
+                    <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-4 leading-[1]">
+                        FAQs about <span className="text-transparent stroke-text-lime">PFPfor.ME</span>
+                    </h2>
+                    <p className="font-mono text-xs text-[#888] mb-8">
+                        Straight answers. No marketing fluff. <br/>
+                    </p>
+                </div>
+                
+              
             </div>
 
             <div className="col-span-12 md:col-span-8">
                 {faqData.map((item, i) => (
-                    <div key={i} className="border-b border-foreground/10 last:border-b-0">
+                    <div key={i} className="border-b border-[#333] last:border-b-0">
                         <button
-                            className="w-full text-left p-8 flex justify-between items-start hover:bg-white/5 transition-colors group"
+                            className={`w-full text-left p-8 flex justify-between items-start hover:bg-[#CCFF00]/5 transition-all duration-300 group ${openIndex === i ? 'bg-[#CCFF00]/5' : ''}`}
                             onClick={() => setOpenIndex(openIndex === i ? null : i)}
                         >
-                            <span className="font-display text-lg font-bold uppercase pr-8 group-hover:text-accent transition-colors">
-                                {item.q}
+                            <div className="flex items-start gap-4 pr-8">
+                                <span className={`font-mono text-xs mt-1 transition-colors ${openIndex === i ? 'text-[#CCFF00]' : 'text-[#444] group-hover:text-[#888]'}`}>
+                                    {i < 9 ? `0${i + 1}` : i + 1}
+                                </span>
+                                <span className={`font-display text-lg md:text-xl font-bold uppercase transition-colors ${openIndex === i ? 'text-[#CCFF00]' : 'text-white group-hover:text-[#CCFF00]'}`}>
+                                    {item.q}
+                                </span>
+                            </div>
+                            <span className={`font-mono text-xl transition-transform duration-300 ${openIndex === i ? 'text-[#CCFF00] rotate-45' : 'text-[#444] group-hover:text-white'}`}>
+                                +
                             </span>
-                            <span className="font-mono text-xl text-accent">{openIndex === i ? "-" : "+"}</span>
                         </button>
                         <div
-                            className={`overflow-hidden transition-all duration-300 ease-in-out ${openIndex === i ? "max-h-48 opacity-100" : "max-h-0 opacity-0"}`}
+                            className={`overflow-hidden transition-all duration-500 ease-in-out ${openIndex === i ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
                         >
-                            <p className="font-mono text-sm text-foreground/70 p-8 pt-0 leading-relaxed max-w-2xl">{item.a}</p>
+                            <div className="p-8 pt-0 pl-16">
+                                <p className="font-mono text-sm text-[#888] leading-relaxed max-w-2xl border-l border-[#333] pl-4">
+                                    {item.a}
+                                </p>
+                            </div>
                         </div>
                     </div>
                 ))}

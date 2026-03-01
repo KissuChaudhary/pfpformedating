@@ -71,7 +71,7 @@ export const defaultSEO: SEOConfig = {
     'Bumble photos',
     'dating profile pictures',
     'hyper realistic AI photos',
-    'AI photoshoot generator',
+    'AI dating photoshoot generator',
     'realistic AI photos',
     'AI photos from selfies',
     'dating profile generator'

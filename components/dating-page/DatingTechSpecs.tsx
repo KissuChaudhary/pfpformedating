@@ -12,7 +12,7 @@ export const DatingTechSpecs = () => {
                     </h2>
                     <p className="font-mono text-foreground/70 mb-8 leading-relaxed max-w-md">
                         Most AI generators give you square images that look awkward when cropped.
-                        Unrealshot generates native Vertical (9:16) full-body shots.
+                        PFPforME generates native Vertical (9:16) full-body shots.
                     </p>
 
                     <ul className="space-y-4 font-mono text-sm text-foreground/60">
@@ -32,7 +32,7 @@ export const DatingTechSpecs = () => {
                     <div className="flex gap-4 h-full items-center">
                         <div className="aspect-[9/16] h-48 sm:h-64 bg-accent/20 border-2 border-accent flex flex-col items-center justify-center relative">
                             <span className="font-mono text-accent text-xs font-bold mb-2">9:16</span>
-                            <span className="font-display text-foreground uppercase text-lg">Unreal</span>
+                            <span className="font-display text-foreground uppercase text-lg">PFPforME</span>
                         </div>
                         <div className="aspect-square h-32 sm:h-40 bg-foreground/5 border border-foreground/20 flex flex-col items-center justify-center grayscale opacity-50">
                             <span className="font-mono text-foreground/40 text-xs mb-2">1:1</span>

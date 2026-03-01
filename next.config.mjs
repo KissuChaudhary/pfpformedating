@@ -17,7 +17,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'blog.unrealshot.com',
+        hostname: 'blog.pfpfor.me',
         pathname: '/wp-content/uploads/**',
       },
       {

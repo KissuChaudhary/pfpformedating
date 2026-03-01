@@ -64,7 +64,7 @@ export const CouplesTechDiff = () => {
 
                 <p className="font-mono text-foreground/70 mb-10 leading-relaxed max-w-md">
                     Most AI generators struggle with two people—they merge faces or make you look like siblings.
-                    Unrealshot uses a <span className="text-white border-b border-white/20">Dual-Identity Lock™</span>. We track both bone structures separately.
+                    PFPforME uses a <span className="text-white border-b border-white/20">Dual-Identity Lock™</span>. We track both bone structures separately.
                 </p>
 
                 <div className="space-y-6 pt-8 border-t border-foreground/10">

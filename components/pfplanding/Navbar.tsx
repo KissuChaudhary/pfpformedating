@@ -77,7 +77,7 @@ export const Navbar: React.FC = () => {
                     <a href="/login" className="font-mono text-xs uppercase text-foreground/60 hover:text-accent transition-colors">Login</a>
                     <Link href="/login">
                         <Button size="sm" className="bg-accent text-background hover:bg-white hover:text-black border-0 shadow-[0_0_15px_rgba(255,77,0,0.2)]">
-                            Start Roll
+                            Get Your Photos
                         </Button>
                     </Link>
                 </div>

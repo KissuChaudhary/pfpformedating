@@ -1,120 +1,186 @@
-import React from 'react';
-import { Zap, Sun, Film, Video } from 'lucide-react';
+"use client"
+import React, { useState } from 'react';
+import { Zap, Sun, Film, Video, ArrowRight, Aperture, Layers, Focus, Camera } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export const LightingLabSection: React.FC = () => {
+    const [activeStyle, setActiveStyle] = useState(0);
+
     const styles = [
         {
             icon: Zap,
-            name: "The 'After Party'",
-            desc: "Flash on. Messy hair. Looks like you just left the coolest club in Berlin."
+            name: "Flash Photography",
+            desc: "Simulates direct on-camera flash. Creates high-energy, candid 'night out' aesthetics with sharp shadows and realistic skin highlights.",
+            img: "/images/demo8.jpg",
+            tag: "HARD_LIGHT_SOURCE",
+            tech: "Direct Flash Simulation"
         },
         {
             icon: Sun,
-            name: "The 'Golden Hour'",
-            desc: "Warm sunlight. Coffee in hand. The 'boyfriend material' shot she sends to her group chat."
+            name: "Natural Sun + Reflector",
+            desc: "Simulates 6PM golden hour sun with a soft fill light. Generates approachable, warm tones that signal 'friendly' and 'social'.",
+            img: "/images/golden-photo.webp",
+            tag: "WARM_DIFFUSED",
+            tech: "Global Illumination"
         },
         {
             icon: Film,
-            name: "The 'Film Grain'",
-            desc: "Vintage Kodak vibes. Artsy, mysterious, and effortlessly cool."
+            name: "Analog 35mm Grain",
+            desc: "Emulates Kodak Portra 400 ISO grain structure. Adds micro-texture to prevent the 'plastic skin' look common in other AI generators.",
+            img: "/images/vintage-roll.webp",
+            tag: "FILM_EMULSION",
+            tech: "Texture Mapping"
         },
         {
             icon: Video,
-            name: "The 'Cinematic'",
-            desc: "Moody lighting. Neon accents. Looks like a still from a Netflix documentary about you."
-        },
+            name: "Cinematic Rim Light",
+            desc: "High-contrast color grading with strong backlighting. Separates subject from background for a premium, editorial magazine look.",
+            img: "/images/cinematic-photo.webp",
+            tag: "VOLUMETRIC_LIGHT",
+            tech: "Color Grading Engine"
+        }
     ];
 
     return (
-        <section className="min-h-[80vh] border-b border-foreground/10 bg-[#080808] grid md:grid-cols-2">
-            {/* Left Column: Text & Visual Menu */}
-            <div className="flex flex-col justify-center p-8 md:p-16 lg:p-20 border-r border-foreground/10 h-full">
-                {/* Heading */}
-                <div className="mb-8">
-                    <div className="font-mono text-[10px] text-foreground/40 mb-4 tracking-widest">
-                        VIBE_CHECK // PASSED
+        <section className="min-h-screen bg-black text-white relative border-b border-[#333] overflow-hidden flex flex-col lg:flex-row">
+            
+            {/* --- Left Panel: Controls (40%) --- */}
+            <div className="w-full lg:w-[40%] p-8 md:p-16 flex flex-col justify-center border-r border-[#333] relative z-20 bg-black">
+                <div className="mb-12">
+                    <div className="inline-flex items-center gap-2 border border-[#CCFF00] text-[#CCFF00] px-3 py-1.5 font-mono text-[10px] uppercase w-fit mb-6 shadow-[0_0_15px_rgba(204,255,0,0.15)] bg-[#CCFF00]/5 rounded-full">
+                        <span className="w-1.5 h-1.5 bg-[#CCFF00] animate-pulse rounded-full"></span>
+                        Virtual Studio Engine
                     </div>
-                    <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase leading-[0.9] mb-6">
-                        Stop Looking<br />
-                        <span className="text-transparent stroke-text">Generic</span>.
+                    <h2 className="font-display text-5xl md:text-6xl font-bold uppercase leading-[0.9] mb-6">
+                        Physics-Based Lighting<br/>
+                        <span className="text-transparent stroke-text-lime">to avoid AI detection</span>
                     </h2>
-                    <p className="font-mono text-foreground/60 text-sm max-w-md leading-relaxed">
-                        Women swipe left on boring. They swipe right on <strong>intrigue</strong>. We don't just generate photos; we generate an entire <em>mood</em> that makes them pause and wonder, "Who is this guy?"
+                    <p className="font-mono text-[#888] text-sm leading-relaxed max-w-md">
+                        Other AI tools just paste your face. We simulate real-world photography physics—<strong className="text-white">shutter speed, aperture, and film grain</strong>—to trick the eye into seeing reality.
                     </p>
                 </div>
 
-                {/* The 4 Styles List */}
-                <div className="space-y-3 mt-4">
+                {/* Style Selector */}
+                <div className="space-y-2">
                     {styles.map((style, i) => (
-                        <div key={i} className="group flex items-start gap-4 p-3 -mx-3 border border-transparent hover:border-foreground/10 hover:bg-white/5 transition-all cursor-default">
-                            <div className="w-8 h-8 flex items-center justify-center border border-foreground/20 group-hover:border-accent/50 transition-colors">
-                                <style.icon className="w-4 h-4 text-foreground/50 group-hover:text-accent transition-colors" />
+                        <button 
+                            key={i}
+                            onClick={() => setActiveStyle(i)}
+                            className={`w-full text-left p-4 border transition-all duration-300 group relative overflow-hidden ${
+                                activeStyle === i 
+                                ? 'border-[#CCFF00] bg-[#CCFF00]/5' 
+                                : 'border-[#333] hover:border-[#666] bg-black'
+                            }`}
+                        >
+                            <div className="flex items-center justify-between relative z-10">
+                                <div className="flex items-center gap-4">
+                                    <div className={`w-8 h-8 flex items-center justify-center border ${
+                                        activeStyle === i ? 'border-[#CCFF00] text-[#CCFF00]' : 'border-[#333] text-[#666] group-hover:text-white'
+                                    }`}>
+                                        <style.icon className="w-4 h-4" />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <span className={`font-display text-lg uppercase tracking-wide leading-none mb-1 ${
+                                            activeStyle === i ? 'text-white' : 'text-[#888] group-hover:text-white'
+                                        }`}>
+                                            {style.name}
+                                        </span>
+                                        <span className="font-mono text-[10px] text-[#555] uppercase tracking-widest group-hover:text-[#777]">
+                                            // {style.tech}
+                                        </span>
+                                    </div>
+                                </div>
+                                {activeStyle === i && <ArrowRight className="w-4 h-4 text-[#CCFF00]" />}
                             </div>
-                            <div>
-                                <h4 className="font-display text-sm font-bold uppercase text-foreground group-hover:text-accent transition-colors mb-1">
-                                    {style.name}
-                                </h4>
-                                <p className="font-mono text-[11px] text-foreground/50 leading-relaxed">
-                                    {style.desc}
-                                </p>
-                            </div>
-                        </div>
+                            
+                            {/* Progress Bar for Active State */}
+                            {activeStyle === i && (
+                                <motion.div 
+                                    layoutId="activeGlow"
+                                    className="absolute bottom-0 left-0 h-[2px] bg-[#CCFF00]"
+                                    initial={{ width: "0%" }}
+                                    animate={{ width: "100%" }}
+                                    transition={{ duration: 0.5 }}
+                                />
+                            )}
+                        </button>
                     ))}
                 </div>
             </div>
 
-            {/* Right Column: 2x2 Grid of Samples */}
-            <div className="grid grid-cols-2 bg-black">
-                {[
-                    { title: "The After Party", k: "FLASH", desc: "Flash on. Messy hair. 3am energy.", img: "/images/demo8.jpg" },
-                    { title: "Golden Hour", k: "GOLDEN", desc: "Boyfriend material. Warm & inviting.", img: "/images/golden-photo.webp" },
-                    { title: "Film Grain", k: "VINTAGE", desc: "Artsy, mysterious, Kodak vibes.", img: "/images/vintage-roll.webp" },
-                    { title: "Cinematic", k: "MOODY", desc: "Main character energy. Neon & shadows.", img: "/images/cinematic-photo.webp" },
-                ].map((item, i) => (
-                    <div key={i} className={`group cursor-pointer relative aspect-[3/4] overflow-hidden border-foreground/10 bg-[#111]
-                            ${i % 2 === 0 ? 'border-r' : ''} 
-                            ${i < 2 ? 'border-b' : ''}
-                        `}>
-                        {/* Interactive Card */}
-                        <div className="w-full h-full relative">
-                            <img
-                                src={item.img}
-                                alt={item.title}
-                                className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500"
-                            />
-                            
-                            {/* Hover UI elements */}
-                            <div className="absolute top-0 left-0 w-full h-full p-6 flex flex-col justify-end z-20">
-                                {/* Top Corners */}
-                                <div className="absolute top-4 left-4 w-2 h-2 border-t border-l border-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                <div className="absolute top-4 right-4 w-2 h-2 border-t border-r border-white/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-
-                                <div className="transform translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                                    <div className="font-mono text-[9px] text-accent mb-2 tracking-widest uppercase">
-                                        {item.k}
-                                    </div>
-                                    <h3 className="font-display text-lg font-bold uppercase text-white mb-1">
-                                        {item.title}
-                                    </h3>
-                                    {/* Description reveal */}
-                                    <div className="h-0 overflow-hidden group-hover:h-auto transition-all duration-300">
-                                        <p className="font-mono text-[10px] text-foreground/60 pt-2 border-t border-white/10 mt-2">
-                                            {item.desc}
-                                        </p>
-                                    </div>
-                                </div>
+            {/* --- Right Panel: Visual Preview (60%) --- */}
+            <div className="w-full lg:w-[60%] relative bg-[#050505] overflow-hidden min-h-[50vh] lg:min-h-auto">
+                <AnimatePresence mode="wait">
+                    <motion.div 
+                        key={activeStyle}
+                        initial={{ opacity: 0, scale: 1.05 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.7, ease: "circOut" }}
+                        className="absolute inset-0 w-full h-full"
+                    >
+                        <img 
+                            src={styles[activeStyle].img} 
+                            alt={styles[activeStyle].name} 
+                            className="w-full h-full object-cover object-center"
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                        
+                        {/* Camera HUD Overlay */}
+                        <div className="absolute top-8 right-8 flex flex-col items-end gap-2 font-mono text-[10px] text-[#CCFF00]/70 uppercase tracking-widest pointer-events-none">
+                            <div className="flex items-center gap-2 border border-[#CCFF00]/30 px-2 py-1 bg-black/50 backdrop-blur-sm">
+                                <Aperture className="w-3 h-3" /> F/1.8
                             </div>
-
-                            {/* Static Label (Always visible until hover) */}
-                            <div className="absolute bottom-4 left-4 z-20 transition-opacity duration-300 group-hover:opacity-0 pointer-events-none">
-                                <span className="font-mono text-[10px] bg-black/50 backdrop-blur-md px-2 py-1 text-foreground/50 border border-white/5">
-                                    {item.title}
-                                </span>
+                            <div className="flex items-center gap-2 border border-[#CCFF00]/30 px-2 py-1 bg-black/50 backdrop-blur-sm">
+                                <Focus className="w-3 h-3" /> ISO 400
+                            </div>
+                            <div className="flex items-center gap-2 border border-[#CCFF00]/30 px-2 py-1 bg-black/50 backdrop-blur-sm">
+                                <Layers className="w-3 h-3" /> RAW
                             </div>
                         </div>
+
+                        {/* Overlay Info */}
+                        <div className="absolute bottom-0 left-0 w-full p-8 md:p-16 pointer-events-none">
+                            <motion.div 
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.2 }}
+                                className="max-w-xl"
+                            >
+                                <div className="font-mono text-[#CCFF00] text-xs mb-2 uppercase tracking-widest flex items-center gap-2">
+                                    <div className="w-1 h-1 bg-[#CCFF00]"></div>
+                                    {styles[activeStyle].tag}
+                                </div>
+                                <h3 className="font-display text-4xl md:text-6xl font-bold text-white mb-4 uppercase leading-none">
+                                    {styles[activeStyle].name}
+                                </h3>
+                                <p className="font-mono text-white/80 text-sm md:text-base border-l-2 border-[#CCFF00] pl-4 bg-black/50 backdrop-blur-sm py-2 pr-4">
+                                    {styles[activeStyle].desc}
+                                </p>
+                            </motion.div>
+                        </div>
+                    </motion.div>
+                </AnimatePresence>
+
+                {/* Tech Grid Overlay */}
+                <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-overlay" 
+                    style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '60px 60px' }}>
+                </div>
+                
+                {/* Crosshairs */}
+                <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-30">
+                    <div className="w-[90%] h-[90%] border border-white/20 relative">
+                        <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#CCFF00]"></div>
+                        <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-[#CCFF00]"></div>
+                        <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-[#CCFF00]"></div>
+                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#CCFF00]"></div>
+                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 border border-white/30 rounded-full flex items-center justify-center">
+                            <div className="w-1 h-1 bg-[#CCFF00] rounded-full"></div>
+                        </div>
                     </div>
-                ))}
+                </div>
             </div>
+
         </section>
     );
 };

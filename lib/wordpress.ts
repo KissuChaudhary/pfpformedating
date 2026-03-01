@@ -48,7 +48,7 @@ interface WordPressSinglePostResponse {
   }
 }
 
-const WORDPRESS_GRAPHQL_URL = 'https://blog.unrealshot.com/graphql'
+const WORDPRESS_GRAPHQL_URL = 'https://blog.pfpfor.me/graphql'
 
 // GraphQL query to fetch all posts
 const GET_POSTS_QUERY = `

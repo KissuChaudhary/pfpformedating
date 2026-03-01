@@ -334,7 +334,7 @@ export default function MobileUIMockup() {
                   <p className="text-sm">
                     <span className="font-semibold">chris_creative</span> Exploring the city today and found this
                     amazing view!
-                    <span className="text-blue-500"> #unrealshotai #photography #urban</span>
+                    <span className="text-blue-500"> #pfpforme #dating #photography</span>
                   </p>
                 </div>
 

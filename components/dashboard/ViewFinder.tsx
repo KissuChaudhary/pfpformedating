@@ -651,9 +651,9 @@ export const Viewfinder: React.FC = () => {
                                                 if (!response.ok) throw new Error('Download failed');
                                                 const blob = await response.blob();
                                                 const url = window.URL.createObjectURL(blob);
-                                                const a = document.createElement('a');
+                                                const a = document.createElement("a");
                                                 a.href = url;
-                                                a.download = `unrealshot_${image.id}.png`;
+                                                a.download = `pfpforme_${image.id}.png`;
                                                 document.body.appendChild(a);
                                                 a.click();
                                                 document.body.removeChild(a);
@@ -693,9 +693,9 @@ export const Viewfinder: React.FC = () => {
                                                         if (!response.ok) throw new Error('Download failed');
                                                         const blob = await response.blob();
                                                         const url = window.URL.createObjectURL(blob);
-                                                        const a = document.createElement('a');
+                                                        const a = document.createElement("a");
                                                         a.href = url;
-                                                        a.download = `unrealshot_${image.id}.png`;
+                                                        a.download = `pfpforme_${image.id}.png`;
                                                         document.body.appendChild(a);
                                                         a.click();
                                                         document.body.removeChild(a);

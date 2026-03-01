@@ -54,7 +54,7 @@ export const CouplesTripodStruggle = () => {
 
                 <div className="relative z-10 text-center max-w-sm p-6 border border-foreground/10 bg-black/50 backdrop-blur-sm">
                     <div className="font-mono text-xs text-accent mb-2 uppercase tracking-widest border-b border-foreground/10 pb-2">
-                        // UNREALSHOT SOLUTION
+                        // PFPforME SOLUTION
                     </div>
                     <p className="font-display text-2xl uppercase font-bold leading-tight mb-4">
                         We capture the chemistry from your couch.

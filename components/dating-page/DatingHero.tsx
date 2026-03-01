@@ -17,7 +17,7 @@ export const DatingHero = () => {
 
                 <p className="font-mono text-foreground/70 text-sm md:text-base max-w-xl mb-10 leading-relaxed">
                     Dating apps are allergic to &quot;LinkedIn energy.&quot; Stop using stiff headshots.
-                    Use Unrealshot to generate candid, messy, &quot;friend-took-this&quot; photos that pass the vibe check.
+                    Use PFPforME to generate candid, messy, &quot;friend-took-this&quot; photos that pass the vibe check.
                 </p>
 
                 <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
@@ -57,7 +57,7 @@ export const DatingHero = () => {
                         </div>
                         <img
                             src="/candid-solo.png"
-                            alt="Candid Unrealshot Photo"
+                            alt="Candid PFPforME Photo"
                             className="w-full h-full object-cover object-center"
                         />
                         <div className="absolute bottom-0 left-0 w-full h-1/3 bg-gradient-to-t from-background to-transparent opacity-80"></div>

@@ -5,7 +5,7 @@ import { useState } from "react"
 const couplesFaqData = [
     {
         q: "Is there an AI that generates couple photos?",
-        a: "Yes. Unrealshot is the first AI specialized in Couple Portraits. Unlike standard avatar makers, it allows you to upload two distinct subject identities and generates scenes where both people interact naturally (hugging, holding hands, sitting together)."
+        a: "Yes. PFPforME is the first AI specialized in Couple Portraits. Unlike standard avatar makers, it allows you to upload two distinct subject identities and generates scenes where both people interact naturally (hugging, holding hands, sitting together)."
     },
     {
         q: "Can I generate photos with my long-distance partner?",
