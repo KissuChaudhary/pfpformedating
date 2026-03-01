@@ -10,22 +10,22 @@ INSERT INTO public.dodo_pricing_plans (
   metadata
 ) VALUES 
 (
-  'Basic Pack',
-  '30 AI photos, 1 model training included, 20-30 min training time',
-  9.99,
-  30,
+  'Starter Pack',
+  '20 AI photos, 1 model training included',
+  19.00,
+  20,
   'USD',
-  'basic_pack_30_credits', -- This will be the product ID in dodopayments
+  'pdt_0NZWYLLB5fkJqKoTspaFn',
   true,
-  '{"features": ["30 AI photos", "1 model training included", "20-30 min training time"]}'
+  '{"features": ["20 AI photos", "1 model training included"]}'
 ),
 (
   'Premium Pack',
-  '60 AI photos, 2 model training included, 20-30 min training time',
-  17.99,
-  60,
+  '500 AI photos, 2 model training included, 20-30 min training time',
+  150.00,
+  500,
   'USD',
-  'premium_pack_60_credits', -- This will be the product ID in dodopayments
+  'pdt_0NZWZB7dYVd8OPPf6Dbqi',
   true,
-  '{"features": ["60 AI photos", "2 model training included", "20-30 min training time"]}'
+  '{"features": ["500 AI photos", "2 model training included"]}'
 );

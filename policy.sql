@@ -48,6 +48,7 @@ CREATE POLICY "Users can view their own models" ON "public"."models" FOR SELECT 
 
 CREATE POLICY "Users can update own profile" ON "public"."profiles" FOR UPDATE TO authenticated USING ((auth.uid() = user_id));
 CREATE POLICY "Users can view own profile" ON "public"."profiles" FOR SELECT TO authenticated USING ((auth.uid() = user_id));
+CREATE POLICY "Users can create own profile" ON "public"."profiles" FOR INSERT TO authenticated WITH CHECK ((auth.uid() = user_id));
 
 CREATE POLICY "Enable insert for authenticated users only" ON "public"."samples" FOR INSERT TO authenticated WITH CHECK ((auth.uid() = (SELECT models.user_id FROM models WHERE (models.id = samples."modelId"))));
 CREATE POLICY "Enable read access for authenticated users" ON "public"."samples" FOR SELECT TO authenticated USING ((auth.uid() = (SELECT models.user_id FROM models WHERE (models.id = samples."modelId"))));
@@ -57,3 +58,8 @@ CREATE POLICY "Enable insert for authenticated users" ON "public"."user_feedback
 CREATE POLICY "Enable insert for service role" ON "public"."user_feedback" FOR INSERT TO service_role WITH CHECK (true);
 CREATE POLICY "Enable read for authenticated users" ON "public"."user_feedback" FOR SELECT TO authenticated USING ((auth.uid() = user_id));
 CREATE POLICY "Enable read for service role" ON "public"."user_feedback" FOR SELECT TO service_role USING (true);
+
+
+
+
+INSERT INTO "public"."dodo_pricing_plans" ("id", "created_at", "updated_at", "name", "description", "price", "credits", "currency", "dodo_product_id", "is_active", "metadata") VALUES ('5778e77f-a091-43e4-967f-ce332f0cb880', '2026-03-01 04:41:09.653181+00', '2026-03-01 04:41:09.653181+00', 'Premium Pack', '60 AI photos, 2 model training included, 20-30 min training time', '150.00', '500', 'USD', 'pdt_0NZWZB7dYVd8OPPf6Dbqi', 'true', '{"features": ["500 AI photos", "2 model training included"]}'), ('bf71a52a-f13a-46b4-b0ab-1f8dac14b201', '2026-03-01 04:41:09.653181+00', '2026-03-01 04:41:09.653181+00', 'Starter Pack', '30 AI photos, 1 model training included, 20-30 min training time', '19.00', '20', 'USD', 'pdt_0NZWYLLB5fkJqKoTspaFn', 'true', '{"features": ["20 AI photos", "1 model training included"]}');

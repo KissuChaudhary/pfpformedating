@@ -41,6 +41,16 @@ export async function GET(request: NextRequest) {
       }
       
       if (data?.user) {
+        const userId = data.user.id
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .upsert(
+            { user_id: userId },
+            { onConflict: 'user_id' }
+          )
+        if (profileError) {
+          console.warn('Profile upsert warning:', profileError)
+        }
         // Log successful auth without user details
         return NextResponse.redirect(`${origin}${next}`)
       } else {
@@ -67,10 +77,17 @@ export async function GET(request: NextRequest) {
       }
 
       if (data?.user) {
+        const userId = data.user.id
+        const { error: profileError } = await supabase
+          .from('profiles')
+          .upsert(
+            { user_id: userId },
+            { onConflict: 'user_id' }
+          )
+        if (profileError) {
+          console.warn('Profile upsert warning:', profileError)
+        }
         return NextResponse.redirect(`${origin}${next}`)
-      } else {
-        console.error('No user data returned after verifyOtp')
-        return NextResponse.redirect(`${origin}/login?error=Authentication failed`)
       }
     } catch (err) {
       console.error('Auth verifyOtp error:', err instanceof Error ? err.message : 'Unknown error')

@@ -1,165 +1,177 @@
-import { DodoPayments } from 'dodopayments'
-type Product = DodoPayments.Product
+/**
+ * Client-side wrapper for calling our Dodo Payments API routes.
+ * NOTE: Do not import the server SDK here. These functions run in the browser.
+ */
 
-let dodopaymentsClient: DodoPayments | null = null
+type ProductCartItem = { product_id: string; quantity: number; amount?: number }
 
-export function getDodoPaymentsClient(): DodoPayments {
-  if (!dodopaymentsClient) {
-    const token = process.env.DODO_API_KEY
-    const environment = process.env.DODO_ENVIRONMENT as "live_mode" | "test_mode"
-
-    console.log('Initializing DodoPayments client...')
-
-    if (!token) {
-      throw new Error(`
-        DODO_API_KEY environment variable is missing.
-        
-        Please check:
-        1. Your .env.local file exists in the project root
-        2. The file contains: DODOAPI_KEY=<your-api-key>
-        3. You've restarted your development server
-        4. No extra quotes or spaces in the .env.local file
-      `)
-    }
-
-    if (!environment || (environment !== "live_mode" && environment !== "test_mode")) {
-      throw new Error('DODO_ENVIRONMENT must be either "live_mode" or "test_mode"')
-    }
-
-    dodopaymentsClient = new DodoPayments({
-      bearerToken: token,
-      environment: environment,
-    })
-  }
-
-  return dodopaymentsClient
+type CustomerRequest = {
+    email: string
+    name?: string
+    phone_number?: string
 }
 
-export const getProducts = async (): Promise<Product[]> => {
-  try {
-    const response = await fetch('/api/products')
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch products: ${response.status} ${response.statusText}`)
-    }
-
-    return await response.json()
-  } catch (error) {
-    console.error('Error fetching products:', error)
-    throw error
-  }
+type BillingAddress = {
+    country: string
+    city: string
+    state?: string
+    street: string
+    zipcode: string
 }
 
-export const getProduct = async (product_id: string): Promise<Product> => {
-  try {
-    const response = await fetch(`/api/product?product_id=${product_id}`)
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch product: ${response.status} ${response.statusText}`)
+/**
+ * Create hosted Checkout Session and return the checkout_url and session_id
+ */
+export async function checkout(
+    product_cart: ProductCartItem[],
+    customer?: CustomerRequest,
+    billing_address?: BillingAddress,
+    return_url?: string,
+    metadata?: Record<string, string>,
+): Promise<{ checkout_url: string; session_id: string }> {
+    if (!return_url) {
+        throw new Error('return_url is required')
     }
-
-    return await response.json()
-  } catch (error) {
-    console.error('Error fetching product:', error)
-    throw error
-  }
-}
-
-export const getCustomer = async (customer_id: string): Promise<DodoPayments.Customers.Customer> => {
-  try {
-    const response = await fetch(`/api/customer?customer_id=${customer_id}`)
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch customer: ${response.status} ${response.statusText}`)
+    const payload: any = {
+        product_cart,
+        return_url,
+        metadata,
     }
+    if (customer) payload.customer = customer
+    if (billing_address) payload.billing_address = billing_address
 
-    return await response.json()
-  } catch (error) {
-    console.error('Error fetching customer:', error)
-    throw error
-  }
-}
-
-export const getCustomerSubscriptions = async (customer_id: string): Promise<DodoPayments.Subscriptions.Subscription[]> => {
-  try {
-    const response = await fetch(`/api/customer/subscriptions?customer_id=${customer_id}`)
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch customer subscriptions: ${response.status} ${response.statusText}`)
-    }
-
-    return await response.json()
-  } catch (error) {
-    console.error('Error fetching customer subscriptions:', error)
-    throw error
-  }
-}
-
-export const getCustomerPayments = async (customer_id: string): Promise<DodoPayments.Payments.Payment[]> => {
-  try {
-    const response = await fetch(`/api/customer/payments?customer_id=${customer_id}`)
-
-    if (!response.ok) {
-      throw new Error(`Failed to fetch customer payments: ${response.status} ${response.statusText}`)
-    }
-
-    return await response.json()
-  } catch (error) {
-    console.error('Error fetching customer payments:', error)
-    throw error
-  }
-}
-
-export const createCustomer = async (customer: DodoPayments.Customers.CustomerCreateParams): Promise<DodoPayments.Customers.Customer> => {
-  try {
-    const response = await fetch('/api/customer', {
-      method: 'POST',
-      body: JSON.stringify(customer),
+    const res = await fetch('/api/dodopayments/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
     })
 
-    if (!response.ok) {
-      throw new Error(`Failed to create customer: ${response.status} ${response.statusText}`)
+    const data = await res.json()
+    if (!res.ok) {
+        throw new Error(data?.error || 'Failed to create checkout session')
     }
-
-    return await response.json()
-  } catch (error) {
-    console.error('Error creating customer:', error)
-    throw error
-  }
+    return { checkout_url: data.checkout_url, session_id: data.session_id }
 }
 
-export const updateCustomer = async (customer_id: string, customer: DodoPayments.Customers.CustomerUpdateParams): Promise<DodoPayments.Customers.Customer> => {
-  try {
-    const response = await fetch(`/api/customer?customer_id=${customer_id}`, {
-      method: 'PUT',
-      body: JSON.stringify(customer),
+/**
+ * Trigger cancellation at next billing date for the user's subscription.
+ * subscription_id is optional; if omitted, the API resolves the user's active subscription.
+ */
+export async function cancelSubscription(
+    subscription_id?: string,
+): Promise<{ ok: boolean; subscription_id: string; remote: any }> {
+    const res = await fetch('/api/dodopayments/subscription/cancel', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscription_id }),
     })
-
-    if (!response.ok) {
-      throw new Error(`Failed to update customer: ${response.status} ${response.statusText}`)
+    const data = await res.json()
+    if (!res.ok) {
+        throw new Error(data?.error || 'Failed to schedule subscription cancellation')
     }
-
-    return await response.json()
-  } catch (error) {
-    console.error('Error updating customer:', error)
-    throw error
-  }
+    return data
 }
 
-export const checkout = async (productCart: Array<{ product_id: string; quantity: number; amount?: number }>, customer: DodoPayments.Payments.CustomerRequest, billing_address: DodoPayments.Payments.BillingAddress, return_url: string, customMetadata?: Record<string, string>) => {
-  try {
-    const response = await fetch('/api/checkout', {
-      method: 'POST',
-      body: JSON.stringify({ productCart, customer, billing_address, return_url, customMetadata }),
+/**
+ * Create a customer portal session so the user can update their default payment method.
+ * subscription_id is optional; if omitted, the API resolves the user's active subscription.
+ * return_url is optional; defaults to /account.
+ */
+export async function updatePaymentMethod(
+    subscription_id?: string,
+    return_url?: string,
+): Promise<{ url?: string; emailed?: boolean; message?: string }> {
+    const res = await fetch('/api/dodopayments/subscription/update-payment-method', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscription_id, return_url }),
     })
-
-    if (!response.ok) {
-      throw new Error(`Failed to checkout: ${response.status} ${response.statusText}`)
+    const data = await res.json()
+    if (!res.ok) {
+        throw new Error(data?.error || 'Failed to create customer portal session')
     }
+    // API may return { url } OR { emailed: true, message }
+    return {
+        url: data?.url || data?.link,
+        emailed: Boolean(data?.emailed),
+        message: typeof data?.message === 'string' ? data.message : undefined,
+    }
+}
 
-    return await response.json()
-  } catch (error) {
-    console.error('Error checking out:', error)
-    throw error
-  }
+/**
+ * Placeholders for future server endpoints. These are imported by hooks/useBilling.ts.
+ * They will throw informative errors until implemented.
+ */
+
+export async function getProducts(): Promise<never> {
+    throw new Error('getProducts is not implemented yet. Please implement a server route and wire it here.')
+}
+
+export async function getProduct(_product_id: string): Promise<never> {
+    throw new Error('getProduct is not implemented yet. Please implement a server route and wire it here.')
+}
+
+export async function getCustomer(_customer_id: string): Promise<never> {
+    throw new Error('getCustomer is not implemented yet. Please implement a server route and wire it here.')
+}
+
+export async function getCustomerSubscriptions(_customer_id: string): Promise<never> {
+    throw new Error('getCustomerSubscriptions is not implemented yet. Please implement a server route and wire it here.')
+}
+
+export async function getCustomerPayments(_customer_id: string): Promise<never> {
+    throw new Error('getCustomerPayments is not implemented yet. Please implement a server route and wire it here.')
+}
+
+export async function createCustomer(_customer: any): Promise<never> {
+    throw new Error('createCustomer is not implemented yet. Please implement a server route and wire it here.')
+}
+
+export async function updateCustomer(_customer_id: string, _customer: any): Promise<never> {
+    throw new Error('updateCustomer is not implemented yet. Please implement a server route and wire it here.')
+}
+// ---- Additional helpers for Subscription management via API routes ----
+
+/**
+ * Restore a subscription (unset cancel_at_next_billing_date) using our API route.
+ */
+export async function restoreSubscription(
+    subscription_id?: string
+): Promise<{ ok: boolean; subscription_id: string }> {
+    const res = await fetch('/api/dodopayments/subscription/restore', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subscription_id }),
+    })
+    const data = await res.json()
+    if (!res.ok) {
+        throw new Error(data?.error || 'Failed to restore subscription')
+    }
+    return data
+}
+
+/**
+ * Change plan for a subscription using our API route.
+ */
+export async function changeSubscriptionPlan(
+    subscription_id: string | undefined,
+    product_id: string,
+    proration_billing_mode: 'prorated_immediately' | 'none' = 'prorated_immediately',
+    quantity: number = 1
+): Promise<{ ok: boolean; subscription_id: string }> {
+    const res = await fetch('/api/dodopayments/subscription/change-plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            subscription_id,
+            product_id,
+            proration_billing_mode,
+            quantity,
+        }),
+    })
+    const data = await res.json()
+    if (!res.ok) {
+        throw new Error(data?.error || 'Failed to change subscription plan')
+    }
+    return data
 }
