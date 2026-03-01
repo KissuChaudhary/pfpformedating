@@ -34,17 +34,17 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
     if (!post) {
       return {
-        title: "Post Not Found - Unrealshot Blog",
+        title: "Post Not Found - PFPforME Blog",
         description: "The requested blog post could not be found.",
       }
     }
 
     const seoTitle = post.title
-    const seoDescription = post.excerpt || "Read this article on Unrealshot Blog"
+    const seoDescription = post.excerpt || "Read this article on PFPforME Blog"
     const ogImage = post.featuredImage?.node?.sourceUrl || "/placeholder.svg"
 
     return {
-      title: `${seoTitle} - Unrealshot Blog`,
+      title: `${seoTitle} - PFPforME Blog`,
       description: seoDescription,
       openGraph: {
         title: seoTitle,
@@ -59,7 +59,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
           height: 630,
           alt: post.featuredImage?.node?.altText || post.title,
         }],
-        url: `https://www.unrealshot.com/blog/${post.slug}`,
+        url: `https://pfpfor.me/blog/${post.slug}`,
       },
       twitter: {
         card: "summary_large_image",
@@ -68,14 +68,14 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         images: [ogImage],
       },
       alternates: {
-        canonical: `https://www.unrealshot.com/blog/${post.slug}`,
+        canonical: `https://pfpfor.me/blog/${post.slug}`,
       },
     }
   } catch (error) {
     console.error('Error generating metadata:', error)
     return {
-      title: "Blog Post - The Unrealshot AI Blog",
-      description: "Get the latest tips for creating stunning AI headshots, professional photos for LinkedIn, and authentic, high-quality images for your social and dating profiles.",
+      title: "Blog Post - PFPforME AI Blog",
+      description: "Read this article on PFPforME AI Blog",
     }
   }
 }
@@ -115,28 +115,28 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
   const blogPostJsonLd = {
     '@context': 'https://schema.org',
     '@type': 'BlogPosting',
-    '@id': `https://www.unrealshot.com/blog/${post.slug}`,
+    '@id': `https://pfpfor.me/blog/${post.slug}`,
     headline: post.title,
     description: post.excerpt ? post.excerpt.replace(/<[^>]*>/g, '') : post.title,
-    image: post.featuredImage?.node?.sourceUrl || 'https://www.unrealshot.com/placeholder.svg',
+    image: post.featuredImage?.node?.sourceUrl || 'https://pfpfor.me/placeholder.svg',
     datePublished: formatDateWithTimezone(post.date),
     dateModified: formatDateWithTimezone(post.modified || post.date),
     author: {
       '@type': 'Organization',
-      name: 'Unrealshot Team',
-      url: 'https://www.unrealshot.com'
+      name: 'PFPforME Team',
+      url: 'https://pfpfor.me'
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Unrealshot AI',
+      name: 'PFPforME AI',
       logo: {
         '@type': 'ImageObject',
-        url: 'https://www.unrealshot.com/unrealshot-logo.png'
+        url: 'https://www.pfpfor.me/unrealshot-logo.png'
       }
     },
     mainEntityOfPage: {
       '@type': 'WebPage',
-      '@id': `https://www.unrealshot.com/blog/${post.slug}`
+      '@id': `https://pfpfor.me/blog/${post.slug}`
     },
     articleSection: category,
     wordCount: post.content.split(' ').length,
@@ -144,8 +144,8 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
     inLanguage: 'en-US',
     isPartOf: {
       '@type': 'Blog',
-      '@id': 'https://www.unrealshot.com/blog',
-      name: 'The Unrealshot AI Blog'
+      '@id': 'https://pfpfor.me/blog',
+      name: 'The PFPforME AI Blog'
     }
   }
 
@@ -225,7 +225,7 @@ function BlogPostContent({ post }: { post: WordPressPost }) {
                 <div className="ml-auto">
                   <ShareButton
                     title={post.title}
-                    url={`https://www.unrealshot.com/blog/${post.slug}`}
+                    url={`https://pfpfor.me/blog/${post.slug}`}
                     text={post.excerpt || `Check out this article: ${post.title}`}
                   />
                 </div>

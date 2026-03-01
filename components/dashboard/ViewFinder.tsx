@@ -55,12 +55,8 @@ export const Viewfinder: React.FC = () => {
     const [selectedModel, setSelectedModel] = useState<Model | null>(null);
     const [isModelDropdownOpen, setIsModelDropdownOpen] = useState(false);
     const [isLoadingModels, setIsLoadingModels] = useState(true);
-    const [viewMode, setViewMode] = useState<'single' | 'couple'>('single');
-
-    // Filter models based on view mode
-    const filteredModels = models.filter(m =>
-        m.mode === viewMode || (!m.mode && viewMode === 'single')
-    );
+    // Filter models to show single-mode only
+    const filteredModels = models.filter(m => m.mode !== 'couple');
 
     // Viewfinder State
     const [prompt, setPrompt] = useState('');
@@ -95,10 +91,8 @@ export const Viewfinder: React.FC = () => {
                     const data = await res.json();
                     setModels(data.models || []);
                     if (data.models?.length > 0) {
-                        const firstModel = data.models[0];
-                        setSelectedModel(firstModel);
-                        // Sync viewMode with the first selected model's mode
-                        setViewMode(firstModel.mode === 'couple' ? 'couple' : 'single');
+                        const firstSingle = data.models.find((m: Model) => m.mode !== 'couple');
+                        setSelectedModel(firstSingle || data.models[0]);
                     }
                 }
             } catch (error) {
@@ -231,8 +225,6 @@ export const Viewfinder: React.FC = () => {
         setStatusMessage('Please wait...Submitting job...');
 
         try {
-            const gender = selectedModel.type || 'Female';
-
             // Submit to fal.ai queue via our API
             const res = await fetch('/api/fal/generate', {
                 method: 'POST',
@@ -241,7 +233,6 @@ export const Viewfinder: React.FC = () => {
                     modelId: selectedModel.id,
                     prompt,
                     mode: mode.id,
-                    gender: gender.toUpperCase(),
                     lighting: lightingTime.id,
                     aspectRatio: aspectRatio.value,
                 }),
@@ -322,37 +313,9 @@ export const Viewfinder: React.FC = () => {
                 {/* Scrollable Form */}
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-5 space-y-6">
 
-                    {/* Single/Couple Mode Tabs */}
-                    <div className="flex p-1 bg-zinc-800 rounded-lg border border-zinc-700">
-                        <button
-                            onClick={() => {
-                                setViewMode('single');
-                                // Select first single model if available
-                                const singleModels = models.filter(m => m.mode === 'single' || !m.mode);
-                                if (singleModels.length > 0) setSelectedModel(singleModels[0]);
-                            }}
-                            className={`cursor-pointer flex-1 py-2 text-xs font-medium rounded-md transition-all ${viewMode === 'single'
-                                ? 'bg-white text-black shadow-sm'
-                                : 'text-zinc-400 hover:text-white'
-                                }`}
-                        >
-                            Single
-                        </button>
-                        <button
-                            onClick={() => {
-                                setViewMode('couple');
-                                // Select first couple model if available
-                                const coupleModels = models.filter(m => m.mode === 'couple');
-                                if (coupleModels.length > 0) setSelectedModel(coupleModels[0]);
-                                else setSelectedModel(null);
-                            }}
-                            className={`cursor-pointer flex-1 py-2 text-xs font-medium rounded-md transition-all ${viewMode === 'couple'
-                                ? 'bg-white text-black shadow-sm'
-                                : 'text-zinc-400 hover:text-white'
-                                }`}
-                        >
-                            Couple
-                        </button>
+                    {/* Mode Tabs removed: single mode only */}
+                    <div className="flex p-2 bg-zinc-800 rounded-lg border border-zinc-700 text-zinc-400 text-xs uppercase tracking-widest">
+                        Single Mode
                     </div>
 
                     {/* 1. Model Selector */}

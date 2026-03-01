@@ -2,10 +2,7 @@
 
 import { GoogleGenAI } from "@google/genai";
 import { REFERENCE_PROMPTS } from "./prompts";
-import { COUPLE_REFERENCE_PROMPTS } from "./couple-prompts";
-import { putR2Object } from './r2';
-import { createClient } from '@/utils/supabase/server';
-import { hasCredits, deductCredits } from '@/lib/credits';
+
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -17,16 +14,15 @@ const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 export async function enhancePrompt(
     userPrompt: string,
     mode: string,
-    gender: string,
     lighting: string = 'DAYLIGHT'
 ): Promise<string> {
     try {
         // Get relevant examples based on mode and gender
         const modeKey = mode as keyof typeof REFERENCE_PROMPTS;
-        const genderKey = gender.toUpperCase() === 'MALE' ? 'MALE' : 'FEMALE';
+        const genderKey = 'MALE';
 
         const modePrompts = REFERENCE_PROMPTS[modeKey];
-        const genderPrompts = modePrompts?.[genderKey] || REFERENCE_PROMPTS.FLASH.FEMALE;
+        const genderPrompts = modePrompts?.[genderKey] || REFERENCE_PROMPTS.FLASH.MALE;
         const examples = genderPrompts.slice(0, 3).join("\n- ");
 
         // Define lighting guidelines based on user selection
@@ -51,7 +47,7 @@ export async function enhancePrompt(
       INSTRUCTIONS:
       1. Analyze the user's idea he want an photoshoot for: "${userPrompt}"
       2. Write a single, detailed image generation prompt.
-      3. The subject is ${gender}.
+      3. The subject is Male.
       4. IMPORTANT: The lighting MUST match the ${lighting === 'NIGHT' ? 'NIGHT/ARTIFICIAL' : 'DAYLIGHT/NATURAL'} setting specified above by the user.
       5. Incorporate the hyper realistic style of the attached best, curated REFERENCE EXAMPLES (camera angle, texture, camera composition, The poses).
       6. Explicitly state: "Keep facial identity consistent with reference photos."
@@ -67,72 +63,14 @@ export async function enhancePrompt(
             }
         });
 
-        return response.text || `${userPrompt}, ${gender}, ${lighting === 'NIGHT' ? 'night, flash photography' : 'daylight, natural light'}, candid, raw`;
+        return response.text || `${userPrompt}, Male, ${lighting === 'NIGHT' ? 'night, flash photography' : 'daylight, natural light'}, candid, raw`;
     } catch (error) {
         console.error("Prompt enhancement failed:", error);
         // Fallback if AI fails
-        return `${userPrompt}, ${gender}, photorealistic, high detail, ${lighting === 'NIGHT' ? 'flash photography, night' : 'natural sunlight, daylight'}`;
+        return `${userPrompt}, Male, photorealistic, high detail, ${lighting === 'NIGHT' ? 'flash photography, night' : 'natural sunlight, daylight'}`;
     }
 }
 
-/**
- * Prompt Enhancement for Couples
- * Similar to enhancePrompt but uses couple-specific reference prompts
- */
-export async function enhanceCouplePrompt(
-    userPrompt: string,
-    mode: string,
-    lighting: string = 'DAYLIGHT'
-): Promise<string> {
-    try {
-        // Get relevant examples based on mode
-        const modeKey = mode as keyof typeof COUPLE_REFERENCE_PROMPTS;
-        const examples = COUPLE_REFERENCE_PROMPTS[modeKey]
-            ? COUPLE_REFERENCE_PROMPTS[modeKey].slice(0, 3).join("\n- ")
-            : COUPLE_REFERENCE_PROMPTS.FLASH.slice(0, 3).join("\n- ");
-
-        const lightingGuide = lighting === 'NIGHT'
-            ? `User have asked to write the prompt to generate an image in day-light so the lighting should be natural and realistic`
-            : `User have asked to write the prompt to generate an image in night-light so the lighting should be natural and realistic suitable for night photography`;
-        const systemInstruction = `
-      You are a specialized AI Photographer Assistant for COUPLE PHOTOSHOOTS.
-      
-      THE AESTHETIC:
-      - Raw, candid, romantic couple photography.
-      - Natural interaction between the couple.
-      - Realistic skin texture, authentic emotions.
-      - NO "AI perfection", NO posed stiff shots.
-      
-      ${lightingGuide}
-      
-      Here are the pro level REFERENCE EXAMPLES OF THE prompts which are tested and have produced the hyper realistic results:
-      - ${examples}
-      
-      INSTRUCTIONS:
-      1. Analyze the user's idea what they are looking to generate: "${userPrompt}"
-      2. Write a single, detailed image generation prompt for the couple photoshoot.
-      3. The subjects are a man and a woman together (romantic couple).
-      4. IMPORTANT: The lighting in the prompt MUST match the ${lighting === 'NIGHT' ? 'NIGHT/ARTIFICIAL' : 'DAYLIGHT/NATURAL'} setting.
-      5. Focus on natural interaction, body language, and connection between them.
-      6. Explicitly state: "Keep both faces' identities consistent with reference photos."
-      7. Output ONLY the prompt string. No explanations.
-    `;
-
-        const response = await ai.models.generateContent({
-            model: 'gemini-2.5-flash',
-            contents: `Generate a couple photoshoot prompt for: ${userPrompt}`,
-            config: {
-                systemInstruction: systemInstruction,
-                temperature: 0.7,
-            }
-        });
-
-        return response.text || `${userPrompt}, romantic couple, ${lighting === 'NIGHT' ? 'night, flash photography' : 'daylight, natural light'}, candid, authentic`;
-    } catch (error) {
-        console.error("Couple prompt enhancement failed:", error);
-        return `${userPrompt}, romantic couple, photorealistic, high detail, ${lighting === 'NIGHT' ? 'flash photography, night' : 'natural sunlight, daylight'}`;
-    }
-}
 
 /**
  * Helper: Convert URL or base64 string to clean base64 data

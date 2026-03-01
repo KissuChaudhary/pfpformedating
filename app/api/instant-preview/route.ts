@@ -11,19 +11,13 @@ if (!FAL_KEY) {
 
 fal.config({ credentials: FAL_KEY });
 
-// Preset styles mapped to prompts by gender
+// Preset styles for male-only previews
 const STYLE_PROMPTS: Record<string, Record<string, string>> = {
   "man": {
     "professional": "professional portrait headshot of me, smiling, direct gaze, hands in suit pockets, dark navy blue two-button suit, white dress shirt, dark blue necktie, textured dark grey background, studio lighting, sharp focus, high resolution, corporate headshot, photorealistic. Subtle depth-of-field, neutral backdrop, crisp lighting, natural skin tones.",
     "glamour": "striking casual pose of me, with rolled-up sleeves and suspenders, leans against a graffiti wall, in a vintage photography aesthetic. The backdrop features a faded advertisement, with the natural light illuminating his face and the textures of the brick, with a slight tilt-shift effect used to isolate the man and the wall.",
     "creative": "A handsome man(me from the attache photo) is the subject of a black swan photoshoot, dressed in a sleek, minimalist black suit. The setting is a minimalist studio, with the photograph being in a high-contrast black and white style, showcasing the sharp lines and textures of the attire. He leans against a dark, textured wall, his expression serious and focused, captured in a waist-up shot emphasizing his posture and the quality of light.",
     "natural": "Handsome man with natural hairstyle, confident smile, looking straight into camera. Background airbrushed neutral blend, natural lighting, film-style sharpness with analog color shift."
-  },
-  "woman": {
-    "professional": "Create a clean, well-lit studio-style professional headshot of a beautiful woman wearing professional business attire. Keep facial features realistic and flattering. Subtle depth-of-field, neutral backdrop, crisp lighting, natural skin tones.",
-    "glamour": "Create a glamorous magazine-style portrait of a beautiful woman with soft studio lighting, refined makeup look, and elegant styling. Emphasize feminine features and polished details while keeping identity realistic.",
-    "creative": "Create an artistic and unique portrait of a woman with creative lighting and styling. Maintain realistic facial features while adding artistic flair and creative composition.",
-    "natural": "Beautiful woman with voluminous layered hairstyle, slight smile, looking straight into camera. Background airbrushed pink-blue blend, glossy print reflection, film-style sharpness with analog color shift."
   }
 };
 
@@ -46,14 +40,14 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { imageUrls, imagesBase64, styleKey, gender = 'man' } = body;
+    const { imageUrls, imagesBase64, styleKey } = body;
 
     if ((!imageUrls || imageUrls.length === 0) && (!imagesBase64 || imagesBase64.length === 0)) {
       return NextResponse.json({ error: "At least one image is required" }, { status: 400 });
     }
 
-    if (!styleKey || !STYLE_PROMPTS[gender]?.[styleKey]) {
-      return NextResponse.json({ error: "Invalid style key or gender" }, { status: 400 });
+    if (!styleKey || !STYLE_PROMPTS.man?.[styleKey]) {
+      return NextResponse.json({ error: "Invalid style key", status: 400 }, { status: 400 });
     }
 
     // Check if user has already used their free trial
@@ -123,7 +117,7 @@ export async function POST(request: Request) {
       },
       body: JSON.stringify({
         image_urls: finalImageUrls,
-        prompt: STYLE_PROMPTS[gender][styleKey],
+        prompt: STYLE_PROMPTS.man[styleKey],
         aspect_ratio: "3:4",
         num_images: 1,
         seed: Math.floor(Math.random() * 1000000),

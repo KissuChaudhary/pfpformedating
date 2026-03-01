@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"
 import FeedbackForm from "@/components/FeedbackForm"
 
 export const metadata: Metadata = {
-  title: "Image Upload Guide | Unrealshot AI",
+  title: "Image Upload Guide | PFPfor.Me",
   description: "View your generated AI headshots",
 }
 

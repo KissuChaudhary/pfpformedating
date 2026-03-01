@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@/utils/supabase/server";
 import { fal } from "@fal-ai/client";
-import { enhancePrompt, enhanceCouplePrompt } from "@/lib/genai";
+import { enhancePrompt } from "@/lib/genai";
 import { hasCredits, deductCredits } from "@/lib/credits";
 import { apiRateLimit, checkRateLimit } from "@/utils/rate-limit";
 
@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     try {
         const body = await request.json();
-        const { modelId, prompt, mode, gender, lighting, aspectRatio } = body;
+        const { modelId, prompt, mode, lighting, aspectRatio } = body;
 
         if (!modelId || !prompt) {
             return NextResponse.json({ error: "modelId and prompt are required" }, { status: 400 });
@@ -70,11 +70,11 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Model has no sample images" }, { status: 400 });
         }
 
-        // Enhance prompt - use couple prompt enhancer for couple models
-        const isCouple = model.mode === 'couple';
-        const enhancedPrompt = isCouple
-            ? await enhanceCouplePrompt(prompt, mode || "FLASH", lighting || "DAYLIGHT")
-            : await enhancePrompt(prompt, mode || "FLASH", gender || model.type || "Male", lighting || "DAYLIGHT");
+        const enhancedPrompt = await enhancePrompt(
+            prompt,
+            mode || "FLASH",
+            lighting || "DAYLIGHT"
+        );
 
         // Deduct credits upfront (optimistic)
         const { success: deducted } = await deductCredits(user.id, CREDIT_COST);

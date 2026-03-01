@@ -13,11 +13,9 @@ if (!FAL_KEY) {
 
 fal.config({ credentials: FAL_KEY || "" });
 
-// Hardcoded "golden prompts" for the free preview - professional headshots that wow users
+// Hardcoded "golden prompts" for the free preview - male-only
 const GOLDEN_PROMPTS = {
     MALE: "raw, documentary-style street photograph of a man walking quickly across a busy city street at midday. He (keep his facial identity exactly consistent from reference photos provided) is holding a takeaway coffee cup and direct sunlight hitting his face. He is looking off-camera with a slight smile. The hard sunlight casts sharp, defined shadows and highlights the natural texture of his skin, stubble, and the denim of his jacket. The background is a bustle of pedestrians and yellow taxi cabs. Film grain is present. Shot on 35mm film stock Kodak Portra 400.",
-    FEMALE: "A hyper-realistic portrait of a woman looking back over her shoulder directly at the camera. She has a messy, curly high bun with loose tendrils framing her face. She is wearing a fitted, white ribbed turtleneck sweater. The lighting is high-contrast hard flash photography, creating a sharp, dramatic shadow against a solid deep pink wall background. Her skin is dewy and glossy, with hyper-detailed, natural texture—visible, natural skin creases, absolutely no plastic smoothing. The mood is bold and cinematic. Shot on a Fujifilm GFX 100S Medium Format, GF 80mm f/1.7 lens, aperture f/2.0. The image is incredibly sharp, capturing the weave of the ribbed sweater and individual strands of messy hair. Keep facial identity consistent with reference photos.",
-    COUPLE: "Vertical candid shot of a couple standing on a windy rooftop overlook at night. She (keep her facial identity exactly consistent from reference photos) is leaning against the railing, hair blowing wildly across her face, smiling broadly at the camera. She is wearing a fitted black turtleneck tucked into high-waisted jeans. He (keep his facial identity exactly consistent from reference photos) is standing behind her, wrapping his arms around her waist, resting his chin on her shoulder, looking at the camera with a calm smile. The direct flash freezes the motion of her hair and illuminates their faces against a pitch-black sky with distant city bokeh. Skin texture is detailed, showing windburn and natural pores. He is wearing a beige knit sweater. Shot on a Fujifilm GFX 100S Medium Format, GF 80mm f/1.7 lens, aperture f/2.0.",
 };
 
 export const dynamic = "force-dynamic";
@@ -122,17 +120,8 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Model has no sample images" }, { status: 400 });
         }
 
-        // Select golden prompt based on mode (couple) or gender (solo)
-        let goldenPrompt: string;
-        const mode = (model.mode || "").toLowerCase();
-
-        if (mode === "couple") {
-            goldenPrompt = GOLDEN_PROMPTS.COUPLE;
-        } else {
-            // Solo mode - select based on gender
-            const gender = (model.type || "Female").toUpperCase();
-            goldenPrompt = gender === "MALE" ? GOLDEN_PROMPTS.MALE : GOLDEN_PROMPTS.FEMALE;
-        }
+        // Use male-only golden prompt
+        const goldenPrompt = GOLDEN_PROMPTS.MALE;
 
         // Submit to fal.ai queue with webhook
         const { request_id } = await fal.queue.submit("fal-ai/bytedance/seedream/v4.5/edit", {

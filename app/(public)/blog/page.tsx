@@ -11,22 +11,22 @@ export const dynamic = 'force-static'
 export const revalidate = 600 // 10 minutes
 
 export const metadata: Metadata = {
-  title: "The Unrealshot AI Blog",
+  title: "The PFPForMe AI Blog",
   description:
     "Actionable guides and insights on AI photography. Get the latest tips for creating stunning AI headshots, professional photos for LinkedIn, and authentic, high-quality images for your social and dating profiles.",
   robots: "index, follow",
   alternates: {
-    canonical: "https://www.unrealshot.com/blog",
+    canonical: "https://pfpfor.me/blog",
   },
   openGraph: {
-    title: "The Unrealshot AI Blog",
+    title: "The PFPForMe AI Blog",
     description: "Your definitive guide to mastering your digital identity. In The Studio, we share expert tips, creative inspiration, and deep dives into the art of the perfect AI photoshoot.",
     type: "website",
-    url: "https://www.unrealshot.com/blog",
+    url: "https://pfpfor.me/blog",
   },
   twitter: {
     card: "summary_large_image",
-    title: "The Unrealshot AI Blog",
+    title: "The PFPForMe AI Blog",
     description: "Your definitive guide to mastering your digital identity. In The Studio, we share expert tips, creative inspiration, and deep dives into the art of the perfect AI photoshoot.",
   },
 }
