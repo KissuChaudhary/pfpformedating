@@ -48,7 +48,7 @@ function getEmailTemplate4Hour(name: string) {
         <strong>Code: WELCOME20</strong> (Save 20%)
       </div>
       
-      <p style="margin-bottom: 16px;">You can use this at checkout: <a href="https://unrealshot.com/buy-credits" style="color: #007bff;">unrealshot.com/buy-credits</a></p>
+      <p style="margin-bottom: 16px;">You can use this at checkout: <a href="https://unrealshot.com/subscribe" style="color: #007bff;">unrealshot.com/subscribe</a></p>
       
       <p style="margin-bottom: 16px;">My only ask: If you like the photos, would you mind sending me a quick reply? I'm desperately looking for feedbacks.</p>
       

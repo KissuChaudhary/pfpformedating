@@ -268,7 +268,7 @@ export default function ImageGallery() {
 
         <div className="mt-8">
           <Button asChild size="lg" className="px-6">
-            <Link href="/buy-credits">Get My AI Photoshoot Now</Link>
+            <Link href="/subscribe">Get My AI Photoshoot Now</Link>
           </Button>
           <p className="mt-3 text-sm text-muted-foreground">
             start at just $8.99 for 15 photos — that’s less than $0.60 each!

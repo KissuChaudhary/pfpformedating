@@ -84,7 +84,7 @@ export function NavUser({
             <DropdownMenuSeparator className="bg-white/10" />
             <DropdownMenuGroup>
               <DropdownMenuItem asChild className="cursor-pointer hover:bg-white/10 focus:bg-white/10">
-                <Link href="/buy-credits" prefetch={false} className="flex items-center">
+                <Link href="/subscribe" prefetch={false} className="flex items-center">
                   <Sparkles className="mr-2 h-4 w-4" />
                   Buy Credits
                 </Link>

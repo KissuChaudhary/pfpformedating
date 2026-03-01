@@ -465,7 +465,7 @@ export const Viewfinder: React.FC = () => {
                 <div className="p-5 border-t border-zinc-700 bg-zinc-900/50 backdrop-blur-sm">
                     {creditBalance === 0 ? (
                         <Link
-                            href="/buy-credits"
+                            href="/subscribe"
                             className="w-full h-12 bg-accent text-white font-semibold text-sm rounded-lg hover:bg-accent/90 transition-all active:scale-[0.98] flex items-center justify-center gap-2 shadow-lg shadow-accent/10"
                         >
                             Buy Credits →

@@ -364,7 +364,7 @@ export const sitemapConfig = {
     '/error',
     '/admin/*',
     '/trained-models/*',
-    '/buy-credits/*',
+    '/subscribe/*',
     '/payment-success',
     
   ],

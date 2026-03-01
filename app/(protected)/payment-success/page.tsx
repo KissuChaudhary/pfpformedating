@@ -264,7 +264,7 @@ export default async function PaymentSuccessPage({ searchParams }: PaymentSucces
           </>
         ) : isPaymentFailed ? (
           <>
-            <Link href="/buy-credits">
+            <Link href="/subscribe">
               <Button className="w-full sm:w-auto">
                 Try Again
                 <ArrowRight className="h-4 w-4 ml-2" />

@@ -68,7 +68,7 @@ function CreditsCard({ userId }: { userId?: string }) {
           <span className="flex items-center gap-2"><Coins className="h-3 w-3" />Credits</span> <span className="text-amber-600"> {balance.toLocaleString()}</span>
         </div>
         <Button size="sm" className="w-full bg-white text-black hover:bg-zinc-200 transition-all active:scale-[0.98] border-0" asChild>
-          <Link href="/buy-credits" prefetch={false}>
+          <Link href="/subscribe" prefetch={false}>
             <Sparkles className="h-3 w-3" /> Get Credits
           </Link>
         </Button>

@@ -562,7 +562,7 @@ export const commonPageMetadata = {
   buyCredits: () => generateMetadata({
     title: 'Buy Credits',
     description: 'Purchase credits to unlock premium features and expand your usage limits.',
-    canonical: '/buy-credits',
+    canonical: '/subscribe',
     keywords: ['buy credits', 'purchase', 'premium features', 'upgrade'],
   }),
 

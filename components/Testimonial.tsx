@@ -53,7 +53,7 @@ const FourthSection: React.FC = () => {
  
       <div className="text-center relative">
         <div className="inline-block relative">
-          <a href="/buy-credits" className="flex items-center justify-center bg-gradient-to-r from-indigo-800 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white font-bold py-2 px-4 rounded text-lg shadow-lg hover:bg-indigo-800 transition-all duration-300 group">
+          <a href="/subscribe" className="flex items-center justify-center bg-gradient-to-r from-indigo-800 to-blue-700 hover:from-blue-700 hover:to-indigo-800 text-white font-bold py-2 px-4 rounded text-lg shadow-lg hover:bg-indigo-800 transition-all duration-300 group">
                 Choose Your Photoshoot Package
                 <Sparkles className="ml-2 group-hover:rotate-12 transition-transform duration-300" />
               </a>
