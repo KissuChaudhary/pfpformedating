@@ -58,12 +58,40 @@ export async function POST(req: NextRequest) {
       quantity: typeof quantity === 'number' && quantity > 0 ? quantity : 1,
     })
 
+    const immObj = preview?.immediate_charge ?? preview?.charge ?? preview?.difference ?? null
+    const immRaw =
+      (immObj && (immObj.amount ?? immObj.total_amount ?? immObj.value)) ??
+      preview?.immediate_charge_amount ??
+      preview?.immediate_charge ??
+      0
+    const immSummary =
+      (immObj && (immObj.summary ?? immObj.text)) ??
+      preview?.immediate_charge_summary ??
+      null
+    const credRaw =
+      (preview?.credit_amount?.amount ?? preview?.credit_amount?.total_amount) ??
+      preview?.credit_amount ??
+      0
+    const currency =
+      (preview?.currency ?? immObj?.currency ?? plan.currency ?? 'USD') as string
+
+    const toNumber = (v: any): number => {
+      if (typeof v === 'number') return v
+      if (typeof v === 'string') {
+        const s = v.replace(/[^0-9.\-]/g, '')
+        const n = Number(s)
+        return Number.isFinite(n) ? n : 0
+      }
+      return 0
+    }
+
     const breakdown = {
-      immediate_charge: preview?.immediate_charge?.amount ?? preview?.immediate_charge ?? 0,
-      credit_amount: preview?.credit_amount ?? 0,
+      immediate_charge: toNumber(immRaw),
+      immediate_summary: typeof immSummary === 'string' ? immSummary : null,
+      credit_amount: toNumber(credRaw),
       effective_date: preview?.effective_date ?? null,
       current_plan_end: preview?.current_plan_end ?? null,
-      currency: preview?.currency ?? (plan.currency || 'USD'),
+      currency,
       new_plan: {
         id: plan.id,
         price: Number(plan.price),

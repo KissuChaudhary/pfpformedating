@@ -91,6 +91,7 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
         effectiveDate?: string | null
         currency?: string
     } | null>(null)
+    const [paymentProcessing, setPaymentProcessing] = useState(false)
     const router = useRouter()
     const [localCancelAtPeriodEnd, setLocalCancelAtPeriodEnd] = useState(!!subscription.cancel_at_period_end)
     const [localNextBillingDate, setLocalNextBillingDate] = useState<string | undefined>(subscription.next_billing_date)
@@ -205,6 +206,30 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
         }
     }, [subscription.subscription_id, router])
 
+    useEffect(() => {
+        async function checkProcessing() {
+            try {
+                const supabase = createSupabaseClient()
+                let uid: string | undefined = undefined
+                if (userEmail) {
+                    const { data: prof } = await supabase.from('profiles').select('id').eq('email', userEmail).maybeSingle()
+                    uid = (prof as any)?.id
+                }
+                if (!uid) return
+                const { data: pending } = await supabase
+                    .from('dodo_subscription_changes')
+                    .select('id')
+                    .eq('user_id', uid)
+                    .eq('status', 'pending')
+                    .order('created_at', { ascending: false })
+                    .limit(1)
+                    .maybeSingle()
+                setPaymentProcessing(!!pending)
+            } catch { }
+        }
+        checkProcessing()
+    }, [userEmail])
+
     const onRestore = useCallback(async () => {
         if (!subscription.subscription_id) return
         try {
@@ -229,7 +254,14 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
                 1
             )
             const currency = (previewRes?.preview?.currency as string) || subscription.currency_snapshot || 'USD'
-            const immediate = Number(previewRes?.preview?.immediate_charge ?? 0)
+            let immediate = Number(previewRes?.preview?.immediate_charge ?? 0)
+            if (!Number.isFinite(immediate) || immediate === 0) {
+                const sum = previewRes?.preview?.immediate_summary as string | undefined
+                if (sum) {
+                    const parsed = Number(String(sum).replace(/[^0-9.\-]/g, ''))
+                    if (Number.isFinite(parsed)) immediate = parsed
+                }
+            }
             const credit = Number(previewRes?.preview?.credit_amount ?? 0)
             const eff = previewRes?.preview?.effective_date ?? null
             setUpgradeDetails({
@@ -338,6 +370,11 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
                     isPlanEnding={localCancelAtPeriodEnd}
                 >
                     <>
+                        {paymentProcessing && (
+                            <div className="w-full rounded-none border border-yellow-700 bg-yellow-900/20 px-3 py-2 text-yellow-300">
+                                Payment is processing. Plan will finalize after confirmation.
+                            </div>
+                        )}
                         <UpdatePlanDialog
                             currentPlan={currentPlanInfo.plan}
                             plans={billingPlans}

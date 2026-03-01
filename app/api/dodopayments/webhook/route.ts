@@ -220,6 +220,7 @@ async function upsertSubscriptionFromEvent(supabase: ReturnType<typeof createAdm
     raw?: any
     price_snapshot?: number | null
     currency_snapshot?: string | null
+    updatePlanId?: boolean
 }) {
     const { user_id, dodo_subscription_id, dodo_product_id, status, raw } = args
 
@@ -254,6 +255,8 @@ async function upsertSubscriptionFromEvent(supabase: ReturnType<typeof createAdm
 
     const finalPricingPlanId: string | null =
         mappedPricingPlanId ?? ((existingSub?.pricing_plan_id as string | undefined) ?? null)
+    const effectivePricingPlanId: string | null =
+        args.updatePlanId === false ? ((existingSub?.pricing_plan_id as string | undefined) ?? null) : finalPricingPlanId
 
     if (!finalPricingPlanId) {
         // Can't satisfy NOT NULL constraint on pricing_plan_id; record for reconciliation and skip upsert
@@ -298,7 +301,7 @@ async function upsertSubscriptionFromEvent(supabase: ReturnType<typeof createAdm
             {
                 user_id,
                 dodo_subscription_id,
-                pricing_plan_id: finalPricingPlanId,
+                pricing_plan_id: effectivePricingPlanId,
                 status,
                 metadata: raw ? { source: 'webhook', raw } : { source: 'webhook' },
                 ...(args.price_snapshot != null ? { price_snapshot: args.price_snapshot } : {}),
@@ -307,7 +310,7 @@ async function upsertSubscriptionFromEvent(supabase: ReturnType<typeof createAdm
             { onConflict: 'dodo_subscription_id' },
         )
 
-    return { pricing_plan_id: finalPricingPlanId, planCredits }
+    return { pricing_plan_id: finalPricingPlanId, effective_pricing_plan_id: effectivePricingPlanId, planCredits }
 }
 
 /**
@@ -624,6 +627,26 @@ export async function POST(req: NextRequest) {
             }
 
             // Get active subscription and its plan credits
+            const { data: pendingChange } = await supabase
+                .from('dodo_subscription_changes')
+                .select('id, to_plan_id')
+                .eq('user_id', effective_user_id)
+                .eq('status', 'pending')
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .maybeSingle()
+
+            if (pendingChange?.to_plan_id) {
+                await supabase
+                    .from('dodo_subscriptions')
+                    .update({ pricing_plan_id: pendingChange.to_plan_id, status: 'active' })
+                    .eq('user_id', effective_user_id)
+                    .eq('status', 'active')
+                try {
+                    await completeLatestPendingChange(supabase, effective_user_id, pendingChange.to_plan_id, { completed_by: eventType })
+                } catch { }
+            }
+
             const { data: activeSub } = await supabase
                 .from('dodo_subscriptions')
                 .select('pricing_plan_id, status, dodo_pricing_plans(credits)')
@@ -720,6 +743,7 @@ export async function POST(req: NextRequest) {
                     raw: subscriptionObj,
                     price_snapshot,
                     currency_snapshot,
+                    updatePlanId: false,
                 })
                 // Persist proration details to dodo_subscription_changes and history
                 try {

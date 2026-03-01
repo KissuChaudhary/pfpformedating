@@ -81,7 +81,7 @@ export function UpdatePlanDialog({
         )}
       >
         <DialogHeader className="flex flex-col gap-3 pb-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4 sm:pb-0">
-          <DialogTitle className="text-lg font-semibold sm:text-xl">
+          <DialogTitle className="text-lg font-semibold sm:text-xl text-zinc-100">
             {title || "Upgrade Plan"}
           </DialogTitle>
           {showCycleToggle ? (
@@ -90,7 +90,7 @@ export function UpdatePlanDialog({
                 size="sm"
                 pressed={!isYearly}
                 onPressedChange={(pressed) => setIsYearly(!pressed)}
-                className="h-9 px-3 text-xs sm:h-10 sm:px-4 sm:text-sm"
+                className="h-9 px-3 text-xs sm:h-10 sm:px-4 sm:text-sm bg-zinc-800 text-zinc-200"
               >
                 Monthly
               </Toggle>
@@ -98,7 +98,7 @@ export function UpdatePlanDialog({
                 size="sm"
                 pressed={isYearly}
                 onPressedChange={(pressed) => setIsYearly(pressed)}
-                className="h-9 px-3 text-xs sm:h-10 sm:px-4 sm:text-sm"
+                className="h-9 px-3 text-xs sm:h-10 sm:px-4 sm:text-sm bg-zinc-800 text-zinc-200"
               >
                 Yearly
               </Toggle>
@@ -147,11 +147,10 @@ export function UpdatePlanDialog({
                     tabIndex={0}
                     aria-pressed={selectedPlan === plan.id}
                     className={cn(
-                      "relative cursor-pointer overflow-hidden rounded-lg border transition-all duration-200 sm:rounded-xl",
-                      "focus-visible:ring-primary touch-manipulation focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
+                      "relative cursor-pointer overflow-hidden border transition-all duration-200",
                       selectedPlan === plan.id
-                        ? "border-primary from-muted/60 to-muted/30 bg-gradient-to-br shadow-sm"
-                        : "border-border hover:border-primary/50",
+                        ? "bg-zinc-900 border-zinc-700"
+                        : "bg-zinc-800 border-zinc-700 hover:border-zinc-500",
                     )}
                   >
                     <motion.div layout="position" className="p-3 sm:p-4">
@@ -166,7 +165,10 @@ export function UpdatePlanDialog({
                             <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                               <Label
                                 htmlFor={plan.id}
-                                className="cursor-pointer text-sm leading-tight font-semibold sm:text-base sm:font-medium"
+                                className={cn(
+                                  "cursor-pointer text-sm leading-tight font-semibold sm:text-base sm:font-medium",
+                                  selectedPlan === plan.id ? "text-zinc-100" : "text-zinc-200"
+                                )}
                               >
                                 {plan.title}
                               </Label>
@@ -179,7 +181,10 @@ export function UpdatePlanDialog({
                                 </Badge>
                               )}
                             </div>
-                            <p className="text-muted-foreground mt-1 text-[11px] leading-relaxed sm:text-xs">
+                            <p className={cn(
+                              "mt-1 text-[11px] leading-relaxed sm:text-xs",
+                              selectedPlan === plan.id ? "text-zinc-300" : "text-zinc-400"
+                            )}>
                               {plan.description}
                             </p>
                             {plan.features.length > 0 && (
@@ -189,10 +194,18 @@ export function UpdatePlanDialog({
                                     (feature, featureIndex) => (
                                       <div
                                         key={featureIndex}
-                                        className="bg-muted/20 border-border/30 flex flex-shrink-0 items-center gap-1.5 rounded-md border px-2 py-1 sm:gap-2 sm:rounded-lg"
+                                        className={cn(
+                                          "flex flex-shrink-0 items-center gap-1.5 border px-2 py-1 sm:gap-2",
+                                          selectedPlan === plan.id
+                                            ? "bg-zinc-800 border-zinc-700"
+                                            : "bg-zinc-700 border-zinc-600"
+                                        )}
                                       >
-                                        <div className="bg-primary h-1 w-1 flex-shrink-0 rounded-full sm:h-1.5 sm:w-1.5" />
-                                        <span className="text-muted-foreground text-[10px] leading-none whitespace-nowrap sm:text-xs">
+                                        <div className="bg-zinc-200 h-1 w-1 flex-shrink-0 rounded-full sm:h-1.5 sm:w-1.5" />
+                                        <span className={cn(
+                                          "text-[10px] leading-none whitespace-nowrap sm:text-xs",
+                                          selectedPlan === plan.id ? "text-zinc-300" : "text-zinc-400"
+                                        )}>
                                           {feature.name}
                                         </span>
                                       </div>
@@ -204,12 +217,18 @@ export function UpdatePlanDialog({
                           </div>
                         </div>
                         <div className="min-w-[60px] flex-shrink-0 text-right sm:min-w-[80px]">
-                          <div className="text-base leading-tight font-bold sm:text-xl sm:font-semibold">
+                          <div className={cn(
+                            "text-base leading-tight font-bold sm:text-xl sm:font-semibold",
+                            selectedPlan === plan.id ? "text-zinc-100" : "text-zinc-200"
+                          )}>
                             {parseFloat(getCurrentPrice(plan)) >= 0
                               ? `${plan.currency}${getCurrentPrice(plan)}`
                               : getCurrentPrice(plan)}
                           </div>
-                          <div className="text-muted-foreground mt-0.5 text-[10px] sm:text-xs">
+                          <div className={cn(
+                            "mt-0.5 text-[10px] sm:text-xs",
+                            selectedPlan === plan.id ? "text-zinc-400" : "text-zinc-500"
+                          )}>
                             /{isYearly ? "year" : "month"}
                           </div>
                         </div>
@@ -256,7 +275,7 @@ export function UpdatePlanDialog({
                             className="px-3 pb-3 sm:px-4 sm:pb-4"
                           >
                             <Button
-                              className="h-10 w-full touch-manipulation text-sm font-medium sm:h-11 sm:text-base"
+                              className="h-10 w-full touch-manipulation text-sm font-medium sm:h-11 sm:text-base bg-zinc-100 text-zinc-900 hover:bg-zinc-200"
                               disabled={selectedPlan === currentPlan.id}
                               onClick={(e) => {
                                 e.stopPropagation();
