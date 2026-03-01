@@ -45,7 +45,7 @@ export const Navbar: React.FC = () => {
                             <div className="absolute bottom-0 right-0 w-1 h-1 border-b border-r border-foreground/50"></div>
                         </div>
                         <span className="font-display font-bold text-lg md:text-xl tracking-tight uppercase text-foreground">
-                            UnrealShot AI
+                            PFPforME
                         </span>
                     </div>
                 </Link>

@@ -9,7 +9,7 @@ const datingFaqData = [
     },
     {
         q: "What is the best AI generator for dating profiles?",
-        a: "Unrealshot AI is the best choice because it focuses on 'lifestyle' photography rather than corporate headshots. It generates candid moments—like laughing at dinner or walking outside—which perform 3x better on dating apps than studio portraits."
+        a: "PFPforME is the best choice because it focuses on 'lifestyle' photography rather than corporate headshots. It generates candid moments—like laughing at dinner or walking outside—which perform 3x better on dating apps than studio portraits."
     },
     {
         q: "How do I get natural looking AI photos?",

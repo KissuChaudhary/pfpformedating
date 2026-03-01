@@ -203,7 +203,7 @@ export function generateWebApplicationJsonLd(props?: { title?: string; descripti
     },
     "publisher": {
       "@type": "Organization",
-      "name": "Unrealshot AI",
+      "name": "PFPforME",
       "logo": {
         "@type": "ImageObject",
         "url": `${process.env.NEXT_PUBLIC_APP_URL}/site-logo.png`
@@ -272,7 +272,7 @@ export function generateWebApplicationJsonLd(props?: { title?: string; descripti
           "ratingValue": "5",
           "bestRating": "5"
         },
-        "reviewBody": "I've tried many AI photo tools, but Unrealshot AI gives the most natural-looking results."
+        "reviewBody": "I've tried many AI photo tools, but PFPforME gives the most natural-looking results."
       },
       {
         "@type": "Review",
@@ -314,7 +314,7 @@ export function generateWebApplicationJsonLd(props?: { title?: string; descripti
           "ratingValue": "5",
           "bestRating": "5"
         },
-        "reviewBody": "Our entire team uses Unrealshot AI for our corporate headshots. Consistent quality every time!"
+        "reviewBody": "Our entire team uses PFPforME for our corporate headshots. Consistent quality every time!"
       }
     ]
   };
@@ -365,14 +365,14 @@ export function generateWebPageJsonLd(page: {
     url: page.url,
     isPartOf: {
       '@type': 'WebSite',
-      '@id': 'https://www.unrealshot.com',
-      name: 'Unrealshot AI',
-      url: 'https://www.unrealshot.com'
+      '@id': 'https://pfpfor.me',
+      name: 'PFPforME',
+      url: 'https://pfpfor.me'
     },
     publisher: {
       '@type': 'Organization',
-      name: 'Unrealshot AI',
-      url: 'https://www.unrealshot.com'
+      name: 'PFPforME',
+      url: 'https://pfpfor.me'
     }
   };
 

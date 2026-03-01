@@ -10,7 +10,7 @@ export const FAQ: React.FC = () => {
         <section className="grid md:grid-cols-12 border-b border-foreground/10 min-h-[50vh]">
             <div className="col-span-12 md:col-span-4 p-8 border-b md:border-b-0 md:border-r border-foreground/10">
                 <h2 className="font-display text-4xl font-bold uppercase mb-4">Frequently Asked Questions</h2>
-                <p className="font-mono text-xs text-foreground/50">Everything you need to know about UnrealShot AI.</p>
+                <p className="font-mono text-xs text-foreground/50">Everything you need to know about PFPforME.</p>
             </div>
 
             <div className="col-span-12 md:col-span-8">

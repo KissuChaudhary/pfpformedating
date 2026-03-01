@@ -16,24 +16,24 @@ const caveat = Caveat({
 
 // Using your actual image paths from the original component
 const images = [
-  { src: "/landing/landingphotowoman1.webp", alt: "AI-generated glamorous photoshoot - Unrealshot AI" },
-  { src: "/landing/landingphotoman2.webp", alt: "AI-generated vintage photoshoot of a man - Unrealshot AI" },
-  { src: "/landing/landingphotowoman3.webp", alt: "AI-generated influencer photoshoot of a lady - Unrealshot AI" },
-    { src: "/landing/landingphotoman4.webp", alt: "AI-generated 90s photoshoot of a man - Unrealshot AI" },
-  { src: "/landing/landingphotowoman5.webp", alt: "AI-generated Natural Looks photoshoot of a lady - Unrealshot AI" },
-    { src: "/landing/landingphotoman16.webp", alt: "- MD doctor AI headshot of a man - Unrealshot AI" },
-    { src: "/landing/landingphotowoman7.webp", alt: "Stylish AI Portraits of a woman - Unrealshot AI" },
+  { src: "/landing/landingphotowoman1.webp", alt: "AI-generated glamorous photoshoot - PFPforME" },
+  { src: "/landing/landingphotoman2.webp", alt: "AI-generated vintage photoshoot of a man - PFPforME" },
+  { src: "/landing/landingphotowoman3.webp", alt: "AI-generated influencer photoshoot of a lady - PFPforME" },
+    { src: "/landing/landingphotoman4.webp", alt: "AI-generated 90s photoshoot of a man - PFPforME" },
+  { src: "/landing/landingphotowoman5.webp", alt: "AI-generated Natural Looks photoshoot of a lady - PFPforME" },
+    { src: "/landing/landingphotoman16.webp", alt: "- MD doctor AI headshot of a man - PFPforME" },
+    { src: "/landing/landingphotowoman7.webp", alt: "Stylish AI Portraits of a woman - PFPforME" },
 
-  { src: "/landing/landingphotoman8.webp", alt: "AI-generated professional headshot of a man - Unrealshot AI" },
-  { src: "/landing/landingphotowoman9.webp", alt: "AI-generated Neutral Muse photoshoot of woman - Unrealshot AI" },
-  { src: "/landing/landingphotoman10.webp", alt: "AI real estate headshot of a man - Unrealshot AI" },
-  { src: "/landing/landingphotowoman11.webp", alt: "AI-generated romantic indoor photoshoot of a lady - Unrealshot AI" },
-    { src: "/landing/landingphotoman12.webp", alt: "AI Dating photoshoot of a man  - Unrealshot AI" },
-  { src: "/landing/landingphotowoman13.webp", alt: "urban street style photo of a woman - Unrealshot AI" },
-  { src: "/landing/landingphotoman14.webp", alt: "AI-generated Fantasy photoshoot of a man - Unrealshot AI" },
-  { src: "/landing/landingphotowoman15.webp", alt: "AI Yearbook photo of a woman - Unrealshot AI" },
-  { src: "/landing/landingphotoman6.webp", alt: "AI-generated natural outdoor photography of a man - Unrealshot AI" },
- { src: "/landing/landingphotoman17.webp", alt: "black swan inspired photoshoot of a man - Unrealshot AI" },
+  { src: "/landing/landingphotoman8.webp", alt: "AI-generated professional headshot of a man - PFPforME" },
+  { src: "/landing/landingphotowoman9.webp", alt: "AI-generated Neutral Muse photoshoot of woman - PFPforME" },
+  { src: "/landing/landingphotoman10.webp", alt: "AI real estate headshot of a man - PFPforME" },
+  { src: "/landing/landingphotowoman11.webp", alt: "AI-generated romantic indoor photoshoot of a lady - PFPforME" },
+    { src: "/landing/landingphotoman12.webp", alt: "AI Dating photoshoot of a man  - PFPforME" },
+  { src: "/landing/landingphotowoman13.webp", alt: "urban street style photo of a woman - PFPforME" },
+  { src: "/landing/landingphotoman14.webp", alt: "AI-generated Fantasy photoshoot of a man - PFPforME" },
+  { src: "/landing/landingphotowoman15.webp", alt: "AI Yearbook photo of a woman - PFPforME" },
+  { src: "/landing/landingphotoman6.webp", alt: "AI-generated natural outdoor photography of a man - PFPforME" },
+ { src: "/landing/landingphotoman17.webp", alt: "black swan inspired photoshoot of a man - PFPforME" },
  ]
 
 export function HeroSection() {
@@ -207,7 +207,7 @@ Go beyond the standard portrait. Create artistic, magazine-worthy AI portraits t
  <div className="absolute bottom-2 left-2 flex items-center gap-[1.5px]">
       <Image
         src="/site-logo.png"
-        alt="Unrealshot AI Logo"
+        alt="PFPforME Logo"
         width={24}
         height={24}
         className="w-6 h-6 rounded"
@@ -244,7 +244,7 @@ Go beyond the standard portrait. Create artistic, magazine-worthy AI portraits t
                    <div className="absolute bottom-2 right-2 flex items-center gap-[1px] bg-white/80 rounded text-[10px]">
       <Image
         src="/site-logo.png"
-        alt="Unrealshot AI Logo"
+        alt="PFPforME Logo"
         width={16}
         height={16}
         className="w-4 h-4 rounded"
@@ -272,7 +272,7 @@ Go beyond the standard portrait. Create artistic, magazine-worthy AI portraits t
                    <div className="absolute bottom-2 right-2 flex items-center gap-[1px] bg-white/80 rounded text-[10px]">
       <Image
         src="/site-logo.png"
-        alt="Unrealshot AI Logo"
+        alt="PFPforME Logo"
         width={16}
         height={16}
         className="w-4 h-4 rounded"

@@ -62,7 +62,7 @@ export interface OrganizationSchema {
 
 // Default SEO Configuration
 export const defaultSEO: SEOConfig = {
-  title: 'Hyper-Realistic AI Dating Photos | 10x More Likes | Unrealshot AI',
+  title: 'Hyper-Realistic AI Dating Photos | 10x More Likes | PFPforME',
   description: "Stop getting banned for fake photos. Generate hyper-realistic dating photos for Tinder, Bumble, Hinge, and Instagram. 100% ban-proof, looks exactly like you.",
   keywords: [
     'AI dating photos',
@@ -76,9 +76,9 @@ export const defaultSEO: SEOConfig = {
     'AI photos from selfies',
     'dating profile generator'
   ],  
-    author: 'Unrealshot AI',
-  siteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://www.unrealshot.com',
-  siteName: 'Unrealshot AI',
+    author: 'PFPforME',
+  siteUrl: process.env.NEXT_PUBLIC_APP_URL || 'https://pfpfor.me',
+  siteName: 'PFPforME',
   locale: 'en_US',
   type: 'website',
   robots: 'index, follow',
@@ -90,19 +90,19 @@ export const defaultSEO: SEOConfig = {
 // Social Media Configuration
 export const socialConfig: SocialConfig = {
   twitter: {
-    handle: '@unrealshotai', // Replace with your actual Twitter handle
-    site: '@unrealshotai', // Replace with your actual Twitter handle
+    handle: '@pfpforme', // Replace with your actual Twitter handle
+    site: '@pfpforme', // Replace with your actual Twitter handle
     cardType: 'summary_large_image',
   },
   instagram: {
-    handle: '@unrealshotai', // Replace with your actual Instagram handle
+    handle: '@pfpforme', // Replace with your actual Instagram handle
   },
 };
 
 // Organization Schema for Structured Data
 export const organizationSchema: OrganizationSchema = {
   '@type': 'Organization',
-  name: 'Unrealshot AI',
+  name: 'PFPforME',
   url: defaultSEO.siteUrl,
   logo: `${defaultSEO.siteUrl}/logo.png`, // Ensure this path is correct
   description: defaultSEO.description,
@@ -117,11 +117,11 @@ export const organizationSchema: OrganizationSchema = {
   contactPoint: {
     '@type': 'ContactPoint',
     contactType: 'customer service',
-    email: 'support@unrealshot.com', // Replace with your support email
+    email: 'support@pfpfor.me', // Replace with your support email
   },
   sameAs: [
-    'https://x.com/unrealshotai', // Replace with your actual social links
-    'https://instagram.com/unrealshotai',
+    'https://x.com/pfpforme', // Replace with your actual social links
+    'https://instagram.com/pfpforme',
   ],
 };
 // --- Page-specific SEO configurations ---
@@ -134,29 +134,24 @@ export const pageSEO = {
     keywords: defaultSEO.keywords,
   },
   login: {
-    title: 'Sign In - Unrealshot AI',
-    description: 'Sign in to your Unrealshot account to access your AI photoshoots and create new ones.',
-    keywords: ['login', 'sign in', 'unrealshot account', 'user portal'],
+    title: 'Sign In - PFPforME',
+    description: 'Sign in to your PFPforME account to access your AI photoshoots and create new ones.',
+    keywords: ['login', 'sign in', 'pfpfor.me account', 'user portal'],
   },
   dashboard: {
-    title: 'My Photoshoots - Unrealshot AI',
+    title: 'My Photoshoots - PFPforME',
     description: 'Access your dashboard to view, download, and manage all your AI-generated photoshoots.',
     keywords: ['dashboard', 'my account', 'my photoshoots'],
     robots: 'noindex, nofollow', // Correctly kept private
   },
   pricing: {
-    title: 'Pricing Plans - Unrealshot AI',
+    title: 'Pricing Plans - PFPforME',
     description: 'Find the perfect plan for your AI photoshoot. Get a complete portfolio of stunning images for a fraction of the cost of a traditional studio.',
     keywords: ['pricing', 'plans', 'ai photoshoot cost', 'packages'],
   },
-  buyCredits: { // Renamed from pricing page, assuming this is the one-time purchase page
-    title: 'Start Your Photoshoot - Unrealshot AI',
-    description: 'Choose your package and get started. Transform your selfies into a complete, professional AI photoshoot in minutes.',
-    keywords: ['buy credits', 'start photoshoot', 'purchase', 'packages'],
-  },
   account: {
-    title: 'Account Settings - Unrealshot AI',
-    description: 'Manage your Unrealshot account settings, view past orders, and update your information.',
+    title: 'Account Settings - PFPforME',
+    description: 'Manage your PFPforME account settings, view past orders, and update your information.',
     keywords: ['account', 'settings', 'profile', 'orders'],
     robots: 'noindex, nofollow',
   },

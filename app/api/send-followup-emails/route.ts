@@ -17,7 +17,7 @@ function getEmailTemplate30Min(name: string) {
     <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; padding: 20px; color: #333; line-height: 1.6;">
       <p style="margin-bottom: 16px;">Hey,</p>
       
-      <p style="margin-bottom: 16px;">I'm Harvansh. I’m the solo founder building Unrealshot AI.</p>
+      <p style="margin-bottom: 16px;">I'm Harvansh. I’m the solo founder building PFPforME.</p>
       
       <p style="margin-bottom: 16px;">I saw you created an account a little while ago but didn't start your photoshoot yet.</p>
       
@@ -28,7 +28,7 @@ function getEmailTemplate30Min(name: string) {
       <p style="margin-bottom: 16px;">If you have a specific worry about how the photos will turn out, just reply to this email. I read every single one and I'd love to help you out personally.</p>
       
       <p style="margin-top: 32px;">Best,</p>
-      <p>Harvansh<br>Founder, Unrealshot.com</p>
+      <p>Harvansh<br>Founder, PFPfor.ME</p>
     </div>
   `;
 }
@@ -48,7 +48,7 @@ function getEmailTemplate4Hour(name: string) {
         <strong>Code: WELCOME20</strong> (Save 20%)
       </div>
       
-      <p style="margin-bottom: 16px;">You can use this at checkout: <a href="https://unrealshot.com/subscribe" style="color: #007bff;">unrealshot.com/subscribe</a></p>
+      <p style="margin-bottom: 16px;">You can use this at checkout: <a href="https://pfpfor.me/subscribe" style="color: #007bff;">pfpfor.me/subscribe</a></p>
       
       <p style="margin-bottom: 16px;">My only ask: If you like the photos, would you mind sending me a quick reply? I'm desperately looking for feedbacks.</p>
       
@@ -90,11 +90,11 @@ export async function POST(request: Request) {
       for (const user of batch30Min.data) {
         try {
           await resend.emails.send({
-            from: "Harvansh from Unrealshot <harvansh@noreply.unrealshot.com>",
+            from: "Harvansh from PFPforME <harvansh@noreply.pfpfor.me>",
             to: user.email,
             subject: "quick question?",
             html: getEmailTemplate30Min(user.email),
-            replyTo: "support@unrealshot.com",
+            replyTo: "support@pfpfor.me",
           });
 
           await supabase.from("followup_email_logs").insert({
@@ -121,11 +121,11 @@ export async function POST(request: Request) {
       for (const user of batch4Hour.data) {
         try {
           await resend.emails.send({
-            from: "Harvansh from Unrealshot <harvansh@noreply.unrealshot.com>",
+            from: "Harvansh from PFPfor.ME <harvansh@noreply.pfpfor.me>",
             to: user.email,
             subject: "I have a small idea",
             html: getEmailTemplate4Hour(user.email),
-            replyTo: "support@unrealshot.com",
+            replyTo: "support@pfpfor.me",
           });
 
           await supabase.from("followup_email_logs").insert({

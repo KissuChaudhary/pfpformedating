@@ -16,21 +16,21 @@ const caveat = Caveat({
 
 // Using your actual image paths from the original component
 const images = [
-  { src: "/content/doctor1.webp", alt: "Doctor Headshots: Close-up professional headshot with neutral background | Unrealshot AI" },
-  { src: "/content/doctor2.webp", alt: "Doctor Headshots: Business portrait in studio lighting | Unrealshot AI" },
-  { src: "/content/doctor3.webp", alt: "Doctor Headshots: Smiling headshot in formal attire | Unrealshot AI" },
-  { src: "/content/doctor4.webp", alt: "Doctor Headshots: Natural light portrait with soft background blur | Unrealshot AI" },
-  { src: "/content/doctor5.webp", alt: "Doctor Headshots: Confident pose, business casual look | Unrealshot AI" },
-  { src: "/content/doctor6.webp", alt: "Doctor Headshots: Profile angle with warm lighting | Unrealshot AI" },
-  { src: "/content/doctor7.webp", alt: "Doctor Headshots: Minimalist background, sharp focus | Unrealshot AI" },
-  { src: "/content/doctor8.webp", alt: "Doctor Headshots: Office setting headshot, polished look | Unrealshot AI" },
-  { src: "/content/doctor9.webp", alt: "Doctor Headshots: Close-up professional headshot with neutral background | Unrealshot AI" },
-  { src: "/content/doctor10.webp", alt: "Doctor Headshots: Business portrait in studio lighting | Unrealshot AI" },
-  { src: "/content/doctor11.webp", alt: "Doctor Headshots: Smiling headshot in formal attire | Unrealshot AI" },
-  { src: "/content/doctor12.webp", alt: "Doctor Headshots: Natural light portrait with soft background blur | Unrealshot AI" },
-  { src: "/content/doctor13.webp", alt: "Doctor Headshots: Confident pose, business casual look | Unrealshot AI" },
-  { src: "/content/doctor14.webp", alt: "Doctor Headshots: Profile angle with warm lighting | Unrealshot AI" },
-  { src: "/content/doctor15.webp", alt: "Doctor Headshots: Minimalist background, sharp focus | Unrealshot AI" },
+  { src: "/content/doctor1.webp", alt: "Doctor Headshots: Close-up professional headshot with neutral background | PFPforME" },
+  { src: "/content/doctor2.webp", alt: "Doctor Headshots: Business portrait in studio lighting | PFPforME" },
+  { src: "/content/doctor3.webp", alt: "Doctor Headshots: Smiling headshot in formal attire | PFPforME" },
+  { src: "/content/doctor4.webp", alt: "Doctor Headshots: Natural light portrait with soft background blur | PFPforME" },
+  { src: "/content/doctor5.webp", alt: "Doctor Headshots: Confident pose, business casual look | PFPforME" },
+  { src: "/content/doctor6.webp", alt: "Doctor Headshots: Profile angle with warm lighting | PFPforME" },
+  { src: "/content/doctor7.webp", alt: "Doctor Headshots: Minimalist background, sharp focus | PFPforME" },
+  { src: "/content/doctor8.webp", alt: "Doctor Headshots: Office setting headshot, polished look | PFPforME" },
+  { src: "/content/doctor9.webp", alt: "Doctor Headshots: Close-up professional headshot with neutral background | PFPforME" },
+  { src: "/content/doctor10.webp", alt: "Doctor Headshots: Business portrait in studio lighting | PFPforME" },
+  { src: "/content/doctor11.webp", alt: "Doctor Headshots: Smiling headshot in formal attire | PFPforME" },
+  { src: "/content/doctor12.webp", alt: "Doctor Headshots: Natural light portrait with soft background blur | PFPforME" },
+  { src: "/content/doctor13.webp", alt: "Doctor Headshots: Confident pose, business casual look | PFPforME" },
+  { src: "/content/doctor14.webp", alt: "Doctor Headshots: Profile angle with warm lighting | PFPforME" },
+  { src: "/content/doctor15.webp", alt: "Doctor Headshots: Minimalist background, sharp focus | PFPforME" },
   
 ]
 
@@ -205,7 +205,7 @@ Project the compassion and professionalism you're known for. Get warm, high-qual
  <div className="absolute bottom-2 left-2 flex items-center gap-[1.5px]">
       <Image
         src="/site-logo.png"
-        alt="Unrealshot AI Logo"
+        alt="PFPforME Logo"
         width={24}
         height={24}
         className="w-6 h-6 rounded"
@@ -242,7 +242,7 @@ Project the compassion and professionalism you're known for. Get warm, high-qual
                    <div className="absolute bottom-2 right-2 flex items-center gap-[1px] bg-white/80 rounded text-[10px]">
       <Image
         src="/site-logo.png"
-        alt="Unrealshot AI Logo"
+        alt="PFPforME Logo"
         width={16}
         height={16}
         className="w-4 h-4 rounded"
@@ -270,7 +270,7 @@ Project the compassion and professionalism you're known for. Get warm, high-qual
                    <div className="absolute bottom-2 right-2 flex items-center gap-[1px] bg-white/80 rounded text-[10px]">
       <Image
         src="/site-logo.png"
-        alt="Unrealshot AI Logo"
+        alt="PFPforME Logo"
         width={16}
         height={16}
         className="w-4 h-4 rounded"

@@ -7,7 +7,7 @@ import { seoUtils } from '@/config/seo'
 
 export const metadata: Metadata = generateMetadata({
   title: 'Terms of Service',
-  description: 'Review the terms and conditions for using UnrealShot AI, our AI headshot generator service.',
+  description: 'Review the terms and conditions for using PFPforME, our AI headshot generator service.',
   canonical: '/terms',
 })
 
@@ -27,7 +27,7 @@ export default function TermsOfService() {
               <span className="text-foreground/30">Service.</span>
             </h1>
             <p className="font-mono text-foreground/60 text-sm">
-              Review the terms and conditions for using UnrealShot AI.
+              Review the terms and conditions for using PFPforME.
             </p>
           </div>
         </section>
@@ -38,8 +38,8 @@ export default function TermsOfService() {
             <div>
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">1. Introduction</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
-                Welcome to <strong className="text-foreground">UnrealShot AI</strong> ("we," "our," "us"). By accessing or using our website at
-                <a href="https://www.unrealshot.com" className="text-accent hover:underline ml-1">unrealshot.com</a>
+                Welcome to <strong className="text-foreground">PFPforME</strong> ("we," "our," "us"). By accessing or using our website at
+                <a href="https://pfpfor.me" className="text-accent hover:underline ml-1">pfpfor.me</a>
                 ("Site"), you agree to comply with and be bound by these Terms of Service ("Terms"). If you do not agree to these Terms, please do not use the Site.
               </p>
             </div>
@@ -47,7 +47,7 @@ export default function TermsOfService() {
             <div>
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">2. Use of Our Service</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
-                <strong className="text-foreground">UnrealShot AI</strong> is an AI-powered headshot generator that allows users to create professional images.
+                <strong className="text-foreground">PFPforME</strong> is an AI-powered headshot generator that allows users to create professional images.
                 Users must adhere to all applicable laws and agree not to misuse our services. Any violations of these rules can result in the termination of access to the platform.
               </p>
             </div>
@@ -63,7 +63,7 @@ export default function TermsOfService() {
             <div>
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">4. Payment and Credits</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
-                <strong className="text-foreground">UnrealShot AI</strong> operates on a credit-based system for using our services. All purchases of credits are final and non-refundable, except as specified in our
+                <strong className="text-foreground">PFPforME</strong> operates on a credit-based system for using our services. All purchases of credits are final and non-refundable, except as specified in our
                 <a href="/refund-policy" className="text-accent hover:underline ml-1">Refund Policy</a>.
                 We reserve the right to modify pricing and the terms of credits at any time.
               </p>
@@ -73,7 +73,7 @@ export default function TermsOfService() {
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">5. Data Retention and Deletion</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
                 We value your privacy. Data, including photos and generated headshots, is stored for a period of 14 days, after which it is permanently deleted. Users may request the deletion of their data at any time by contacting us at
-                <a href="mailto:support@unrealshot.com" className="text-accent hover:underline ml-1">support@unrealshot.com</a>.
+                <a href="mailto:support@pfpfor.me" className="text-accent hover:underline ml-1">support@pfpfor.me</a>.
                 For more information, please review our
                 <a href="/privacy-policy" className="text-accent hover:underline ml-1">Privacy Policy</a>.
               </p>
@@ -82,7 +82,7 @@ export default function TermsOfService() {
             <div>
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">6. Third-Party Services</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
-                <strong className="text-foreground">UnrealShot AI</strong> uses third-party services, including <strong className="text-foreground">FAL.ai</strong> for AI image generation. By using our service, you agree to be bound by the terms and policies of these third parties.
+                <strong className="text-foreground">PFPforME</strong> uses third-party services, including <strong className="text-foreground">FAL.ai</strong> for AI image generation. By using our service, you agree to be bound by the terms and policies of these third parties.
                 Please review <strong className="text-foreground">FAL.ai's</strong> terms at
                 <a href="https://fal.ai/terms" className="text-accent hover:underline ml-1">FAL.ai Terms of Service</a>.
               </p>
@@ -91,7 +91,7 @@ export default function TermsOfService() {
             <div>
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">7. Limitation of Liability</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
-                To the maximum extent permitted by law, <strong className="text-foreground">UnrealShot AI</strong> and its affiliates shall not be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with your use of our services.
+                To the maximum extent permitted by law, <strong className="text-foreground">PFPforME</strong> and its affiliates shall not be liable for any indirect, incidental, special, or consequential damages arising out of or in connection with your use of our services.
               </p>
             </div>
 
@@ -106,21 +106,21 @@ export default function TermsOfService() {
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">9. Contact Us</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
                 If you have any questions about these Terms, please contact us at
-                <a href="mailto:support@unrealshot.com" className="text-accent hover:underline ml-1">support@unrealshot.com</a>.
+                <a href="mailto:support@pfpfor.me" className="text-accent hover:underline ml-1">support@pfpfor.me</a>.
               </p>
             </div>
 
             <div>
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">10. Shipping Policy</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
-                UnrealShot AI provides a fully digital service. No physical products are shipped as part of our offerings. All generated images and digital assets are delivered directly to the user's dashboard on our platform. Once a photoshoot is complete, users can download their generated images from the dashboard at any time. Since all products are digital, there are no shipping fees, and delivery is instant upon generation completion.
+                PFPforME provides a fully digital service. No physical products are shipped as part of our offerings. All generated images and digital assets are delivered directly to the user's dashboard on our platform. Once a photoshoot is complete, users can download their generated images from the dashboard at any time. Since all products are digital, there are no shipping fees, and delivery is instant upon generation completion.
               </p>
             </div>
 
             <div>
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">11. Affiliate Program Disclosure</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed mb-4">
-                We offer an affiliate program that allows users to earn rewards by referring others to <strong className="text-foreground">UnrealShot AI</strong>. By participating in the affiliate program, you agree to the following terms:
+                We offer an affiliate program that allows users to earn rewards by referring others to <strong className="text-foreground">PFPforME</strong>. By participating in the affiliate program, you agree to the following terms:
               </p>
               <ul className="space-y-2 font-mono text-sm text-foreground/70">
                 <li className="flex items-start">
@@ -142,7 +142,7 @@ export default function TermsOfService() {
               </ul>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed mt-4">
                 We reserve the right to modify or terminate the affiliate program at any time. Please contact us at
-                <a href="mailto:support@unrealshot.com" className="text-accent hover:underline ml-1">support@unrealshot.com</a> if you have any questions about the affiliate program.
+                <a href="mailto:support@pfpfor.me" className="text-accent hover:underline ml-1">support@pfpfor.me</a> if you have any questions about the affiliate program.
               </p>
             </div>
           </div>

@@ -95,7 +95,7 @@ const ThirdSection: React.FC = () => {
         
 
         <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-         Let Unrealshot AI show you a side of yourself you didn't know existed.
+         Let PFPforME show you a side of yourself you didn't know existed.
         </p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-[3rem]">
         <BeforeAfterImage

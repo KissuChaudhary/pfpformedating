@@ -5,10 +5,10 @@ export const Footer: React.FC = () => {
         <footer className="py-12 px-8 border-t border-foreground/10">
             <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
                 <div className="text-center md:text-left">
-                    <h3 className="font-display text-2xl font-bold uppercase mb-2">UnrealShot AI</h3>
+                    <h3 className="font-display text-2xl font-bold uppercase mb-2">PFPforME</h3>
                     <p className="font-mono text-xs text-foreground/40">
-                        © 2025 UnrealShot AI. <br />
-                        DESIGNED FOR IMPERFECTION.
+                        © 2025 PFPforME. <br />
+                        DESIGNED FOR DATING APPS.
                     </p>
                 </div>
 
@@ -20,7 +20,7 @@ export const Footer: React.FC = () => {
                     <a href="/terms" className="hover:text-accent uppercase">Terms</a>
                     <a href="/refund-policy" className="hover:text-accent uppercase">Refund</a>
                     <a href="/blog" className="hover:text-accent uppercase">Blog</a>
-                    <a href="https://twitter.com/unrealshotai" className="hover:text-accent uppercase">Twitter</a>
+                    <a href="https://twitter.com/pfpforme" className="hover:text-accent uppercase">Twitter</a>
                 </div>
             </div>
         </footer>

@@ -124,7 +124,7 @@ export default function StylePacks() {
             <div className="flex flex-col md:flex-row justify-between items-center">
               <div className="max-w-2xl mb-4 md:mb-0">
                 <p className="text-lg text-gray-300 max-w-3xl mx-auto">
-                UnrealShot AI turns your selfies into professional AI photoshoots.{" "}
+                PFPforME turns your selfies into professional AI photoshoots.{" "}
                   <span className="text-[#ff6f00] font-semibold">
                   Upload your photos, choose a style pack, enter a prompt,{" "}  
                   </span> 

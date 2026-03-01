@@ -37,9 +37,9 @@ export default function FAQSection() {
       "Yes, we take your privacy seriously. Your uploaded and generated photos are kept private, secure and deleted after certain time period.",
   },
   {
-    question: "How does Unrealshot AI photoshoot Generator work?",
+    question: "How does PFPforME photoshoot Generator work?",
     answer:
-      "Unrealshot AI uses advanced AI technology to transform your input into high-quality photoshoots in just three simple steps. Simply upload your photo, choose your preferences, and let the AI do the rest!",
+      "PFPforME uses advanced AI technology to transform your input into high-quality photoshoots in just three simple steps. Simply upload your photo, choose your preferences, and let the AI do the rest!",
   },
   {
     question: "Is my payment information secure?",
@@ -50,14 +50,14 @@ export default function FAQSection() {
     answer: "Yes, we offer corporate plans for companies looking to generate headshots for multiple employees.",
   },
   {
-    question: "Is Unrealshot AI free to use?",
+    question: "Is PFPforME free to use?",
     answer:
-      "Unrealshot AI operates on a credits-based system. You can purchase credits and use them to generate photoshoots based on your needs.",
+      "PFPforME operates on a credits-based system. You can purchase credits and use them to generate photoshoots based on your needs.",
   },
   {
     question: "How long does it take to generate a photoshoot?",
     answer:
-      "Once you submit your request, Unrealshot AI typically trains an ai model and generates your photoshoot within a 20-30 minutes, depending on server load. You will receive an Email once it's ready.",
+      "Once you submit your request, PFPforME typically trains an ai model and generates your photoshoot within a 20-30 minutes, depending on server load. You will receive an Email once it's ready.",
   },
   {
     question: "What if I'm not satisfied with the results? ",
@@ -77,7 +77,7 @@ export default function FAQSection() {
             Frequently asked <span className="text-[#ff6f00]">photoshoot questions</span> 
           </h2>
           <p className="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto leading-tight">
-            Everything you need to know about Unrealshot AI photoshoots.
+            Everything you need to know about PFPforME photoshoots.
           </p>
         </div>
 

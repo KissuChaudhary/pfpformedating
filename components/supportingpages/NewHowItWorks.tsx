@@ -344,7 +344,7 @@ Get a diverse portfolio of studio-quality images in minutes, ready for any platf
             <Carousal images={humans2} reverse={true} />
           </div>
           <div className="text-center justify-center flex text-sm font-md px-10 uppercase tracking-wider text-slate-400">
-            Results from unrealshot ai photoshoot generator.
+            Results from PFPforME photoshoot generator.
           </div>
         </div>
       </div>

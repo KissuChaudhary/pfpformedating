@@ -39,12 +39,12 @@ export default function PricingPage() {
             COMPARISON // VS_ALTERNATIVES
           </div>
           <h2 className="font-display text-2xl md:text-3xl font-bold uppercase mb-2">How we compare</h2>
-          <p className="text-foreground/60 font-mono text-sm mb-8">See how UnrealShot stacks up against traditional photo studios and other AI providers.</p>
+          <p className="text-foreground/60 font-mono text-sm mb-8">See how PFPforME stacks up against traditional photo studios and other AI providers.</p>
 
-          {/* Traditional studio vs UnrealShot */}
+          {/* Traditional studio vs PFPforME */}
           <div className="bg-[#0a0a0a] border border-foreground/10 rounded-lg overflow-hidden mb-8">
             <div className="px-6 py-4 border-b border-foreground/10">
-              <h3 className="font-display text-lg font-bold uppercase">Traditional Photo Studio vs UnrealShot</h3>
+              <h3 className="font-display text-lg font-bold uppercase">Traditional Photo Studio vs PFPforME</h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -52,7 +52,7 @@ export default function PricingPage() {
                   <tr className="border-b border-foreground/10">
                     <th className="text-left px-6 py-3 font-mono text-foreground/60 uppercase text-xs">Aspect</th>
                     <th className="text-left px-6 py-3 font-mono text-foreground/60 uppercase text-xs">Traditional Studio</th>
-                    <th className="text-left px-6 py-3 font-mono text-foreground/60 uppercase text-xs">UnrealShot AI</th>
+                    <th className="text-left px-6 py-3 font-mono text-foreground/60 uppercase text-xs">PFPforME</th>
                   </tr>
                 </thead>
                 <tbody className="font-mono text-foreground/70">
@@ -96,10 +96,10 @@ export default function PricingPage() {
             </div>
           </div>
 
-          {/* Other AI Providers vs UnrealShot */}
+          {/* Other AI Providers vs PFPforME */}
           <div className="bg-[#0a0a0a] border border-foreground/10 rounded-lg overflow-hidden">
             <div className="px-6 py-4 border-b border-foreground/10">
-              <h3 className="font-display text-lg font-bold uppercase">Other AI Providers vs UnrealShot</h3>
+              <h3 className="font-display text-lg font-bold uppercase">Other AI Providers vs PFPforME</h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -107,14 +107,14 @@ export default function PricingPage() {
                   <tr className="border-b border-foreground/10">
                     <th className="text-left px-6 py-3 font-mono text-foreground/60 uppercase text-xs">Aspect</th>
                     <th className="text-left px-6 py-3 font-mono text-foreground/60 uppercase text-xs">Other AI Providers</th>
-                    <th className="text-left px-6 py-3 font-mono text-foreground/60 uppercase text-xs">UnrealShot AI</th>
+                    <th className="text-left px-6 py-3 font-mono text-foreground/60 uppercase text-xs">PFPforME</th>
                   </tr>
                 </thead>
                 <tbody className="font-mono text-foreground/70">
                   <tr className="border-b border-foreground/5">
                     <td className="px-6 py-3 text-foreground">Pricing Model</td>
                     <td className="px-6 py-3">Often subscription or upsells</td>
-                    <td className="px-6 py-3 text-accent font-semibold">Transparent one-time pricing</td>
+                    <td className="px-6 py-3 text-accent font-semibold">Simple monthly subscription</td>
                   </tr>
                   <tr className="border-b border-foreground/5">
                     <td className="px-6 py-3 text-foreground">Quality Consistency</td>
@@ -152,7 +152,7 @@ export default function PricingPage() {
             </details>
             <details className="group bg-[#0a0a0a] border border-foreground/10 rounded-lg p-5">
               <summary className="cursor-pointer font-display font-bold uppercase text-sm">Is this a subscription?</summary>
-              <p className="mt-3 text-foreground/70 font-mono text-sm">No. Plans are one-time purchases. You can buy more credits whenever you need them.</p>
+              <p className="mt-3 text-foreground/70 font-mono text-sm">Yes. You can cancel anytime.</p>
             </details>
             <details className="group bg-[#0a0a0a] border border-foreground/10 rounded-lg p-5">
               <summary className="cursor-pointer font-display font-bold uppercase text-sm">Can I get a refund?</summary>
@@ -184,7 +184,7 @@ export default function PricingPage() {
         <section className="max-w-5xl mx-auto px-4 py-12 text-center border-t border-foreground/10">
           <h3 className="font-display text-xl font-bold uppercase mb-3">Need a custom plan or invoice?</h3>
           <p className="text-foreground/60 font-mono text-sm mb-6">We're happy to help.</p>
-          <Link href="mailto:support@unrealshot.com">
+          <Link href="mailto:support@pfpfor.me">
             <Button size="lg" variant="primary">
               Contact us →
             </Button>

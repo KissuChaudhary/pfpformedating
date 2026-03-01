@@ -130,7 +130,7 @@ export default function MobileUIMockup() {
                     <p className="mt-2 text-sm text-gray-600">
                     Serial entrepreneur with a passion for solving real-world problems through technology. Founded TechNova in 2022, 
   raised $4.2M seed round, and always believes in leveraging cutting-edge AI tools for maximum impact. Even this headshot 
-  was generated using Unrealshot AI—a fast and <strong>realistic photoshoot generator</strong> that delivers studio-quality photos, 
+  was generated using PFPforME—a fast and <strong>realistic photoshoot generator</strong> that delivers studio-quality photos, 
   perfect for professionals with a packed schedule.
                     </p>
                   </div>

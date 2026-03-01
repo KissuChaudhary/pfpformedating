@@ -16,18 +16,18 @@ const caveat = Caveat({
 
 // Using your actual image paths from the original component
 const images = [
-  { src: "/content/christmas1.jpg", alt: "AI Christmas Photoshoot: Creative portrait with styled outfit | Unrealshot AI" },
-  { src: "/content/christmas2.jpg", alt: "AI Christmas Photoshoot: Glamour look with soft studio lighting | Unrealshot AI" },
-  { src: "/content/ai-christmas-photo3.jpg", alt: "AI Christmas Photoshoot: Editorial pose with dramatic shadows | Unrealshot AI" },
-  { src: "/content/christmas3.jpg", alt: "AI Christmas Photoshoot: Outdoor scene with natural light | Unrealshot AI" },
-  { src: "/content/ai-christmas-photo12.jpg", alt: "AI Christmas Photoshoot: Fashion-inspired portrait, bold colors | Unrealshot AI" },
-  { src: "/content/ai-christmas-photo5.jpg", alt: "AI Christmas Photoshoot: Classic look against textured backdrop | Unrealshot AI" },
-  { src: "/content/ai-christmas-photo6.jpg", alt: "AI Christmas Photoshoot: Candid pose, lifestyle feel | Unrealshot AI" },
-  { src: "/content/ai-christmas-photo7.jpg", alt: "AI Christmas Photoshoot: Minimalist studio setup, clean lines | Unrealshot AI" },
-  { src: "/content/ai-christmas-photo8.jpg", alt: "AI Christmas Photoshoot: Artistic composition with unique framing | Unrealshot AI" },
-  { src: "/content/ai-christmas-photo9.jpg", alt: "AI Christmas Photoshoot: Vintage-inspired portrait aesthetics | Unrealshot AI" },
-  { src: "/content/ai-christmas-photo10.jpg", alt: "AI Christmas Photoshoot: Creative portrait with styled outfit | Unrealshot AI" },
-  { src: "/content/ai-christmas-photo11.jpg", alt: "AI Christmas Photoshoot: Glamour look with soft studio lighting | Unrealshot AI" },
+  { src: "/content/christmas1.jpg", alt: "AI Christmas Photoshoot: Creative portrait with styled outfit | PFPforME" },
+  { src: "/content/christmas2.jpg", alt: "AI Christmas Photoshoot: Glamour look with soft studio lighting | PFPforME" },
+  { src: "/content/ai-christmas-photo3.jpg", alt: "AI Christmas Photoshoot: Editorial pose with dramatic shadows | PFPforME" },
+  { src: "/content/christmas3.jpg", alt: "AI Christmas Photoshoot: Outdoor scene with natural light | PFPforME" },
+  { src: "/content/ai-christmas-photo12.jpg", alt: "AI Christmas Photoshoot: Fashion-inspired portrait, bold colors | PFPforME" },
+  { src: "/content/ai-christmas-photo5.jpg", alt: "AI Christmas Photoshoot: Classic look against textured backdrop | PFPforME" },
+  { src: "/content/ai-christmas-photo6.jpg", alt: "AI Christmas Photoshoot: Candid pose, lifestyle feel | PFPforME" },
+  { src: "/content/ai-christmas-photo7.jpg", alt: "AI Christmas Photoshoot: Minimalist studio setup, clean lines | PFPforME" },
+  { src: "/content/ai-christmas-photo8.jpg", alt: "AI Christmas Photoshoot: Artistic composition with unique framing | PFPforME" },
+  { src: "/content/ai-christmas-photo9.jpg", alt: "AI Christmas Photoshoot: Vintage-inspired portrait aesthetics | PFPforME" },
+  { src: "/content/ai-christmas-photo10.jpg", alt: "AI Christmas Photoshoot: Creative portrait with styled outfit | PFPforME" },
+  { src: "/content/ai-christmas-photo11.jpg", alt: "AI Christmas Photoshoot: Glamour look with soft studio lighting | PFPforME" },
 ]
 
 export function HeroSection() {
@@ -180,7 +180,7 @@ export function HeroSection() {
  <div className="absolute bottom-2 left-2 flex items-center gap-[1.5px]">
       <Image
         src="/site-logo.png"
-        alt="Unrealshot AI Logo"
+        alt="PFPforME Logo"
         width={24}
         height={24}
         className="w-6 h-6 rounded"
@@ -217,7 +217,7 @@ export function HeroSection() {
                    <div className="absolute bottom-2 right-2 flex items-center gap-[1px] bg-white/80 rounded text-[10px]">
       <Image
         src="/site-logo.png"
-        alt="Unrealshot AI Logo"
+        alt="PFPforME Logo"
         width={16}
         height={16}
         className="w-4 h-4 rounded"
@@ -245,7 +245,7 @@ export function HeroSection() {
                    <div className="absolute bottom-2 right-2 flex items-center gap-[1px] bg-white/80 rounded text-[10px]">
       <Image
         src="/site-logo.png"
-        alt="Unrealshot AI Logo"
+        alt="PFPforME Logo"
         width={16}
         height={16}
         className="w-4 h-4 rounded"

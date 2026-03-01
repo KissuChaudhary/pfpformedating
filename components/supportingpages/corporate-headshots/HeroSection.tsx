@@ -24,12 +24,12 @@ const images = [
   { src: "/landing/corporate_woman_headshot7.webp", alt: "High-quality AI business headshot of a woman" },
   { src: "/landing/corporate_man_headshot8.webp", alt: "AI-generated professional headshot of a man" },
   { src: "/landing/corporate_woman_headshot9.webp", alt: "Corporate profile picture of a woman" },
-  { src: "/landing/corporate_man_headshot10.webp", alt: "Professional AI headshot for a man's corporate profile - Unrealshot AI" },
-  { src: "/landing/corporate_woman_headshot11.webp", alt: "Executive AI portrait of a woman - Unrealshot AI" },
-  { src: "/landing/corporate_man_headshot12.webp", alt: "Formal business headshot of a man - Unrealshot AI" },
-  { src: "/landing/corporate_man_headshot13.webp", alt: "Corporate AI headshot of a man in business attire - Unrealshot AI" },
-  { src: "/landing/corporate_man_headshot14.webp", alt: "Modern professional headshot of a man for LinkedIn - Unrealshot AI" },
-  { src: "/landing/corporate_woman_headshot15.webp", alt: "AI-generated corporate portrait of a woman - Unrealshot AI" }
+  { src: "/landing/corporate_man_headshot10.webp", alt: "Professional AI headshot for a man's corporate profile - PFPforME" },
+  { src: "/landing/corporate_woman_headshot11.webp", alt: "Executive AI portrait of a woman - PFPforME" },
+  { src: "/landing/corporate_man_headshot12.webp", alt: "Formal business headshot of a man - PFPforME" },
+  { src: "/landing/corporate_man_headshot13.webp", alt: "Corporate AI headshot of a man in business attire - PFPforME" },
+  { src: "/landing/corporate_man_headshot14.webp", alt: "Modern professional headshot of a man for LinkedIn - PFPforME" },
+  { src: "/landing/corporate_woman_headshot15.webp", alt: "AI-generated corporate portrait of a woman - PFPforME" }
 ]
 
 
@@ -205,7 +205,7 @@ Present a credible, consistent brand across LinkedIn, Slack, and your company si
  <div className="absolute bottom-2 left-2 flex items-center gap-[1.5px]">
       <Image
         src="/site-logo.png"
-        alt="Unrealshot AI Logo"
+        alt="PFPforME Logo"
         width={24}
         height={24}
         className="w-6 h-6 rounded"
@@ -242,7 +242,7 @@ Present a credible, consistent brand across LinkedIn, Slack, and your company si
                    <div className="absolute bottom-2 right-2 flex items-center gap-[1px] bg-white/80 rounded text-[10px]">
       <Image
         src="/site-logo.png"
-        alt="Unrealshot AI Logo"
+        alt="PFPforME Logo"
         width={16}
         height={16}
         className="w-4 h-4 rounded"
@@ -270,7 +270,7 @@ Present a credible, consistent brand across LinkedIn, Slack, and your company si
                    <div className="absolute bottom-2 right-2 flex items-center gap-[1px] bg-white/80 rounded text-[10px]">
       <Image
         src="/site-logo.png"
-        alt="Unrealshot AI Logo"
+        alt="PFPforME Logo"
         width={16}
         height={16}
         className="w-4 h-4 rounded"

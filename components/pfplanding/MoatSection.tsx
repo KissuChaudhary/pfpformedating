@@ -45,7 +45,7 @@ export const MoatSection: React.FC = () => {
                         <div className="absolute -left-[31px] md:-left-[39px] top-1 w-3 h-3 bg-accent border border-accent shadow-[0_0_10px_rgba(255,77,0,0.5)] rounded-full animate-pulse"></div>
 
                         <div className="flex items-center gap-3 mb-6">
-                            <span className="font-mono text-[10px] uppercase tracking-widest text-accent">AFTER (With Unrealshot AI)</span>
+                            <span className="font-mono text-[10px] uppercase tracking-widest text-accent">AFTER (With PFPforME)</span>
                             <span className="h-[1px] w-8 bg-accent/50"></span>
                         </div>
 

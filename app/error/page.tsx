@@ -10,7 +10,7 @@ import Link from 'next/link'
 
 // Removed disallowed metadata export from client component
 // export const metadata: Metadata = {
-//   title: "Error - UnrealShot AI",
+//   title: "Error - PFPforME",
 //   description: "Oops! Something went wrong. Please try again or go home.",
 // }
 
@@ -18,9 +18,9 @@ import Link from 'next/link'
 // const errorPageSchema = {
 //   "@context": "https://schema.org",
 //   "@type": "WebPage",
-//   "name": "Error - UnrealShot AI",
+//   "name": "Error - PFPforME",
 //   "description": "Oops! Something went wrong. Please try again or go home.",
-//   "url": "https://www.unrealshot.com/error",
+//   "url": "https://pfpfor.me/error",
 // }
 
 export default function ErrorPage() {

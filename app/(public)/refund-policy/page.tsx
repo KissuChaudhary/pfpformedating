@@ -8,7 +8,7 @@ import { seoUtils } from '@/config/seo'
 export const metadata: Metadata = generateMetadata({
   title: 'Refund Policy',
   description:
-    'Read about our refund policy for AI-generated headshots at UnrealShot AI, including eligibility and refund process details.',
+    'Read about our refund policy for AI-generated headshots at PFPforME, including eligibility and refund process details.',
   canonical: '/refund-policy',
 })
 
@@ -28,7 +28,7 @@ export default function RefundPolicy() {
               <span className="text-foreground/30">Policy.</span>
             </h1>
             <p className="font-mono text-foreground/60 text-sm">
-              Understand when and how refunds may be issued for UnrealShot AI services.
+              Understand when and how refunds may be issued for PFPforME services.
             </p>
           </div>
         </section>
@@ -39,7 +39,7 @@ export default function RefundPolicy() {
             <div>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
                 Thank you for choosing our{' '}
-                <a href="https://www.unrealshot.com" className="text-accent hover:underline">AI Photoshoot generator</a>{' '}
+                <a href="https://pfpfor.me" className="text-accent hover:underline">AI Dating Photoshoot generator</a>{' '}
                 service. We strive to provide the best experience for our users. Please review our refund policy below to understand the circumstances under which refunds may be issued.
               </p>
             </div>
@@ -145,7 +145,7 @@ export default function RefundPolicy() {
             <div>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
                 If you have any questions or need to request a refund, please contact our support team at{' '}
-                <a href="mailto:support@unrealshot.com" className="text-accent hover:underline">support@unrealshot.com</a>.
+                <a href="mailto:support@pfpfor.me" className="text-accent hover:underline">support@pfpfor.me</a>.
                 We are here to assist you!
               </p>
             </div>

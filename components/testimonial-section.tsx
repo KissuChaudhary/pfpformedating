@@ -61,7 +61,7 @@ export default function TestimonialSection() {
       rating: 5,
     },
     {
-      quote: "I've tried many AI photo tools, but Unrealshot AI gives the most natural-looking results.",
+      quote: "I've tried many AI photo tools, but PFPforME gives the most natural-looking results.",
       name: "Sumesh",
       role: "Tech Enthusiast",
       avatar: "/content/sumesh.webp",
@@ -82,7 +82,7 @@ export default function TestimonialSection() {
       rating: 5,
     },
     {
-      quote: "Our entire team uses Unrealshot AI for our corporate headshots. Consistent quality every time!",
+      quote: "Our entire team uses PFPforME for our corporate headshots. Consistent quality every time!",
       name: "Shrey Singh",
       role: "HR Manager",
       avatar: "/images/demo2.jpg",

@@ -7,7 +7,7 @@ import { seoUtils } from '@/config/seo'
 
 export const metadata: Metadata = generateMetadata({
   title: 'Privacy Policy',
-  description: 'Learn how UnrealShot AI collects, uses, and protects your personal data.',
+  description: 'Learn how PFPforME collects, uses, and protects your personal data.',
   canonical: '/privacy-policy',
 })
 
@@ -27,7 +27,7 @@ export default function PrivacyPolicy() {
               <span className="text-foreground/30">Policy.</span>
             </h1>
             <p className="font-mono text-foreground/60 text-sm">
-              Learn how UnrealShot AI collects, uses, and protects your personal data.
+              Learn how PFPforME collects, uses, and protects your personal data.
             </p>
           </div>
         </section>
@@ -39,9 +39,9 @@ export default function PrivacyPolicy() {
           <div className="space-y-8 bg-[#0a0a0a] border border-foreground/10 rounded-lg p-6 md:p-8">
             <div>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
-                At <strong className="text-foreground">UnrealShot AI</strong>, accessible from{' '}
-                <a href="https://www.unrealshot.com" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">
-                  unrealshot.com
+                At <strong className="text-foreground">PFPforME</strong>, accessible from{' '}
+                <a href="https://pfpfor.me" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">
+                  pfpfor.me
                 </a>
                 , we are committed to protecting your privacy. This Privacy Policy explains what information we collect, how we use it, how we process user data, and your rights under <strong className="text-foreground">applicable privacy laws, including the General Data Protection Regulation (GDPR)</strong>. By using our services, you agree to the practices described in this Privacy Policy.
               </p>
@@ -172,7 +172,7 @@ export default function PrivacyPolicy() {
               </ul>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed mt-4">
                 <strong className="text-foreground">To exercise your rights, contact us at:</strong>{' '}
-                <a href="mailto:support@unrealshot.com" className="text-accent hover:underline">support@unrealshot.com</a>. We will respond within <strong className="text-foreground">14 days</strong> as per GDPR guidelines.
+                <a href="mailto:support@pfpfor.me" className="text-accent hover:underline">support@pfpfor.me</a>. We will respond within <strong className="text-foreground">14 days</strong> as per GDPR guidelines.
               </p>
             </div>
 
@@ -221,7 +221,7 @@ export default function PrivacyPolicy() {
 
             <div>
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">7. Cookies & Tracking Technologies</h2>
-              <p className="text-foreground/70 font-mono text-sm leading-relaxed mb-4">We use cookies and similar tracking technologies to improve your experience on UnrealShot AI.</p>
+              <p className="text-foreground/70 font-mono text-sm leading-relaxed mb-4">We use cookies and similar tracking technologies to improve your experience on PFPforME.</p>
               <h3 className="text-foreground font-bold text-sm mb-2">7.1 What Cookies Do We Use?</h3>
               <ul className="space-y-2 font-mono text-sm text-foreground/70 mb-4">
                 <li className="flex items-start">
@@ -240,7 +240,7 @@ export default function PrivacyPolicy() {
               <h3 className="text-foreground font-bold text-sm mb-2">7.2 Managing Cookies</h3>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
                 You can control or disable cookies through your browser settings. However, disabling authentication cookies may log you out or limit certain features. For any questions regarding our use of cookies, contact us at{' '}
-                <a href="mailto:support@unrealshot.com" className="text-accent hover:underline">support@unrealshot.com</a>.
+                <a href="mailto:support@pfpfor.me" className="text-accent hover:underline">support@pfpfor.me</a>.
               </p>
             </div>
 
@@ -259,7 +259,7 @@ export default function PrivacyPolicy() {
             <div>
               <h2 className="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-foreground">10. Changes to This Privacy Policy</h2>
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
-                We may update this Privacy Policy to reflect <strong className="text-foreground">legal, technical, or business changes</strong>. Any updates will be posted here with an <strong className="text-foreground">effective date</strong>. Continued use of UnrealShot AI signifies your acceptance of the changes.
+                We may update this Privacy Policy to reflect <strong className="text-foreground">legal, technical, or business changes</strong>. Any updates will be posted here with an <strong className="text-foreground">effective date</strong>. Continued use of PFPforME signifies your acceptance of the changes.
               </p>
             </div>
 
@@ -268,9 +268,9 @@ export default function PrivacyPolicy() {
               <p className="text-foreground/70 font-mono text-sm leading-relaxed">
                 For any questions or privacy-related concerns, contact us:<br />
                 <strong className="text-foreground">Email:</strong>{' '}
-                <a href="mailto:support@unrealshot.com" className="text-accent hover:underline">support@unrealshot.com</a><br />
+                <a href="mailto:support@pfpfor.me" className="text-accent hover:underline">support@pfpfor.me</a><br />
                 <strong className="text-foreground">Website:</strong>{' '}
-                <a href="https://www.unrealshot.com" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">unrealshot.com</a>
+                <a href="https://pfpfor.me" className="text-accent hover:underline" target="_blank" rel="noopener noreferrer">pfpfor.me</a>
               </p>
             </div>
           </div>
