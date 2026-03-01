@@ -6,7 +6,8 @@
     "build": "next build",
     "dev": "next dev",
     "lint": "next lint",
-    "start": "next start"
+    "start": "next start",
+    "types:generate": "node scripts/generate-supabase-types.mjs"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.917.0",

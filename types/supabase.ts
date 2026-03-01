@@ -6,38 +6,9 @@ export type Json =
   | { [key: string]: Json | undefined }
   | Json[]
 
-export interface Database {
+export type Database = {
   public: {
     Tables: {
-      credits: {
-        Row: {
-          id: number
-          created_at: string
-          credits: number
-          user_id: string
-        }
-        Insert: {
-          id?: number
-          created_at?: string
-          credits?: number
-          user_id: string
-        }
-        Update: {
-          id?: number
-          created_at?: string
-          credits?: number
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "credits_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
       dodo_pricing_plans: {
         Row: {
           id: string
@@ -50,7 +21,7 @@ export interface Database {
           currency: string
           dodo_product_id: string | null
           is_active: boolean
-          metadata: Json
+          metadata: Json | null
         }
         Insert: {
           id?: string
@@ -63,7 +34,7 @@ export interface Database {
           currency?: string
           dodo_product_id?: string | null
           is_active?: boolean
-          metadata?: Json
+          metadata?: Json | null
         }
         Update: {
           id?: string
@@ -76,75 +47,8 @@ export interface Database {
           currency?: string
           dodo_product_id?: string | null
           is_active?: boolean
-          metadata?: Json
+          metadata?: Json | null
         }
-        Relationships: []
-      }
-      dodo_payments: {
-        Row: {
-          id: string
-          created_at: string
-          updated_at: string
-          user_id: string
-          dodo_payment_id: string | null
-          dodo_checkout_session_id: string | null
-          pricing_plan_id: string
-          amount: number
-          currency: string
-          status: string
-          credits: number
-          metadata: Json
-          completed_at: string | null
-          failed_at: string | null
-        }
-        Insert: {
-          id?: string
-          created_at?: string
-          updated_at?: string
-          user_id: string
-          dodo_payment_id?: string | null
-          dodo_checkout_session_id?: string | null
-          pricing_plan_id: string
-          amount: number
-          currency?: string
-          status?: string
-          credits: number
-          metadata?: Json
-          completed_at?: string | null
-          failed_at?: string | null
-        }
-        Update: {
-          id?: string
-          created_at?: string
-          updated_at?: string
-          user_id?: string
-          dodo_payment_id?: string | null
-          dodo_checkout_session_id?: string | null
-          pricing_plan_id?: string
-          amount?: number
-          currency?: string
-          status?: string
-          credits?: number
-          metadata?: Json
-          completed_at?: string | null
-          failed_at?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "dodo_payments_pricing_plan_id_fkey"
-            columns: ["pricing_plan_id"]
-            isOneToOne: false
-            referencedRelation: "dodo_pricing_plans"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "dodo_payments_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
       }
       dodo_subscriptions: {
         Row: {
@@ -155,7 +59,13 @@ export interface Database {
           dodo_subscription_id: string | null
           pricing_plan_id: string
           status: string
-          metadata: Json
+          metadata: Json | null
+          cancel_at_period_end: boolean
+          current_period_end: string | null
+          next_billing_date: string | null
+          canceled_at: string | null
+          price_snapshot?: number | null
+          currency_snapshot?: string | null
         }
         Insert: {
           id?: string
@@ -165,7 +75,13 @@ export interface Database {
           dodo_subscription_id?: string | null
           pricing_plan_id: string
           status?: string
-          metadata?: Json
+          metadata?: Json | null
+          cancel_at_period_end?: boolean
+          current_period_end?: string | null
+          next_billing_date?: string | null
+          canceled_at?: string | null
+          price_snapshot?: number | null
+          currency_snapshot?: string | null
         }
         Update: {
           id?: string
@@ -175,24 +91,126 @@ export interface Database {
           dodo_subscription_id?: string | null
           pricing_plan_id?: string
           status?: string
-          metadata?: Json
+          metadata?: Json | null
+          cancel_at_period_end?: boolean
+          current_period_end?: string | null
+          next_billing_date?: string | null
+          canceled_at?: string | null
+          price_snapshot?: number | null
+          currency_snapshot?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "dodo_subscriptions_pricing_plan_id_fkey"
-            columns: ["pricing_plan_id"]
-            isOneToOne: false
-            referencedRelation: "dodo_pricing_plans"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "dodo_subscriptions_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
+      }
+      dodo_subscription_changes: {
+        Row: {
+          id: string
+          created_at: string
+          user_id: string
+          from_plan_id: string | null
+          to_plan_id: string | null
+          checkout_session_id: string | null
+          status: string
+          change_type: string
+          reason: string | null
+          completed_at: string | null
+          error_message: string | null
+          metadata: Json | null
+          proration_billing_mode: string | null
+          immediate_charge: number | null
+          credit_amount: number | null
+          invoice_id: string | null
+          payment_id: string | null
+          effective_date: string | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          user_id: string
+          from_plan_id?: string | null
+          to_plan_id?: string | null
+          checkout_session_id?: string | null
+          status: string
+          change_type: string
+          reason?: string | null
+          completed_at?: string | null
+          error_message?: string | null
+          metadata?: Json | null
+          proration_billing_mode?: string | null
+          immediate_charge?: number | null
+          credit_amount?: number | null
+          invoice_id?: string | null
+          payment_id?: string | null
+          effective_date?: string | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          user_id?: string
+          from_plan_id?: string | null
+          to_plan_id?: string | null
+          checkout_session_id?: string | null
+          status?: string
+          change_type?: string
+          reason?: string | null
+          completed_at?: string | null
+          error_message?: string | null
+          metadata?: Json | null
+          proration_billing_mode?: string | null
+          immediate_charge?: number | null
+          credit_amount?: number | null
+          invoice_id?: string | null
+          payment_id?: string | null
+          effective_date?: string | null
+        }
+      }
+      dodo_subscription_history: {
+        Row: {
+          id: string
+          created_at: string
+          user_id: string
+          dodo_subscription_id: string
+          from_plan_id: string | null
+          to_plan_id: string | null
+          proration_billing_mode: string | null
+          immediate_charge: number | null
+          credit_amount: number | null
+          invoice_id: string | null
+          payment_id: string | null
+          effective_date: string | null
+          event_type: string
+          metadata: Json | null
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          user_id: string
+          dodo_subscription_id: string
+          from_plan_id?: string | null
+          to_plan_id?: string | null
+          proration_billing_mode?: string | null
+          immediate_charge?: number | null
+          credit_amount?: number | null
+          invoice_id?: string | null
+          payment_id?: string | null
+          effective_date?: string | null
+          event_type?: string
+          metadata?: Json | null
+        }
+        Update: {
+          id?: string
+          created_at?: string
+          user_id?: string
+          dodo_subscription_id?: string
+          from_plan_id?: string | null
+          to_plan_id?: string | null
+          proration_billing_mode?: string | null
+          immediate_charge?: number | null
+          credit_amount?: number | null
+          invoice_id?: string | null
+          payment_id?: string | null
+          effective_date?: string | null
+          event_type?: string
+          metadata?: Json | null
+        }
       }
       dodo_webhook_events: {
         Row: {
@@ -228,336 +246,97 @@ export interface Database {
           error_message?: string | null
           retry_count?: number
         }
-        Relationships: []
       }
-      images: {
+      dodo_payments: {
         Row: {
-          created_at: string
-          id: number
-          modelId: number
-          uri: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          modelId: number
-          uri: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          modelId?: number
-          uri?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "images_modelId_fkey"
-            columns: ["modelId"]
-            referencedRelation: "models"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      models: {
-        Row: {
-          created_at: string
-          id: number
-          modelId: string | null
-          name: string | null
-          status: string
-          type: string | null
-          user_id: string | null
-          auto_extend: boolean
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          modelId?: string | null
-          name?: string | null
-          status: string
-          type?: string | null
-          user_id?: string | null
-          auto_extend?: boolean
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          modelId?: string | null
-          name?: string | null
-          status?: string
-          type?: string | null
-          user_id?: string | null
-          auto_extend?: boolean
-        }
-        Relationships: [
-          {
-            foreignKeyName: "models_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      prompts: {
-        Row: {
-          id: number
+          dodo_payment_id: string
           user_id: string
-          modelId: number
-          promptId: string
-          image_url: string
+          pricing_plan_id: string | null
+          amount: number
+          currency: string
           status: string
-          created_at: string
-          updated_at: string
+          credits: number
+          metadata: Json | null
         }
         Insert: {
-          id?: number
+          dodo_payment_id: string
           user_id: string
-          modelId: number
-          promptId: string
+          pricing_plan_id?: string | null
+          amount: number
+          currency: string
           status?: string
-          created_at?: string
-          updated_at?: string
+          credits?: number
+          metadata?: Json | null
         }
         Update: {
-          id?: number
+          dodo_payment_id?: string
           user_id?: string
-          modelId?: number
-          promptId?: string
+          pricing_plan_id?: string | null
+          amount?: number
+          currency?: string
           status?: string
-          created_at?: string
-          updated_at?: string
+          credits?: number
+          metadata?: Json | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "prompts_modelId_fkey"
-            columns: ["modelId"]
-            referencedRelation: "models"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "prompts_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      samples: {
-        Row: {
-          created_at: string
-          id: number
-          modelId: number
-          uri: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          modelId: number
-          uri: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          modelId?: number
-          uri?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "samples_modelId_fkey"
-            columns: ["modelId"]
-            referencedRelation: "models"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
-      one_day_followup_emails: {
-        Row: {
-          created_at: string
-          id: number
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: number
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: number
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "one_day_followup_emails_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
       }
       profiles: {
         Row: {
           id: string
-          user_id: string
-          created_at: string
-          updated_at: string
-          has_completed_onboarding: boolean
+          email: string
         }
         Insert: {
-          id?: string
-          user_id: string
-          created_at?: string
-          updated_at?: string
-          has_completed_onboarding?: boolean
+          id: string
+          email: string
         }
         Update: {
           id?: string
-          user_id?: string
-          created_at?: string
-          updated_at?: string
-          has_completed_onboarding?: boolean
+          email?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "profiles_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: true
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
-      },
-      followup_email_logs: {
+      }
+      credits: {
         Row: {
           id: number
+          created_at: string
+          credits: number
           user_id: string
-          email_type: string
-          sent_at: string
         }
         Insert: {
           id?: number
+          created_at?: string
+          credits?: number
           user_id: string
-          email_type: string
-          sent_at?: string
         }
         Update: {
           id?: number
+          created_at?: string
+          credits?: number
+          user_id?: string
+        }
+      }
+      followup_email_logs: {
+        Row: {
+          id: string
+          created_at: string
+          user_id: string
+          email_type: string
+        }
+        Insert: {
+          id?: string
+          created_at?: string
+          user_id: string
+          email_type: string
+        }
+        Update: {
+          id?: string
+          created_at?: string
           user_id?: string
           email_type?: string
-          sent_at?: string
         }
-        Relationships: [
-          {
-            foreignKeyName: "followup_email_logs_user_id_fkey"
-            columns: ["user_id"]
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          }
-        ]
       }
     }
-    Views: {
-      [_ in never]: never
-    }
-    Functions: {
-      deduct_credits: {
-        Args: { user_id: string; amount: number }
-        Returns: void
-      }
-      get_eligible_users: {
-        Args: Record<PropertyKey, never>
-        Returns: { id: string; email: string }[]
-      },
-      get_eligible_users_for_followup: {
-        Args: {
-          start_offset: string
-          end_offset: string
-          target_email_type: string
-        }
-        Returns: { id: string; email: string }[]
-      }
-    }
-    Enums: {
-      [_ in never]: never
-    }
-    CompositeTypes: {
-      [_ in never]: never
-    }
+    Views: {}
+    Functions: {}
+    Enums: {}
+    CompositeTypes: {}
   }
 }
-
-export type Tables<
-  PublicTableNameOrOptions extends
-  | keyof (Database["public"]["Tables"])
-  | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-  ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"])
-  : never = never
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-    Row: infer R
-  }
-    ? R
-    : never)
-  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"])
-  ? (Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-    Row: infer R
-  }
-    ? R
-    : never)
-  : never
-
-export type TablesInsert<
-  PublicTableNameOrOptions extends
-  | keyof (Database["public"]["Tables"])
-  | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-  ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"])
-  : never = never
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-    Insert: infer I
-  }
-    ? I
-    : never)
-  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"])
-  ? (Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-    Insert: infer I
-  }
-    ? I
-    : never)
-  : never
-
-export type TablesUpdate<
-  PublicTableNameOrOptions extends
-  | keyof (Database["public"]["Tables"])
-  | { schema: keyof Database },
-  TableName extends PublicTableNameOrOptions extends { schema: keyof Database }
-  ? keyof (Database[PublicTableNameOrOptions["schema"]]["Tables"])
-  : never = never
-> = PublicTableNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicTableNameOrOptions["schema"]]["Tables"][TableName] extends {
-    Update: infer U
-  }
-    ? U
-    : never)
-  : PublicTableNameOrOptions extends keyof (Database["public"]["Tables"])
-  ? (Database["public"]["Tables"][PublicTableNameOrOptions] extends {
-    Update: infer U
-  }
-    ? U
-    : never)
-  : never
-
-export type Enums<
-  PublicEnumNameOrOptions extends
-  | keyof (Database["public"]["Enums"])
-  | { schema: keyof Database },
-  EnumName extends PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? keyof (Database[PublicEnumNameOrOptions["schema"]]["Enums"])
-  : never = never
-> = PublicEnumNameOrOptions extends { schema: keyof Database }
-  ? (Database[PublicEnumNameOrOptions["schema"]]["Enums"][EnumName])
-  : PublicEnumNameOrOptions extends keyof (Database["public"]["Enums"])
-  ? (Database["public"]["Enums"][PublicEnumNameOrOptions])
-  : never
