@@ -54,7 +54,7 @@ export async function POST(request: Request) {
     const { data: userData, error: userError } = await supabase
       .from('profiles')
       .select('trial_preview_used')
-      .eq('id', user.id)
+      .eq('user_id', user.id)
       .single();
     
     if (userError && userError.code !== 'PGRST116') {
@@ -136,7 +136,7 @@ export async function POST(request: Request) {
     const { error: updateError } = await supabase
       .from('profiles')
       .update({ trial_preview_used: true })
-      .eq('id', user.id);
+      .eq('user_id', user.id);
 
     if (updateError) {
       console.error("Error updating user metadata:", updateError);

@@ -45,7 +45,7 @@ export async function POST(request: NextRequest) {
         const { data: profile, error: profileError } = await supabase
             .from("profiles")
             .select("trial_preview_used")
-            .eq("id", user.id)
+            .eq("user_id", user.id)
             .single();
 
         // Log for debugging
@@ -176,7 +176,7 @@ export async function POST(request: NextRequest) {
         await supabase
             .from("profiles")
             .update({ trial_preview_used: true })
-            .eq("id", user.id);
+            .eq("user_id", user.id);
 
         return NextResponse.json({
             success: true,
