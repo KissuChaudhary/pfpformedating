@@ -613,12 +613,7 @@ export async function POST(req: NextRequest) {
                 } catch { }
             }
 
-            // If the subscription is already active on create (some providers send as active), also provision credits
-            const remoteStatus = (subscriptionObj?.status ?? '').toString().toLowerCase()
-            if (status === 'active' || remoteStatus === 'active') {
-                // Non-rollover: reset to plan credits
-                await setUserCreditsToPlanCredits(supabase, effective_user_id, planCredits ?? null)
-            }
+            // Credit provisioning happens on payment/renewal events
             // Persist service-management fields for reporting/operations
             await updateSubscriptionServiceFields(supabase, dodo_subscription_id, subscriptionObj, eventType)
         } else if (eventType === 'payment.succeeded' || eventType === 'subscription.renewed' || eventType === 'invoice.paid') {
@@ -854,18 +849,7 @@ export async function POST(req: NextRequest) {
                     price_snapshot,
                     currency_snapshot,
                 })
-                if (mapped === 'active') {
-                    await setUserCreditsToPlanCredits(supabase, effective_user_id, planCredits ?? null)
-                    await reactivateUserPlans(supabase, effective_user_id)
-                    try {
-                        await completeLatestPendingChange(
-                            supabase,
-                            effective_user_id,
-                            pricing_plan_id ?? null,
-                            { completed_by: eventType },
-                        )
-                    } catch { }
-                }
+                // Do not grant credits on generic status update; rely on payment/renewal events
                 await updateSubscriptionServiceFields(supabase, dodo_subscription_id, subscriptionObj, eventType)
             }
         } else {

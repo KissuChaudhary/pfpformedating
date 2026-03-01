@@ -25,6 +25,7 @@ export interface UpdatePlanDialogProps {
   className?: string;
   title?: string;
   customTrigger?: React.ReactNode;
+  showCycleToggle?: boolean;
 }
 
 const easing = [0.4, 0, 0.2, 1] as const;
@@ -37,12 +38,18 @@ export function UpdatePlanDialog({
   title,
   triggerText,
   customTrigger,
+  showCycleToggle,
 }: UpdatePlanDialogProps) {
   const [isYearly, setIsYearly] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<string | undefined>(
     undefined,
   );
   const [isOpen, setIsOpen] = useState(false);
+
+  const getMonthlyNumber = useCallback((plan: Plan) => {
+    const n = Number(plan.monthlyPrice);
+    return Number.isFinite(n) ? n : 0;
+  }, []);
 
   const getCurrentPrice = useCallback(
     (plan: Plan) => (isYearly ? `${plan.yearlyPrice}` : `${plan.monthlyPrice}`),
@@ -77,24 +84,26 @@ export function UpdatePlanDialog({
           <DialogTitle className="text-lg font-semibold sm:text-xl">
             {title || "Upgrade Plan"}
           </DialogTitle>
-          <div className="flex items-center gap-1.5 text-sm sm:gap-2">
-            <Toggle
-              size="sm"
-              pressed={!isYearly}
-              onPressedChange={(pressed) => setIsYearly(!pressed)}
-              className="h-9 px-3 text-xs sm:h-10 sm:px-4 sm:text-sm"
-            >
-              Monthly
-            </Toggle>
-            <Toggle
-              size="sm"
-              pressed={isYearly}
-              onPressedChange={(pressed) => setIsYearly(pressed)}
-              className="h-9 px-3 text-xs sm:h-10 sm:px-4 sm:text-sm"
-            >
-              Yearly
-            </Toggle>
-          </div>
+          {showCycleToggle ? (
+            <div className="flex items-center gap-1.5 text-sm sm:gap-2">
+              <Toggle
+                size="sm"
+                pressed={!isYearly}
+                onPressedChange={(pressed) => setIsYearly(!pressed)}
+                className="h-9 px-3 text-xs sm:h-10 sm:px-4 sm:text-sm"
+              >
+                Monthly
+              </Toggle>
+              <Toggle
+                size="sm"
+                pressed={isYearly}
+                onPressedChange={(pressed) => setIsYearly(pressed)}
+                className="h-9 px-3 text-xs sm:h-10 sm:px-4 sm:text-sm"
+              >
+                Yearly
+              </Toggle>
+            </div>
+          ) : null}
         </DialogHeader>
         <div
           className="[&::-webkit-scrollbar-thumb]:bg-muted hover:[&::-webkit-scrollbar-thumb]:bg-muted-foreground/20 -mx-4 min-h-0 flex-1 overflow-x-hidden overflow-y-auto px-4 sm:-mx-6 sm:px-6 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:border-2 [&::-webkit-scrollbar-thumb]:border-transparent [&::-webkit-scrollbar-track]:bg-transparent"
@@ -257,7 +266,9 @@ export function UpdatePlanDialog({
                             >
                               {selectedPlan === currentPlan.id
                                 ? "Current Plan"
-                                : "Upgrade"}
+                                : getMonthlyNumber(plan) > getMonthlyNumber(currentPlan)
+                                  ? "Upgrade"
+                                  : "Downgrade"}
                             </Button>
                           </motion.div>
                         </motion.div>

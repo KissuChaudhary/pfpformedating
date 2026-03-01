@@ -2,6 +2,7 @@
 
 import React, { useCallback, useMemo, useState, useEffect } from 'react'
 import { SubscriptionManagement } from '@/components/billingsdk/subscription-management'
+import { UpdatePlanDialog } from '@/components/billingsdk/update-plan-dialog'
 import {
     cancelSubscription as apiCancelSubscription,
     restoreSubscription as apiRestoreSubscription,
@@ -81,6 +82,15 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
     const [busy, setBusy] = useState(false)
     const [confirmCancelOpen, setConfirmCancelOpen] = useState(false)
     const [confirmRestoreOpen, setConfirmRestoreOpen] = useState(false)
+    const [confirmUpgradeOpen, setConfirmUpgradeOpen] = useState(false)
+    const [upgradeDetails, setUpgradeDetails] = useState<{
+        planId?: string
+        planName?: string
+        immediate?: number
+        credit?: number
+        effectiveDate?: string | null
+        currency?: string
+    } | null>(null)
     const router = useRouter()
     const [localCancelAtPeriodEnd, setLocalCancelAtPeriodEnd] = useState(!!subscription.cancel_at_period_end)
     const [localNextBillingDate, setLocalNextBillingDate] = useState<string | undefined>(subscription.next_billing_date)
@@ -212,27 +222,25 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
         if (!chosen || !subscription.subscription_id) return
         try {
             setBusy(true)
-            const preview = await apiPreviewChangePlan(
+            const previewRes = await apiPreviewChangePlan(
                 subscription.subscription_id,
                 chosen.dodo_product_id,
                 'prorated_immediately',
                 1
             )
-            const currency = subscription.currency_snapshot || 'USD'
-            const sym = currencySymbol(currency)
-            const immediate = Number(preview?.preview?.immediate_charge || 0)
-            const credit = Number(preview?.preview?.credit_amount || 0)
-            const eff = preview?.preview?.effective_date
-            const confirm = window.confirm(
-                `You are changing to "${chosen.name}".\n\n` +
-                `Immediate charge: ${sym}${immediate.toFixed(2)}\n` +
-                (credit > 0 ? `Credit applied: ${sym}${credit.toFixed(2)}\n` : '') +
-                (eff ? `Effective date: ${new Date(eff).toLocaleString()}\n` : '') +
-                `\nProceed?`
-            )
-            if (!confirm) return
-            await apiChangePlan(subscription.subscription_id, chosen.dodo_product_id, 'prorated_immediately', 1)
-            router.refresh()
+            const currency = (previewRes?.preview?.currency as string) || subscription.currency_snapshot || 'USD'
+            const immediate = Number(previewRes?.preview?.immediate_charge ?? 0)
+            const credit = Number(previewRes?.preview?.credit_amount ?? 0)
+            const eff = previewRes?.preview?.effective_date ?? null
+            setUpgradeDetails({
+                planId: chosen.id,
+                planName: chosen.name,
+                immediate,
+                credit,
+                effectiveDate: eff,
+                currency,
+            })
+            setConfirmUpgradeOpen(true)
         } catch (e) {
             console.error('Plan change failed', e)
             alert((e as any)?.message || 'Failed to change plan')
@@ -330,6 +338,14 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
                     isPlanEnding={localCancelAtPeriodEnd}
                 >
                     <>
+                        <UpdatePlanDialog
+                            currentPlan={currentPlanInfo.plan}
+                            plans={billingPlans}
+                            triggerText="Change Plan"
+                            showCycleToggle={false}
+                            className="bg-zinc-900 text-zinc-100 border border-zinc-800"
+                            onPlanChange={(planId: string) => onPlanChange(planId)}
+                        />
                         {subscription.status === 'active' && !localCancelAtPeriodEnd && (
                             <Button
                                 variant="destructive"
@@ -389,6 +405,42 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
                 title="Restore your subscription?"
                 description="Your subscription will continue and you will be billed on the next billing date. Your access will remain uninterrupted."
                 confirmText="Yes, restore subscription"
+                cancelText="Cancel"
+                variant="default"
+            />
+
+            <ConfirmationDialog
+                isOpen={confirmUpgradeOpen}
+                onClose={() => setConfirmUpgradeOpen(false)}
+                onConfirm={async () => {
+                    if (!subscription.subscription_id || !upgradeDetails?.planId) return
+                    try {
+                        setBusy(true)
+                        const planRow = plans.find(p => p.id === upgradeDetails.planId)
+                        if (!planRow) return
+                        await apiChangePlan(subscription.subscription_id, planRow.dodo_product_id, 'prorated_immediately', 1)
+                        setConfirmUpgradeOpen(false)
+                        router.refresh()
+                    } finally {
+                        setBusy(false)
+                    }
+                }}
+                title="Confirm plan change"
+                description={
+                    (() => {
+                        const sym = currencySymbol(upgradeDetails?.currency || 'USD')
+                        const imm = Number(upgradeDetails?.immediate ?? 0)
+                        const cred = Number(upgradeDetails?.credit ?? 0)
+                        const eff = upgradeDetails?.effectiveDate
+                        return [
+                            `You are changing to "${upgradeDetails?.planName || ''}".`,
+                            `Immediate charge: ${sym}${Number.isFinite(imm) ? imm.toFixed(2) : '0.00'}`,
+                            cred > 0 ? `Credit applied: ${sym}${Number.isFinite(cred) ? cred.toFixed(2) : '0.00'}` : '',
+                            eff ? `Effective date: ${new Date(eff).toLocaleString()}` : '',
+                        ].filter(Boolean).join('\n')
+                    })()
+                }
+                confirmText="Confirm change"
                 cancelText="Cancel"
                 variant="default"
             />

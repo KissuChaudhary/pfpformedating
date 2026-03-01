@@ -157,10 +157,10 @@ export default async function SubscribePage() {
             <RealtimeSubscriptionSync userId={user?.id} />
 
             {/* ISLAND CARD CONTAINER */}
-            <div className="w-full max-w-5xl border border-zinc-800 bg-zinc-900">
+            <div className="w-full max-w-4xl">
 
                 {/* Header Section */}
-                <div className="text-center pt-10 pb-6 border-b border-zinc-800 px-6">
+                <div className="text-center pt-10 px-6">
                     <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-zinc-800 border border-zinc-700 mb-4">
                         <Sparkles className="w-3.5 h-3.5 text-zinc-300" />
                         <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-300">Early Bird Pricing</span>
@@ -180,7 +180,7 @@ export default async function SubscribePage() {
                     <div className="p-4 sm:p-6">
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                             {activePlans.map((plan) => (
-                                <div key={plan.id} className="border border-zinc-800 bg-zinc-900">
+                                <div key={plan.id} className="border border-zinc-800 bg-zinc-900 rounded-md">
                                     <div className="p-6 border-b border-zinc-800 text-center">
                                         <h2 className="text-xl font-bold text-zinc-100">{plan.name}</h2>
                                         <p className="text-zinc-300 text-sm mt-2">
@@ -232,7 +232,7 @@ export default async function SubscribePage() {
                 )}
 
                 {/* Footer Info */}
-                <div className="bg-zinc-900 border-t border-zinc-800 p-4 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
+                <div className="p-4 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
 
                     <div className="flex items-center gap-2 opacity-60 hover:opacity-100 transition-opacity">
                         <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
