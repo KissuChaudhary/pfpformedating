@@ -4,7 +4,7 @@ import { redirect } from "next/navigation"
 import { commonPageMetadata } from '@/lib/seo'
 import FeedbackForm from "@/components/FeedbackForm"
 import { DashboardContent } from '@/components/dashboard/DashboardContent'
-import { creditService } from '@/lib/credits'
+// import { creditService } from '@/lib/credits'
 
 export const metadata: Metadata = commonPageMetadata.dashboard()
 
@@ -31,63 +31,7 @@ export default async function DashboardPage() {
     redirect("/models/create")
   }
 
-  // === STRICT ONBOARDING CONTROL ===
-
-  // 1. Get user profile
-  let { data: profile } = await supabase
-    .from('profiles')
-    .select('trial_preview_used, credits')
-    .eq('user_id', user.id)
-    .single()
-
-  // FALLBACK: If profile is missing or flag is false, double check real usage
-  let realTrialUsed = profile?.trial_preview_used === true;
-
-  if (!realTrialUsed) {
-    // Check if they actually have a completed preview job
-    const { count } = await supabase
-      .from('preview_images')
-      .select('*', { count: 'exact', head: true })
-      .eq('user_id', user.id)
-      .eq('status', 'completed');
-
-    if (count && count > 0) {
-      realTrialUsed = true;
-    }
-  }
-
-  // Check payments (accept both 'succeeded' and 'completed' just in case)
-  const { data: payments } = await supabase
-    .from('dodo_payments')
-    .select('id')
-    .eq('user_id', user.id)
-    .in('status', ['succeeded', 'completed'])
-    .limit(1)
-
-  // 2. Determine user status
-  const hasCredits = (profile?.credits || 0) > 0
-  const hasPaid = payments && payments.length > 0
-  const isUnlockedUser = hasPaid || hasCredits
-
-  // Debug log
-  console.log('🔴 DASHBOARD CHECK (ROBUST):', {
-    userId: user.id,
-    profileFound: !!profile,
-    flagInProfile: profile?.trial_preview_used,
-    realTrialUsed,
-    hasPaid,
-  })
-
-  // 3. Enforce Strict Rules
-  if (!isUnlockedUser) {
-    if (realTrialUsed) {
-      // User used trial (flag or actual image found) -> Buy credits
-      redirect('/buy-credits')
-    } else {
-      // New user -> Create model
-      redirect('/models/create')
-    }
-  }
+  // Dashboard is accessible to any authenticated user with at least one model
 
   // Rule B: Unlocked users have full access
   // (dashboard renders below)

@@ -45,9 +45,6 @@ CREATE POLICY "Users can delete their own models" ON "public"."models" FOR DELET
 CREATE POLICY "Users can update their own models" ON "public"."models" FOR UPDATE USING ((auth.uid() = user_id)) WITH CHECK ((auth.uid() = user_id));
 CREATE POLICY "Users can view their own models" ON "public"."models" FOR SELECT USING ((auth.uid() = user_id));
 
-CREATE POLICY "Service role can update preview images" ON "public"."preview_images" FOR UPDATE USING (true);
-CREATE POLICY "Users can insert own preview images" ON "public"."preview_images" FOR INSERT WITH CHECK ((auth.uid() = user_id));
-CREATE POLICY "Users can view own preview images" ON "public"."preview_images" FOR SELECT USING ((auth.uid() = user_id));
 
 CREATE POLICY "Users can update own profile" ON "public"."profiles" FOR UPDATE TO authenticated USING ((auth.uid() = user_id));
 CREATE POLICY "Users can view own profile" ON "public"."profiles" FOR SELECT TO authenticated USING ((auth.uid() = user_id));

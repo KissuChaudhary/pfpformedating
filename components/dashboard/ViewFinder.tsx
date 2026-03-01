@@ -11,7 +11,6 @@ const MODES = [
     { id: 'LIFESTYLE', label: 'LIFESTYLE', desc: 'Warm sun, Bistro lights' },
     { id: 'GRITTY', label: 'GRITTY VINTAGE', desc: 'B&W Street' },
     { id: 'CINE', label: 'CINE SHOOT', desc: 'Cinematic' },
-    { id: 'PROFESSIONAL', label: 'Professional', desc: 'confident' }
 ];
 
 const RATIOS = [
@@ -312,11 +311,6 @@ export const Viewfinder: React.FC = () => {
 
                 {/* Scrollable Form */}
                 <div className="flex-1 overflow-y-auto custom-scrollbar p-5 space-y-6">
-
-                    {/* Mode Tabs removed: single mode only */}
-                    <div className="flex p-2 bg-zinc-800 rounded-lg border border-zinc-700 text-zinc-400 text-xs uppercase tracking-widest">
-                        Single Mode
-                    </div>
 
                     {/* 1. Model Selector */}
                     <div>

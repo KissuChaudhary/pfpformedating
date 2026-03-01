@@ -5,39 +5,20 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const since = searchParams.get("since");
 
-  const supabase = createClient();
-
+  const supabase = await createClient();
 
   const {
     data: { user },
-  } = await (await supabase).auth.getUser();
+    error: authError,
+  } = await supabase.auth.getUser();
 
-  if (!user) {
+  if (authError || !user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-
   try {
-    // Fetch from prompts table
-    let promptsQuery = (await supabase)
-      .from("prompts")
-      .select("id, user_id, promptId, image_url, created_at")
-      .eq("user_id", user.id)
-      .eq("status", "succeeded");
 
-    if (since) {
-      promptsQuery = promptsQuery.gt("created_at", since);
-    }
-
-    const { data: promptsData, error: promptsError } = await promptsQuery;
-
-    if (promptsError) {
-      return NextResponse.json({ error: "Failed to fetch prompts" }, { status: 500 });
-    }
-
-
-    // SECURITY FIX: First get user's model IDs, then filter images by those IDs
-    const { data: userModels, error: modelsError } = await (await supabase)
+    const { data: userModels, error: modelsError } = await supabase
       .from("models")
       .select("id")
       .eq("user_id", user.id);
@@ -47,53 +28,35 @@ export async function GET(request: Request) {
       return NextResponse.json({ error: "Failed to fetch models" }, { status: 500 });
     }
 
-    // Get array of model IDs that belong to this user
-    const userModelIds = userModels?.map(m => m.id) || [];
+    const userModelIds = userModels?.map((m) => m.id) || [];
 
-    // If user has no models, return only prompts data
     if (userModelIds.length === 0) {
-      const promptsImages = promptsData.map((prompt) => ({
-        id: prompt.id,
-        image_url: prompt.image_url,
-        promptId: prompt.promptId,
-        user_id: prompt.user_id,
-        created_at: prompt.created_at,
-        source: "prompts",
-      }));
-
-      return NextResponse.json({ images: promptsImages });
+      return NextResponse.json({ images: [] });
     }
 
-    // Fetch images only for user's models
-    let imagesQuery = (await supabase)
+    let imagesQuery = supabase
       .from("images")
       .select("id, modelId, uri, created_at")
-      .in("modelId", userModelIds); // Only get images for user's models
+      .in("modelId", userModelIds);
 
     if (since) {
       imagesQuery = imagesQuery.gt("created_at", since);
     }
 
-    const { data: imagesData, error: imagesError } = await imagesQuery;
-
-    if (imagesError) {
-      console.error("Images fetch error:", imagesError);
-      return NextResponse.json({ error: "Failed to fetch images" }, { status: 500 });
+    let imagesData: any[] = [];
+    try {
+      const { data, error } = await imagesQuery;
+      if (!error && Array.isArray(data)) {
+        imagesData = data;
+      } else {
+        console.warn("Images fetch error or unavailable table/permissions:", error);
+        imagesData = [];
+      }
+    } catch (e) {
+      console.warn("Images fetch threw exception (treated as empty):", e);
+      imagesData = [];
     }
 
-
-    // Map prompts data
-    const promptsImages = promptsData.map((prompt) => ({
-      id: prompt.id,
-      image_url: prompt.image_url,
-      promptId: prompt.promptId,
-      user_id: prompt.user_id,
-      created_at: prompt.created_at,
-      source: "prompts",
-    }));
-
-
-    // Map images data
     const imagesImages = (imagesData || []).map((image) => ({
       id: image.id,
       image_url: image.uri,
@@ -103,8 +66,7 @@ export async function GET(request: Request) {
       source: "images",
     }));
 
-    // Combine and sort
-    const combinedImages = [...promptsImages, ...imagesImages].sort(
+    const combinedImages = [...imagesImages].sort(
       (a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
     );
 

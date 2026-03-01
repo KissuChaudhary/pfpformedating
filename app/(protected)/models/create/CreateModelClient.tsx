@@ -244,25 +244,7 @@ export function CreateModelClient() {
                 throw new Error(firstError || 'Some images failed to upload. Please try again.');
             }
 
-            // All uploads succeeded - trigger preview generation and redirect to preview page
-            try {
-                const previewResp = await fetch('/api/preview/generate', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ modelId }),
-                });
-                const previewData = await previewResp.json();
-
-                if (!previewResp.ok) {
-                    console.error('Preview generation failed:', previewResp.status, previewData);
-                    // Log but don't block - user can still see preview page
-                }
-            } catch (previewErr) {
-                console.error('Failed to trigger preview generation:', previewErr);
-                // Don't block the redirect if preview fails - it can be retried
-            }
-
-            router.push(`/preview/${modelId}`);
+            router.push(`/dashboard`);
         } catch (err) {
             console.error('Error creating model:', err);
             setError(err instanceof Error ? err.message : 'Something went wrong');
