@@ -175,3 +175,26 @@ export async function changeSubscriptionPlan(
     }
     return data
 }
+
+export async function previewChangeSubscriptionPlan(
+    subscription_id: string | undefined,
+    product_id: string,
+    proration_billing_mode: 'prorated_immediately' | 'difference_immediately' | 'full_immediately' = 'prorated_immediately',
+    quantity: number = 1
+): Promise<{ ok: boolean; preview: any }> {
+    const res = await fetch('/api/dodopayments/subscription/preview-change-plan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            subscription_id,
+            product_id,
+            proration_billing_mode,
+            quantity,
+        }),
+    })
+    const data = await res.json()
+    if (!res.ok) {
+        throw new Error(data?.error || 'Failed to preview plan change')
+    }
+    return data
+}

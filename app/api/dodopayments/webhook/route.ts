@@ -726,6 +726,59 @@ export async function POST(req: NextRequest) {
                     price_snapshot,
                     currency_snapshot,
                 })
+                // Persist proration details to dodo_subscription_changes and history
+                try {
+                    const prorationMode = subscriptionObj?.proration_billing_mode || data?.proration_billing_mode || null
+                    const immediateChargeRaw = Number(subscriptionObj?.immediate_charge?.amount ?? data?.immediate_charge?.amount ?? subscriptionObj?.immediate_charge ?? data?.immediate_charge ?? 0)
+                    const creditAmountRaw = Number(subscriptionObj?.credit_amount ?? data?.credit_amount ?? 0)
+                    const effectiveDateRaw = subscriptionObj?.effective_date ?? data?.effective_date ?? null
+                    const invoiceId = subscriptionObj?.invoice_id ?? data?.invoice_id ?? null
+                    const paymentId = subscriptionObj?.payment_id ?? data?.payment_id ?? null
+
+                    // Update latest pending change row with proration info
+                    let pendingChange: any = await (supabase as any)
+                        .from('dodo_subscription_changes')
+                        .select('id')
+                        .eq('user_id', effective_user_id)
+                        .eq('status', 'pending')
+                        .order('created_at', { ascending: false })
+                        .limit(1)
+                        .maybeSingle()
+                    const changeId = (pendingChange?.data as any)?.id
+                    if (changeId) {
+                        await (supabase as any)
+                            .from('dodo_subscription_changes')
+                            .update({
+                                proration_billing_mode: prorationMode,
+                                immediate_charge: Number.isFinite(immediateChargeRaw) ? immediateChargeRaw : null,
+                                credit_amount: Number.isFinite(creditAmountRaw) ? creditAmountRaw : null,
+                                invoice_id: invoiceId,
+                                payment_id: paymentId,
+                                effective_date: effectiveDateRaw ? new Date(effectiveDateRaw).toISOString() : null,
+                            })
+                            .eq('id', changeId)
+                    }
+
+                    // Insert into history
+                    await (supabase as any)
+                        .from('dodo_subscription_history')
+                        .insert({
+                            user_id: effective_user_id,
+                            dodo_subscription_id,
+                            from_plan_id: null,
+                            to_plan_id: pricing_plan_id ?? null,
+                            proration_billing_mode: prorationMode,
+                            immediate_charge: Number.isFinite(immediateChargeRaw) ? immediateChargeRaw : null,
+                            credit_amount: Number.isFinite(creditAmountRaw) ? creditAmountRaw : null,
+                            invoice_id: invoiceId,
+                            payment_id: paymentId,
+                            effective_date: effectiveDateRaw ? new Date(effectiveDateRaw).toISOString() : null,
+                            event_type: 'plan_changed',
+                            metadata: subscriptionObj || payload,
+                        })
+                } catch (histErr) {
+                    console.error('Failed to persist plan change details:', histErr)
+                }
                 if (mapped === 'active') {
                     try {
                         await completeLatestPendingChange(
@@ -737,6 +790,48 @@ export async function POST(req: NextRequest) {
                     } catch { }
                 }
                 await updateSubscriptionServiceFields(supabase, dodo_subscription_id, subscriptionObj, eventType)
+
+                try {
+                    const apiKey = (process.env.RESEND_API_KEY || '').trim()
+                    if (apiKey) {
+                        const { Resend } = await import('resend')
+                        const resend = new Resend(apiKey)
+                        // Resolve recipient email
+                        let recipient: string | undefined = undefined
+                        try {
+                            const { data: userRow } = await supabase
+                                .from('profiles')
+                                .select('email')
+                                .eq('id', effective_user_id)
+                                .maybeSingle()
+                            recipient = (userRow as any)?.email
+                        } catch { }
+                        if (recipient) {
+                            const currency = currency_snapshot || 'USD'
+                            const immediateChargeRaw = Number(subscriptionObj?.immediate_charge?.amount ?? data?.immediate_charge?.amount ?? subscriptionObj?.immediate_charge ?? data?.immediate_charge ?? 0)
+                            const creditAmountRaw = Number(subscriptionObj?.credit_amount ?? data?.credit_amount ?? 0)
+                            const amt = Number.isFinite(immediateChargeRaw) ? (immediateChargeRaw as number) : 0
+                            const cred = Number.isFinite(creditAmountRaw) ? (creditAmountRaw as number) : 0
+                            const eff = subscriptionObj?.effective_date ?? data?.effective_date ?? null
+                            const sym = currency.toUpperCase() === 'USD' ? '$' : currency
+                            const html =
+                                `<div style="font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial; color: #111;">` +
+                                `<p>Your subscription plan was updated successfully.</p>` +
+                                `<p>Immediate charge: <strong>${sym}${amt.toFixed(2)}</strong>${cred > 0 ? ` (credit applied: ${sym}${cred.toFixed(2)})` : ''}</p>` +
+                                `${eff ? `<p>Effective date: ${new Date(eff).toLocaleString()}</p>` : ''}` +
+                                `<p>If you did not request this change, please contact support.</p>` +
+                                `</div>`
+                            await resend.emails.send({
+                                from: 'Unrealshot <noreply@unrealshot.com>',
+                                to: recipient,
+                                subject: 'Your subscription plan has changed',
+                                html,
+                            })
+                        }
+                    }
+                } catch (emailErr) {
+                    console.error('Failed to send plan change email:', emailErr)
+                }
             }
         } else if (eventType === 'subscription.updated') {
             // Track status transitions; if cancel_at_period_end included in subscriptionObj, we may update local status

@@ -47,11 +47,21 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ error: 'product_id is required' }, { status: 400 })
         }
 
+        // Validate product exists
+        const { data: planRow } = await supabase
+            .from('dodo_pricing_plans')
+            .select('id, dodo_product_id')
+            .eq('dodo_product_id', product_id)
+            .maybeSingle()
+        if (!planRow) {
+            return NextResponse.json({ error: 'Invalid product_id' }, { status: 400 })
+        }
+
         // Resolve user's most recent subscription if not provided
         if (!subscription_id) {
             const { data: latestSub, error: subErr } = await supabase
                 .from('dodo_subscriptions')
-                .select('dodo_subscription_id')
+                .select('dodo_subscription_id, status')
                 .eq('user_id', user.id)
                 .order('created_at', { ascending: false })
                 .limit(1)
@@ -69,7 +79,7 @@ export async function POST(req: NextRequest) {
                     const admin = createAdminClient()
                     const { data: adminLatest } = await admin
                         .from('dodo_subscriptions')
-                        .select('dodo_subscription_id')
+                        .select('dodo_subscription_id, status')
                         .eq('user_id', user.id)
                         .order('created_at', { ascending: false })
                         .limit(1)
@@ -85,6 +95,9 @@ export async function POST(req: NextRequest) {
 
             if (!subscription_id) {
                 return NextResponse.json({ error: 'No subscription found for user' }, { status: 404 })
+            }
+            if ((latestSub?.status || '').toLowerCase() !== 'active') {
+                return NextResponse.json({ error: 'Subscription is not active' }, { status: 400 })
             }
         }
 

@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
 
     try {
         const body = await request.json();
-        const { modelId, prompt, mode, lighting, aspectRatio } = body;
+        const { modelId, prompt, mode, lighting, aspectRatio, numImages } = body;
 
         if (!modelId || !prompt) {
             return NextResponse.json({ error: "modelId and prompt are required" }, { status: 400 });
@@ -82,29 +82,17 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "Failed to deduct credits" }, { status: 500 });
         }
 
-        // Map aspect ratio to fal.ai supported sizes
-        // Fal supports: portrait_4_3, portrait_16_9, landscape_4_3, landscape_16_9, or custom { width, height }
-        let imageSize: string | { width: number; height: number };
-
-        switch (aspectRatio) {
-            case "9:16":
-                imageSize = "portrait_16_9";  // Tall portrait (phone screen)
-                break;
-            case "3:4":
-                imageSize = "portrait_4_3";   // Standard portrait
-                break;
-            case "4:5":
-                imageSize = { width: 1080, height: 1350 };  // Instagram portrait (not natively supported)
-                break;
-            case "4:3":
-                imageSize = "landscape_4_3";  // Standard landscape
-                break;
-            case "5:4":
-                imageSize = { width: 1350, height: 1080 };  // Slightly wide (not natively supported)
-                break;
-            default:
-                imageSize = "portrait_16_9";  // Default to 9:16
-        }
+        let imageSize: string;
+        const allowedAspectRatios = new Set([
+            "auto",
+            "1:1",
+            "16:9",
+            "4:3",
+            "3:4",
+            "9:16",
+        ]);
+        imageSize = allowedAspectRatios.has(aspectRatio) ? aspectRatio : "auto";
+        const safeNumImages = Math.min(Math.max(parseInt(numImages ?? "1"), 1), 4);
 
         // Submit to fal.ai queue with webhook
         const { request_id } = await fal.queue.submit("fal-ai/nano-banana-2/edit", {
@@ -112,7 +100,7 @@ export async function POST(request: NextRequest) {
                 prompt: enhancedPrompt,
                 image_urls: referenceImageUrls,
                 aspect_ratio: imageSize,
-                num_images: 1,
+                num_images: safeNumImages,
                 output_format: "png",
                 safety_tolerance: "4",
                 resolution: "1K"

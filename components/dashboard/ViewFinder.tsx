@@ -7,18 +7,20 @@ import { FadeInImage } from '@/components/ui/FadeInImage';
 
 // Configuration for the 5 physics engines (Modes)
 const MODES = [
-    { id: 'FLASH', label: 'FLASH', desc: 'Hard shadows' },
+    { id: 'FLASH', label: 'FLASH', desc: 'Candid Night Life Flash' },
     { id: 'LIFESTYLE', label: 'LIFESTYLE', desc: 'Warm sun, Bistro lights' },
     { id: 'GRITTY', label: 'GRITTY VINTAGE', desc: 'B&W Street' },
     { id: 'CINE', label: 'CINE SHOOT', desc: 'Cinematic' },
 ];
 
 const RATIOS = [
-    { label: '9:16', value: '9:16', class: 'aspect-[9/16]' },
-    { label: '3:4', value: '3:4', class: 'aspect-[3/4]' },
-    { label: '4:5', value: '4:5', class: 'aspect-[4/5]' },
+    { label: 'Auto', value: 'auto', class: 'aspect-auto' },
+    { label: '1:1', value: '1:1', class: 'aspect-[1/1]' },
+    { label: '16:9', value: '16:9', class: 'aspect-[16/9]' },
     { label: '4:3', value: '4:3', class: 'aspect-[4/3]' },
-    { label: '5:4', value: '5:4', class: 'aspect-[5/4]' },
+    { label: '3:4', value: '3:4', class: 'aspect-[3/4]' },
+    { label: '9:16', value: '9:16', class: 'aspect-[9/16]' },
+    
 ];
 
 const LIGHTING = [
@@ -46,6 +48,7 @@ interface PendingJob {
     prompt: string;
     created_at: string;
     result_url?: string;
+    count?: number;
 }
 
 export const Viewfinder: React.FC = () => {
@@ -62,6 +65,7 @@ export const Viewfinder: React.FC = () => {
     const [mode, setMode] = useState(MODES[0]);
     const [aspectRatio, setAspectRatio] = useState(RATIOS[0]);
     const [lightingTime, setLightingTime] = useState(LIGHTING[0]);
+    const [numImages, setNumImages] = useState(1);
     const [isDeveloping, setIsDeveloping] = useState(false);
     const [creditBalance, setCreditBalance] = useState<number | null>(null);
 
@@ -161,6 +165,7 @@ export const Viewfinder: React.FC = () => {
                         prompt: j.prompt || '',
                         created_at: j.created_at,
                         result_url: j.result_url,
+                    count: 1,
                     }));
                     setPendingJobs(pending);
                 }
@@ -234,6 +239,7 @@ export const Viewfinder: React.FC = () => {
                     mode: mode.id,
                     lighting: lightingTime.id,
                     aspectRatio: aspectRatio.value,
+                    numImages,
                 }),
             });
 
@@ -248,6 +254,7 @@ export const Viewfinder: React.FC = () => {
                     status: 'pending',
                     prompt: prompt,
                     created_at: new Date().toISOString(),
+                    count: numImages,
                 };
                 setPendingJobs(prev => [newJob, ...prev]);
 
@@ -404,6 +411,25 @@ export const Viewfinder: React.FC = () => {
                         </div>
                     </div>
 
+                    {/* 2b. Variations */}
+                    <div>
+                        <label className="text-xs font-medium text-zinc-400 mb-3 block uppercase tracking-wide">Variations</label>
+                        <div className="flex gap-2">
+                            {[1, 2, 3, 4].map((n) => (
+                                <button
+                                    key={n}
+                                    onClick={() => setNumImages(n)}
+                                    className={`cursor-pointer flex-1 p-2.5 rounded-lg border transition-all ${numImages === n
+                                        ? 'bg-white text-black shadow-sm'
+                                        : 'bg-transparent border-zinc-700 hover:bg-white/5 hover:border-zinc-700'
+                                        }`}
+                                >
+                                    <div className={`font-semibold text-xs ${numImages === n ? 'text-black' : 'text-zinc-400'}`}>{n}</div>
+                                </button>
+                            ))}
+                        </div>
+                    </div>
+
                     {/* 3. Lighting Time */}
                     <div>
                         <label className="text-xs font-medium text-zinc-400 mb-3 block uppercase tracking-wide">Lighting Time</label>
@@ -509,30 +535,34 @@ export const Viewfinder: React.FC = () => {
                         </div>
                     ) : (
                         <div className="columns-2 md:columns-2 lg:columns-3 gap-2 md:gap-4 space-y-2 md:space-y-3 pb-12 pt-4 md:pt-0">
-                            {/* Pending job loader cards - one for each pending job */}
-                            {pendingJobs.filter(j => j.status === 'pending').map((job) => (
-                                <div key={job.id} className="break-inside-avoid w-full bg-gradient-to-br from-zinc-900 to-zinc-800 border border-zinc-700 rounded-lg overflow-hidden aspect-[3/4] flex flex-col items-center justify-center relative">
-                                    {/* Animated spinner */}
-                                    <div className="relative w-16 h-16 mb-4">
-                                        <div className="absolute inset-0 rounded-full border-2 border-zinc-600"></div>
-                                        <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-white animate-spin"></div>
-                                        <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                            {/* Pending job loader cards - show placeholders per job count */}
+                            {pendingJobs
+                                .filter(j => j.status === 'pending')
+                                .flatMap((job) => {
+                                    const placeholders = Array.from({ length: job.count || 1 });
+                                    return placeholders.map((_, idx) => (
+                                        <div key={`${job.id}-${idx}`} className="break-inside-avoid w-full bg-gradient-to-br from-zinc-900 to-zinc-800 border border-zinc-700 rounded-lg overflow-hidden aspect-[3/4] flex flex-col items-center justify-center relative">
+                                            <div className="relative w-16 h-16 mb-4">
+                                                <div className="absolute inset-0 rounded-full border-2 border-zinc-600"></div>
+                                                <div className="absolute inset-0 rounded-full border-2 border-transparent border-t-white animate-spin"></div>
+                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                    <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                                                </div>
+                                            </div>
+                                            <div className="text-xs font-medium text-white/80 tracking-widest uppercase">
+                                                Processing
+                                            </div>
+                                            <div className="text-[10px] text-zinc-500 mt-1 px-4 text-center truncate max-w-full">
+                                                You can now leave this page if needed
+                                            </div>
+                                            <div className="flex gap-1 mt-2">
+                                                <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                                                <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                                                <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="text-xs font-medium text-white/80 tracking-widest uppercase">
-                                        Processing
-                                    </div>
-                                    <div className="text-[10px] text-zinc-500 mt-1 px-4 text-center truncate max-w-full">
-                                        You can now leave this page if needed
-                                    </div>
-                                    <div className="flex gap-1 mt-2">
-                                        <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                                        <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                                        <span className="w-1 h-1 bg-white/60 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
-                                    </div>
-                                </div>
-                            ))}
+                                    ));
+                                })}
                             {/* Custom Loading Animation for active submission */}
                             {isDeveloping && (
                                 <div className="break-inside-avoid w-full bg-gradient-to-br from-zinc-900 to-zinc-800 border border-zinc-700 rounded-lg overflow-hidden aspect-[3/4] flex flex-col items-center justify-center relative">

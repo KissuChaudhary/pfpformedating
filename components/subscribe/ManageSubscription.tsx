@@ -6,6 +6,7 @@ import {
     cancelSubscription as apiCancelSubscription,
     restoreSubscription as apiRestoreSubscription,
     changeSubscriptionPlan as apiChangePlan,
+    previewChangeSubscriptionPlan as apiPreviewChangePlan,
     updatePaymentMethod as apiUpdatePaymentMethod,
 } from '@/lib/dodopayments'
 import type { Plan as BSDKPlan, CurrentPlan as BSDKCurrentPlan } from '@/lib/billingsdk-config'
@@ -211,9 +212,30 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
         if (!chosen || !subscription.subscription_id) return
         try {
             setBusy(true)
+            const preview = await apiPreviewChangePlan(
+                subscription.subscription_id,
+                chosen.dodo_product_id,
+                'prorated_immediately',
+                1
+            )
+            const currency = subscription.currency_snapshot || 'USD'
+            const sym = currencySymbol(currency)
+            const immediate = Number(preview?.preview?.immediate_charge || 0)
+            const credit = Number(preview?.preview?.credit_amount || 0)
+            const eff = preview?.preview?.effective_date
+            const confirm = window.confirm(
+                `You are changing to "${chosen.name}".\n\n` +
+                `Immediate charge: ${sym}${immediate.toFixed(2)}\n` +
+                (credit > 0 ? `Credit applied: ${sym}${credit.toFixed(2)}\n` : '') +
+                (eff ? `Effective date: ${new Date(eff).toLocaleString()}\n` : '') +
+                `\nProceed?`
+            )
+            if (!confirm) return
             await apiChangePlan(subscription.subscription_id, chosen.dodo_product_id, 'prorated_immediately', 1)
-            // Webhook will update local state; reflect without hard reload
             router.refresh()
+        } catch (e) {
+            console.error('Plan change failed', e)
+            alert((e as any)?.message || 'Failed to change plan')
         } finally {
             setBusy(false)
         }
@@ -302,7 +324,7 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
                         triggerText: 'Change Plan',
                         onPlanChange: (planId: string) => onPlanChange(planId),
                     }}
-                    hideUpdatePlan={true}
+                    hideUpdatePlan={false}
                     hideCancelDialog={true}
                     dateLabel={dateLabel}
                     isPlanEnding={localCancelAtPeriodEnd}

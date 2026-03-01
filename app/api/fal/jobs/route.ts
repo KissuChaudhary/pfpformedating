@@ -80,47 +80,52 @@ export async function GET(request: NextRequest) {
                         requestId: job.fal_request_id,
                     });
 
-                    const falImageUrl = (result.data as any)?.images?.[0]?.url;
-                    console.log(`Job ${job.id} completed, fal image URL:`, falImageUrl);
+                    const imageUrls: string[] = ((result.data as any)?.images || [])
+                        .map((i: any) => i?.url)
+                        .filter((u: string) => !!u);
+                    console.log(`Job ${job.id} completed, fal image URLs:`, imageUrls);
 
-                    if (falImageUrl) {
+                    if (imageUrls.length > 0) {
                         try {
-                            // Download image from fal.ai
-                            const imageResponse = await fetch(falImageUrl);
-                            if (!imageResponse.ok) {
-                                throw new Error(`Failed to fetch from fal: ${imageResponse.status}`);
-                            }
+                            let firstPublicUri: string | null = null;
+                            let firstImageId: number | null = null;
 
-                            const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
-                            console.log(`Downloaded image, size: ${imageBuffer.length} bytes`);
+                            for (const url of imageUrls) {
+                                const imageResponse = await fetch(url);
+                                if (!imageResponse.ok) {
+                                    throw new Error(`Failed to fetch from fal: ${imageResponse.status}`);
+                                }
 
-                            // Generate R2 key
-                            const timestamp = Date.now();
-                            const randomId = crypto.randomUUID();
-                            const key = `generated/${user.id}/${job.model_id}/${timestamp}-${randomId}.png`;
+                                const imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
+                                console.log(`Downloaded image, size: ${imageBuffer.length} bytes`);
 
-                            // Upload to R2
-                            await putR2Object(key, imageBuffer, "image/png");
-                            console.log(`Uploaded to R2: ${key}`);
+                                // Generate R2 key
+                                const timestamp = Date.now();
+                                const randomId = crypto.randomUUID();
+                                const key = `generated/${user.id}/${job.model_id}/${timestamp}-${randomId}.png`;
 
-                            // Construct public URL
-                            const r2BaseUrl = process.env.R2_PUBLIC_URL || "";
-                            const publicUri = `${r2BaseUrl}/${key}`;
+                                // Upload to R2
+                                await putR2Object(key, imageBuffer, "image/png");
+                                console.log(`Uploaded to R2: ${key}`);
 
-                            // Save to images table
-                            const { data: newImage, error: imageError } = await supabase
-                                .from("images")
-                                .insert({
-                                    uri: publicUri,
-                                    modelId: job.model_id,
-                                })
-                                .select()
-                                .single();
+                                // Construct public URL
+                                const r2BaseUrl = process.env.R2_PUBLIC_URL || "";
+                                const publicUri = `${r2BaseUrl}/${key}`;
 
-                            if (imageError) {
-                                console.error("Failed to save image to DB:", imageError);
-                            } else {
-                                console.log(`Saved image to DB, id: ${newImage?.id}`);
+                                // Save to images table
+                                const { data: newImage } = await supabase
+                                    .from("images")
+                                    .insert({
+                                        uri: publicUri,
+                                        modelId: job.model_id,
+                                    })
+                                    .select()
+                                    .single();
+
+                                if (!firstPublicUri) {
+                                    firstPublicUri = publicUri;
+                                    firstImageId = newImage?.id ?? null;
+                                }
                             }
 
                             // Update job as completed
@@ -128,8 +133,8 @@ export async function GET(request: NextRequest) {
                                 .from("generation_jobs")
                                 .update({
                                     status: "completed",
-                                    result_url: publicUri,
-                                    image_id: newImage?.id,
+                                    result_url: firstPublicUri,
+                                    image_id: firstImageId,
                                     completed_at: new Date().toISOString(),
                                 })
                                 .eq("id", job.id);
@@ -139,7 +144,7 @@ export async function GET(request: NextRequest) {
                                 await supabase
                                     .from("preview_images")
                                     .update({
-                                        image_url: publicUri,
+                                        image_url: firstPublicUri,
                                         status: "completed",
                                         completed_at: new Date().toISOString(),
                                     })
