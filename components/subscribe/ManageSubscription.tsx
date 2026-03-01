@@ -225,7 +225,7 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
             const previewRes = await apiPreviewChangePlan(
                 subscription.subscription_id,
                 chosen.dodo_product_id,
-                'prorated_immediately',
+                'difference_immediately',
                 1
             )
             const currency = (previewRes?.preview?.currency as string) || subscription.currency_snapshot || 'USD'
@@ -418,7 +418,7 @@ export default function ManageSubscription({ subscription, plans, userEmail }: M
                         setBusy(true)
                         const planRow = plans.find(p => p.id === upgradeDetails.planId)
                         if (!planRow) return
-                        await apiChangePlan(subscription.subscription_id, planRow.dodo_product_id, 'prorated_immediately', 1)
+                        await apiChangePlan(subscription.subscription_id, planRow.dodo_product_id, 'difference_immediately', 1)
                         setConfirmUpgradeOpen(false)
                         router.refresh()
                     } finally {

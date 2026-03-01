@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
         }: {
             subscription_id?: string
             product_id?: string
-            proration_billing_mode?: 'prorated_immediately' | 'none'
+            proration_billing_mode?: 'prorated_immediately' | 'difference_immediately' | 'none'
             quantity?: number
         } = body || {}
 
@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
 
         await client.subscriptions.changePlan(subscription_id, {
             product_id,
-            proration_billing_mode: proration_billing_mode ?? 'prorated_immediately',
+            proration_billing_mode: proration_billing_mode ?? 'difference_immediately',
             quantity: typeof quantity === 'number' && quantity > 0 ? quantity : 1,
         } as any)
 

@@ -156,7 +156,7 @@ export async function restoreSubscription(
 export async function changeSubscriptionPlan(
     subscription_id: string | undefined,
     product_id: string,
-    proration_billing_mode: 'prorated_immediately' | 'none' = 'prorated_immediately',
+    proration_billing_mode: 'prorated_immediately' | 'difference_immediately' | 'none' = 'difference_immediately',
     quantity: number = 1
 ): Promise<{ ok: boolean; subscription_id: string }> {
     const res = await fetch('/api/dodopayments/subscription/change-plan', {
