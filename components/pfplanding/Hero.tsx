@@ -4,67 +4,115 @@ import Link from "next/link"
 
 export const Hero: React.FC = () => {
   return (
-    <section className="relative min-h-screen flex flex-col md:grid md:grid-cols-12 border-b border-foreground/10">
-      {/* Left Content */}
-      <div className="md:col-span-7 flex flex-col justify-center p-6 md:p-12 lg:p-20 border-r border-foreground/10 relative">
-        <div className="mb-6 font-mono text-xs text-foreground/40">
-          // DESIGNED FOR <span className="text-red-500/70 font-bold">REALISM</span>
-        </div>
+    <section className="relative min-h-screen pt-32 pb-20 flex flex-col items-center justify-center overflow-hidden bg-[#050505] border-b border-foreground/10">
+      
+      {/* Background Gradient Effects */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1000px] h-[500px] bg-red-500/10 blur-[120px] rounded-full pointer-events-none opacity-50" />
+      <div className="absolute bottom-0 left-0 w-full h-[300px] bg-gradient-to-t from-background to-transparent pointer-events-none z-10" />
 
-        <h1 className="font-display text-4xl sm:text-8xl font-bold sm:leading-[0.9] sm:tracking-tighter uppercase mb-8">
-          The Hyper-Realistic <br />
-          <span className="text-transparent stroke-text">Anti-AI Photoshoot</span>.
+      {/* Hero Content */}
+      <div className="relative z-20 max-w-7xl mx-auto px-4 text-center flex flex-col items-center">
+        
+        {/* Badge */}
+           <div className="font-mono items-center text-xs text-foreground/80 mb-4 mb-8 ">
+                             // #1 AI DATING PHOTO APP FOR MEN
+                        </div>
+
+        {/* Headline */}
+        <h1 className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.9] mb-8 uppercase text-foreground">
+           <span className="text-transparent stroke-text relative">
+            Hyper-Realistic AI Photos
+          
+          </span> <br className="hidden lg:block" />for 10x More Matches
         </h1>
 
-        <p className="font-mono text-foreground/70 text-sm md:text-base max-w-xl mb-12 leading-relaxed">
-          Turn your selfies into professional, candid photos without the camera. Stop using plastic-looking AI avatars. We generate raw, cinematic, and photorealistic images that look like they were taken on 35mm film.
+        {/* Subhead */}
+        <p className="font-mono text-foreground/60 text-sm md:text-lg max-w-2xl mb-10 leading-relaxed">
+          Stop getting banned for fake photos. Our hyper-realism engine generates dating pics so real, even your mom won't know. Perfect for <span className="text-foreground border-b border-foreground/20">Tinder</span>, <span className="text-foreground border-b border-foreground/20">Hinge</span>, & <span className="text-foreground border-b border-foreground/20">Bumble</span>.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-          <Link href="/login">
-            <Button size="lg" className="w-full sm:w-auto">
-              Create Your Photos ($8.99)
+        {/* CTA */}
+        <div className="flex flex-col gap-6 w-full items-center justify-center mb-20">
+            <Link href="/login">
+            <Button size="lg" className="px-8 py-4 text-lg h-auto w-full sm:w-auto rounded-none border border-foreground/20 hover:border-red-500/50 hover:bg-red-500/10 transition-all duration-300 uppercase font-bold tracking-wider">
+              Generate My Dating Photos
             </Button>
-          </Link>
-
-          <span className="font-mono text-xs text-foreground/40 sm:max-w-[200px] max-w-full">
-            [!] No plastic skin. No fake smiles.
-          </span>
-        </div>
-      </div>
-
-      {/* Right Visuals */}
-      <div className="md:col-span-5 relative bg-[#050505] overflow-hidden group border-t md:border-t-0 border-foreground/10 aspect-[2/3] md:aspect-auto md:h-auto">
-        <div className="absolute inset-0 grid grid-rows-2">
-          {/* Image 1 */}
-          <div className="relative overflow-hidden border-b border-foreground/10 h-full w-full">
-            <img
-              src="/hero2.png"
-              alt="Couple in Leather Jackets"
-              className="w-full h-full object-cover opacity-90 hover:grayscale-100 hover:opacity-100 transition-all duration-100 ease-linear cursor-none"
-            />
-            <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur border border-foreground/20 px-2 py-1 text-[10px] font-mono uppercase">
-             // 35mm film, high grain shot
+            </Link>
+            <div className="flex items-center justify-center gap-2 text-xs font-mono text-foreground/40 uppercase tracking-widest">
+                <span>[!] 100% Ban-Proof</span>
+                <span>//</span>
+                <span>No Plastic Skin</span>
             </div>
-          </div>
+        </div>
 
-          {/* Image 2 */}
-          <div className="relative overflow-hidden h-full w-full">
-            <img
-              src="/images/hero4.webp"
-              alt="Messy Bun Morning"
-              className="w-full h-full object-cover opacity-90 hover:grayscale-100 hover:opacity-100 transition-all duration-100 ease-linear cursor-none"
-            />
-            <div className="absolute bottom-4 left-4 bg-black/80 backdrop-blur border border-foreground/20 px-2 py-1 text-[10px] font-mono uppercase">
-             // raw mode, high shutter speed
+        {/* Visuals - The "Cards" */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 w-full max-w-5xl px-4 md:px-0">
+            
+            {/* Card 1 - Tinder Style */}
+            <div className="relative aspect-[9/16] md:aspect-[3/4] group overflow-hidden border border-foreground/10 bg-foreground/5 rounded-none md:rotate-[-3deg] md:hover:rotate-0 transition-all duration-500 hover:z-30 hover:scale-105">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
+                <img src="/images/demo14.jpg" alt="Candid Photo" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="absolute top-4 left-4 z-20 bg-black/50 backdrop-blur px-2 py-1 border border-white/10">
+                    <span className="text-[10px] font-mono text-green-400 uppercase tracking-widest">● Active Now</span>
+                </div>
+
+                <div className="absolute bottom-0 left-0 w-full p-6 z-20 text-left">
+                    <div className="flex items-end gap-2 mb-2">
+                        <span className="text-2xl font-bold text-white font-display">Josh</span>
+                        <span className="text-lg text-white/80 font-mono mb-1">27</span>
+                    </div>
+                    <div className="flex gap-2">
+                        <span className="px-2 py-1 bg-white/10 backdrop-blur rounded text-[10px] font-mono text-white/80 border border-white/10">
+                            ☕ Coffee
+                        </span>
+                        <span className="px-2 py-1 bg-white/10 backdrop-blur rounded text-[10px] font-mono text-white/80 border border-white/10">
+                            ✈️ Travel
+                        </span>
+                    </div>
+                </div>
             </div>
-          </div>
+
+            {/* Card 2 - Hinge Style (Center Highlight) */}
+             <div className="relative aspect-[9/16] md:aspect-[3/4] group overflow-hidden border border-foreground/10 bg-foreground/5 rounded-none z-20 md:-mt-12 shadow-2xl shadow-red-500/10 hover:scale-105 transition-all duration-500">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/90 z-10" />
+                <img src="/images/demo13.jpg" alt="Couple Photo" className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                 <div className="absolute top-4 right-4 z-20">
+                    <div className="bg-white text-black px-3 py-1 text-[10px] font-bold tracking-wider uppercase transform rotate-3">
+                        Hinge Standout
+                    </div>
+                </div>
+
+                 <div className="absolute bottom-0 left-0 w-full p-6 z-20 text-left">
+                    <div className="font-mono text-[10px] text-white/60 mb-2 uppercase tracking-widest">My simple pleasure</div>
+                    <div className="text-white font-display text-2xl leading-tight mb-4">
+                        Weekend trips to nowhere with a film camera 📸
+                    </div>
+                    <div className="h-1 w-12 bg-red-500 rounded-full"></div>
+                </div>
+            </div>
+
+            {/* Card 3 - Bumble/Insta Style */}
+             <div className="relative aspect-[9/16] md:aspect-[3/4] group overflow-hidden border border-foreground/10 bg-foreground/5 rounded-none md:rotate-[3deg] md:hover:rotate-0 transition-all duration-500 hover:z-30 hover:scale-105">
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/80 z-10" />
+                <img src="/images/demo12.jpg" alt="Messy Bun" className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500" />
+                
+                <div className="absolute top-4 left-4 z-20">
+                     <div className="bg-red-500 text-white px-2 py-1 text-[10px] font-mono font-bold tracking-wider uppercase">
+                        12 New Likes
+                    </div>
+                </div>
+
+                <div className="absolute bottom-6 left-0 w-full px-6 z-20 text-center">
+                    <div className="bg-[#FFC629] text-black p-3 font-bold uppercase tracking-wider text-xs transform -rotate-2 shadow-lg">
+                        "You made the first move!"
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        {/* Center label */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-accent text-background font-mono text-xs font-bold px-3 py-1 uppercase tracking-widest rotate-90 md:rotate-0 z-10 pointer-events-none mix-blend-hard-light">
-          AI GENERATED
-        </div>
       </div>
     </section>
   )

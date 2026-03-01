@@ -12,15 +12,15 @@ export const ConsistencySection: React.FC = () => {
                 <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
                     <div>
                         <h2 className="font-display text-4xl md:text-5xl font-bold uppercase mb-4 leading-none">
-                            NO SHAPESHIFTING.  <span className="text-accent">JUST YOU.</span>
+                            The Algorithm <span className="text-accent">Isn't Rigged.</span>
                         </h2>
                         <p className="font-mono text-foreground/60 max-w-xl text-sm md:text-base">
-                            Other AI generators hallucinate new faces when you change the angle or lighting. We don't. Whether you’re laughing in a taxi or eating under neon lights, <strong className="text-foreground">your identity stays locked</strong>. No AI cousins. No glitchy lookalikes. Just you.
+                            You aren't "shadowbanned." You're just using photos that scream "boring" and "low effort." We replace the 3 biggest red flags in your profile with green flags that make them stop scrolling.
                         </p>
                     </div>
                     <div className="font-mono text-[10px] md:text-xs text-accent text-right">
-                        SUBJECT_CONSISTENCY: LOCKED <br />
-                        VARIANCE: &lt;0.2%
+                        PROBLEM: NO_MATCHES <br />
+                        SOLUTION: BETTER_DATA
                     </div>
                 </div>
 
@@ -31,21 +31,33 @@ export const ConsistencySection: React.FC = () => {
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         {[
-                            { title: 'MACRO_SCAN // PORES_VISIBLE', img: '/pores-visible.png' },
-                            { title: 'FULL_BODY // CONTEXT_AWARE', img: '/images/full-body-photo.webp' },
-                            { title: 'PROFILE // OFF_AXIS', img: '/profile.png' }
+                            { 
+                                title: 'PROBLEM: "HE LOOKS TRY-HARD"', 
+                                desc: 'Fix: Candid shots that look effortless & fun.',
+                                img: '/images/candid-solo.webp' 
+                            },
+                            { 
+                                title: 'PROBLEM: "JUST HEADSHOTS?"', 
+                                desc: 'Fix: Full body shots that show confidence.',
+                                img: '/images/full-body-photo.webp' 
+                            },
+                            { 
+                                title: 'PROBLEM: "BLURRY SELFIES"', 
+                                desc: 'Fix: High-status photos that command respect.',
+                                img: '/images/cinematic-photo.webp' 
+                            }
                         ].map((item, i) => (
                             <div key={i} className="relative group">
                                 {/* Image Container */}
                                 <div className="relative aspect-[3/4] overflow-hidden border border-foreground/10 bg-black">
                                     <img
                                         src={item.img}
-                                        alt="Identity Consistency"
-                                        className="w-full h-full object-cover opacity-90 group-hover:opacity-70 group-hover:grayscale-50 transition-all duration-300"
+                                        alt={item.title}
+                                        className="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-all duration-300"
                                     />
 
                                     {/* Face Mesh Overlay */}
-                                    <div className="absolute top-[20%] left-[25%] w-[50%] h-[30%] border border-accent/60 opacity-80 z-30 flex flex-col justify-between p-1 group-hover:border-accent transition-colors">
+                                    <div className="absolute top-[20%] left-[25%] w-[50%] h-[30%] border border-accent/60 opacity-0 group-hover:opacity-80 z-30 flex flex-col justify-between p-1 transition-opacity duration-300">
                                         <div className="flex justify-between">
                                             <div className="w-1 h-1 bg-accent"></div>
                                             <div className="w-1 h-1 bg-accent"></div>
@@ -62,13 +74,18 @@ export const ConsistencySection: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    {/* Scanning line animation */}
-                                    <div className="absolute top-0 left-0 w-full h-[1px] bg-accent/50 animate-[scan_3s_ease-in-out_infinite] z-30 shadow-[0_0_10px_rgba(255,77,0,0.5)]"></div>
+                                    {/* Scanning line animation - Only on Hover now to be less distracting but still techy */}
+                                    <div className="absolute top-0 left-0 w-full h-[1px] bg-accent/50 opacity-0 group-hover:opacity-100 group-hover:animate-[scan_2s_ease-in-out_infinite] z-30 shadow-[0_0_10px_rgba(255,77,0,0.5)] transition-opacity"></div>
                                 </div>
 
                                 {/* Meta Label */}
-                                <div className="mt-3 font-mono text-[10px] text-accent/70 uppercase tracking-widest">
-                                    {item.title}
+                                <div className="mt-4 border-l-2 border-accent pl-3">
+                                    <div className="font-mono text-[10px] text-accent/70 uppercase tracking-widest mb-1">
+                                        {item.title}
+                                    </div>
+                                    <div className="font-display text-lg font-bold text-foreground leading-none">
+                                        {item.desc}
+                                    </div>
                                 </div>
                             </div>
                         ))}

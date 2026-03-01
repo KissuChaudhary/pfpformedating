@@ -24,7 +24,7 @@ export const HowItWorks: React.FC = () => {
                     {
                         step: '02',
                         title: 'Pick Your Vibe',
-                        desc: 'Choose from 5 film modes: Night Flash, Golden Hour, Gritty Vintage, Cine Shoot, or Headshot. Set lighting and describe your scene.',
+                        desc: 'Choose from 4 film modes: Night Flash, Golden Hour, Gritty Vintage, or Cineamtic Shoot. Set lighting and describe your scene.',
                         meta: 'STYLE_SELECT'
                     },
                     {

@@ -5,7 +5,6 @@ import { Hero } from '@/components/pfplanding/Hero';
 import { MoatSection } from '@/components/pfplanding/MoatSection';
 import { ConsistencySection } from '@/components/pfplanding/ConsistencySection';
 import { LightingLabSection } from '@/components/pfplanding/LightingLabSection';
-import { ProductSection } from '@/components/pfplanding/ProductSection';
 import { FullFrameSection } from '@/components/pfplanding/FullFrameSection';
 import { HowItWorks } from '@/components/pfplanding/HowItWorks';
 import { SocialProof } from '@/components/pfplanding/SocialProof';
@@ -31,9 +30,8 @@ export default function Home() {
         <MoatSection />
         <ConsistencySection />
         <LightingLabSection />
-        <ProductSection />
-        <FullFrameSection />
         <HowItWorks />
+        <FullFrameSection />
         <SocialProof />
         <Pricing />
         <FAQ />

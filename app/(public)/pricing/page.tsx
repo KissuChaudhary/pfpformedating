@@ -12,20 +12,17 @@ export const metadata: Metadata = commonPageMetadata.pricing()
 
 // Pricing feature sets for structured data
 const starterFeatures = [
-  "15 Hyper-Realistic Photos",
-  "4 Film Modes Included",
-  "Nano-Texture Engine",
-  "Auto-Delete Privacy",
+  "20 AI Photos",
+  "1 Model Training Included",
+  "Optimized for Dating Apps",
   "Commercial License"
 ]
 
 const proFeatures = [
-  "50 Hyper-Realistic Photos",
-  "Best Value ($0.37 per photo)",
-  "Perfect for Couples & Solos",
-  "4 Film Modes Included",
-  "Nano-Texture Engine",
-  "Auto-Delete Privacy"
+  "500 Match-Ready Photos",
+  "Priority Generation",
+  "Commercial License",
+  "Anti-Ban Protection"
 ]
 
 export default function PricingPage() {
@@ -62,7 +59,7 @@ export default function PricingPage() {
                   <tr className="border-b border-foreground/5">
                     <td className="px-6 py-3 text-foreground">Cost</td>
                     <td className="px-6 py-3">$150–$600+ per session</td>
-                    <td className="px-6 py-3 text-accent font-semibold">$8.99–$18.99 one-time</td>
+                    <td className="px-6 py-3 text-accent font-semibold">$19.00–$150.00 / month</td>
                   </tr>
                   <tr className="border-b border-foreground/5">
                     <td className="px-6 py-3 text-foreground">Setup & Scheduling</td>
@@ -77,7 +74,7 @@ export default function PricingPage() {
                   <tr className="border-b border-foreground/5">
                     <td className="px-6 py-3 text-foreground">Variety of Looks</td>
                     <td className="px-6 py-3">Limited by wardrobe/backgrounds</td>
-                    <td className="px-6 py-3">5 film modes, unlimited scenes</td>
+                    <td className="px-6 py-3">Unlimited scenes</td>
                   </tr>
                   <tr className="border-b border-foreground/5">
                     <td className="px-6 py-3 text-foreground">Retouching & Revisions</td>
@@ -92,7 +89,7 @@ export default function PricingPage() {
                   <tr>
                     <td className="px-6 py-3 text-foreground">Privacy</td>
                     <td className="px-6 py-3">Photographer retains copies</td>
-                    <td className="px-6 py-3">Auto-delete after 7 days</td>
+                    <td className="px-6 py-3">Cancel anytime</td>
                   </tr>
                 </tbody>
               </table>

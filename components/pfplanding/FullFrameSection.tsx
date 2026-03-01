@@ -3,19 +3,19 @@ import type React from "react"
 import { useEffect, useState } from "react"
 
 const COLUMN_1_IMAGES = [
-    { src: "/showcase10.png", aspect: "aspect-[3/4]" },
-    { src: "/showcase8.png", aspect: "aspect-[16/9]" },
-    { src: "/showcase3.png", aspect: "aspect-[9/16]" },
-    { src: "/showcase5.png", aspect: "aspect-[4/3]" },
-    { src: "/showcase1.png", aspect: "aspect-[3/4]" },
+    { src: "/images/demo14.jpg", aspect: "aspect-[3/4]" },
+    { src: "/images/demo12.jpg", aspect: "aspect-[3/4]" },
+    { src: "/images/demo10.jpg", aspect: "aspect-[3/4]" },
+    { src: "/images/demo8.jpg", aspect: "aspect-[3/4]" },
+    { src: "/images/demo6.jpg", aspect: "aspect-[3/4]" },
 ]
 
 const COLUMN_2_IMAGES = [
-    { src: "/showcase4.png", aspect: "aspect-[3/4]" },
-    { src: "/showcase7.png", aspect: "aspect-[16/9]" },
-    { src: "/showcase9.png", aspect: "aspect-[9/16]" },
-    { src: "/showcase2.png", aspect: "aspect-[4/3]" },
-    { src: "/showcase6.png", aspect: "aspect-[3/4]" },
+    { src: "/images/demo13.jpg", aspect: "aspect-[3/4]" },
+    { src: "/images/demo11.jpg", aspect: "aspect-[3/4]" },
+    { src: "/images/demo9.jpg", aspect: "aspect-[3/4]" },
+    { src: "/images/demo7.jpg", aspect: "aspect-[3/4]" },
+    { src: "/images/demo5.jpg", aspect: "aspect-[3/4]" },
 ]
 
 export const FullFrameSection: React.FC = () => {
@@ -25,11 +25,11 @@ export const FullFrameSection: React.FC = () => {
             <div className="flex flex-col justify-center p-8 md:p-20 border-r border-foreground/10 relative z-10 bg-[#080808]">
                 <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-8">
                     STOP BEING GHOSTED.
-                    <span className="text-foreground/50"> START BEING FOLLOWED.</span>
+                    <span className="text-foreground/50"> START GETTING MATCHES.</span>
                 </h2>
 
                 <p className="font-mono text-foreground/70 mb-10 text-sm md:text-base max-w-md leading-relaxed">
-                    Stop posting stiff, corporate headshots on apps meant for real life. We generate candid, lifestyle photos that look like <strong className="text-white">your best friend took them on a night out.</strong>
+                   Stop losing matches to bad selfies and awkward angles. We generate candid, lifestyle photos that look like <strong className="text-white">your best friend took them on a night out.</strong>
                 </p>
 
                 <div className="space-y-6">
@@ -38,7 +38,7 @@ export const FullFrameSection: React.FC = () => {
                             01
                         </div>
                         <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            Ditch the stiff, corporate headshot look.
+                            More Matches, Less Effort.
                         </div>
                     </div>
                     <div className="flex items-center gap-4 group">
@@ -46,7 +46,7 @@ export const FullFrameSection: React.FC = () => {
                             02
                         </div>
                         <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            Authentic vibes that get more matches.
+                            Pass the "Vibe Check" Instantly.
                         </div>
                     </div>
                     <div className="flex items-center gap-4 group">
@@ -54,7 +54,7 @@ export const FullFrameSection: React.FC = () => {
                             03
                         </div>
                         <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            Candid shots your friends will believe.
+                            Photos that don't look like "AI".
                         </div>
                     </div>
                     <div className="flex items-center gap-4 group">
@@ -62,7 +62,7 @@ export const FullFrameSection: React.FC = () => {
                             04
                         </div>
                         <div className="font-mono text-sm uppercase text-foreground/60 group-hover:text-foreground transition-colors">
-                            Flawless skin, natural grain, zero "plastic."
+                            Optimized for Hinge, Tinder & Bumble.
                         </div>
                     </div>
                 </div>

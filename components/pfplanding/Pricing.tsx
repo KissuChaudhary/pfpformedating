@@ -4,35 +4,35 @@ import Link from "next/link"
 
 const plans = [
     {
-        name: "STANDARD ROLL",
-        subtitle: "15 Exposures.",
-        price: "$8.99",
-        priceNote: "/ roll",
+        name: "STARTER PACK",
+        subtitle: "Perfect for a quick profile refresh.",
+        price: "$19.00",
+        priceNote: "/ month",
         features: [
-            "15 Hyper-Realistic Photos",
-            "4 Film Modes Included",
-            "Nano-Texture Engine",
-            "Auto-Delete Privacy",
+            "Create 20 Match-Ready Photos",
+            "Optimized for Dating Apps",
+            "100% Undetectable",
             "Commercial License",
+            "Private & Secure"
         ],
-        cta: "Buy Standard Roll",
+        cta: "Get Started",
         isPopular: false,
     },
     {
-        name: "PRO ROLL",
-        subtitle: "50 Exposures.",
-        price: "$18.99",
-        priceNote: "/ roll",
-        badge: "BEST VALUE",
+        name: "PREMIUM PACK",
+        subtitle: "Enough for all your dating profiles.",
+        price: "$150.00",
+        priceNote: "/ month",
+        badge: "10X YOUR MATCHES",
         features: [
-            "50 Hyper-Realistic Photos ",
-            "Best Value ($0.37 per photo)",
-            "4 Film Modes Included",
-            "Perfect for Couples & Solos",
-            "Nano-Texture Engine",
-            "Auto-Delete Privacy",
+            "Create 500 Match-Ready Photos",
+            "Priority Generation",
+            "Commercial License",
+            "Anti-Ban Protection",
+            "Commercial License",
+            "Private & Secure"
         ],
-        cta: "Buy Pro Roll",
+        cta: "Get Premium",
         isPopular: true,
     },
 ]
@@ -52,14 +52,14 @@ export const Pricing: React.FC<PricingProps> = ({ asH1 = false }) => {
                     {/* Section Title */}
                     <div className="mb-12">
                         <div className="font-mono text-xs text-foreground/40 mb-4">
-                            PRICING // SINGLE_PAYMENT
+                            PRICING // SUBSCRIPTION
                         </div>
                         <HeadingTag className="font-display text-4xl md:text-5xl font-bold uppercase leading-[0.95] mb-3">
-                            Pick Your<br />
-                            <span className="text-foreground/30">Film Roll.</span>
+                            Invest in Your<br />
+                            <span className="text-foreground/30">Love Life.</span>
                         </HeadingTag>
                         <p className="font-mono text-foreground/60 text-sm">
-                            No subscriptions. Pay once, own forever.
+                            Cheaper than a bad date. Cancel anytime.
                         </p>
                     </div>
 
