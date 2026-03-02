@@ -8,14 +8,14 @@ export const ConsistencySection: React.FC = () => {
         <section className="min-h-screen bg-black text-white relative border-b border-[#333] overflow-hidden flex flex-col justify-center">
             
             {/* Header: Left Aligned Badge/Heading, Right Aligned Desc */}
-            <div className="w-full mx-auto px-12 py-16 relative z-10">
-                <div className="flex flex-col md:flex-row justify-between items-end gap-8 pb-12">
+            <div className="w-full mx-auto px-6 md:px-12 py-16 relative z-10">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8 pb-12">
                     {/* Left Side: Badge & Heading */}
                     <div className="max-w-2xl">
-                        <div className="inline-flex items-center gap-2 border border-[#CCFF00] text-[#CCFF00] px-3 py-1.5 font-mono text-[10px] uppercase w-fit mb-6 shadow-[0_0_15px_rgba(204,255,0,0.15)] bg-[#CCFF00]/5 rounded-full">
-                            <span className="w-1.5 h-1.5 bg-[#CCFF00] animate-pulse rounded-full"></span>
-                            The 3 Essential Photos
-                        </div>
+                      
+                        <div className="inline-flex items-center gap-3 border border-[#CCFF00] text-[#CCFF00] px-3 py-1.5 font-mono text-[10px] md:text-xs uppercase w-fit mb-8 shadow-[0_0_15px_rgba(204,255,0,0.15)] bg-[#CCFF00]/5">
+            <span className="w-2 h-2 bg-[#CCFF00] animate-pulse"></span>
+             The 3 Essential Photos</div>
                         <h2 className="font-display text-5xl md:text-7xl font-bold uppercase leading-[0.9]">
                             The Algorithm <br/>
                             <span className="text-transparent stroke-text-lime">Isn't Rigged.</span>
@@ -23,7 +23,7 @@ export const ConsistencySection: React.FC = () => {
                     </div>
 
                     {/* Right Side: Description */}
-                    <div className="max-w-md text-right md:text-left">
+                    <div className="max-w-md text-left md:text-left">
                         <p className="font-mono text-[#888] text-sm md:text-base leading-relaxed">
                             You aren't "shadowbanned." You're just feeding the algorithm bad data. 
                             We replace the 3 biggest red flags in your profile with green flags.
@@ -75,14 +75,14 @@ export const ConsistencySection: React.FC = () => {
                                 <div className="font-mono text-6xl font-bold text-white/10">{item.id}</div>
                             </div>
 
-                            <div className="border-l-2 border-[#CCFF00] pl-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+                            <div className="border-l-2 border-[#CCFF00] pl-6 transform translate-y-0 md:translate-y-4 md:group-hover:translate-y-0 transition-transform duration-500">
                                 <div className="font-mono text-[10px] text-red-500 mb-2 uppercase tracking-widest bg-black/50 w-fit px-2 py-1 backdrop-blur-sm">
                                     {item.problem}
                                 </div>
                                 <h3 className="font-display text-3xl md:text-4xl font-bold text-white uppercase mb-4 leading-none drop-shadow-lg">
                                     {item.title}
                                 </h3>
-                                <p className="font-sans text-sm md:text-base text-white/80 max-w-xs leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                                <p className="font-sans text-sm md:text-base text-white/80 max-w-xs leading-relaxed opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-500 delay-100">
                                     {item.desc}
                                 </p>
                             </div>

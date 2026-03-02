@@ -3,43 +3,51 @@ import React, { useState } from 'react';
 import { Zap, Sun, Film, Video, ArrowRight, Aperture, Layers, Focus, Camera } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
+const styles = [
+    {
+        icon: Zap,
+        name: "Flash Photography",
+        desc: "Simulates direct on-camera flash. Creates high-energy, candid 'night out' aesthetics with sharp shadows and realistic skin highlights.",
+        img: "/images/demo8.jpg",
+        tag: "HARD_LIGHT_SOURCE",
+        tech: "Direct Flash Simulation"
+    },
+    {
+        icon: Sun,
+        name: "Natural Sun + Reflector",
+        desc: "Simulates 6PM golden hour sun with a soft fill light. Generates approachable, warm tones that signal 'friendly' and 'social'.",
+        img: "/images/golden-photo.webp",
+        tag: "WARM_DIFFUSED",
+        tech: "Global Illumination"
+    },
+    {
+        icon: Film,
+        name: "Analog 35mm Grain",
+        desc: "Emulates Kodak Portra 400 ISO grain structure. Adds micro-texture to prevent the 'plastic skin' look common in other AI generators.",
+        img: "/images/vintage-roll.webp",
+        tag: "FILM_EMULSION",
+        tech: "Texture Mapping"
+    },
+    {
+        icon: Video,
+        name: "Cinematic Rim Light",
+        desc: "High-contrast color grading with strong backlighting. Separates subject from background for a premium, editorial magazine look.",
+        img: "/images/cinematic-photo.webp",
+        tag: "VOLUMETRIC_LIGHT",
+        tech: "Color Grading Engine"
+    }
+];
+
 export const LightingLabSection: React.FC = () => {
     const [activeStyle, setActiveStyle] = useState(0);
 
-    const styles = [
-        {
-            icon: Zap,
-            name: "Flash Photography",
-            desc: "Simulates direct on-camera flash. Creates high-energy, candid 'night out' aesthetics with sharp shadows and realistic skin highlights.",
-            img: "/images/demo8.jpg",
-            tag: "HARD_LIGHT_SOURCE",
-            tech: "Direct Flash Simulation"
-        },
-        {
-            icon: Sun,
-            name: "Natural Sun + Reflector",
-            desc: "Simulates 6PM golden hour sun with a soft fill light. Generates approachable, warm tones that signal 'friendly' and 'social'.",
-            img: "/images/golden-photo.webp",
-            tag: "WARM_DIFFUSED",
-            tech: "Global Illumination"
-        },
-        {
-            icon: Film,
-            name: "Analog 35mm Grain",
-            desc: "Emulates Kodak Portra 400 ISO grain structure. Adds micro-texture to prevent the 'plastic skin' look common in other AI generators.",
-            img: "/images/vintage-roll.webp",
-            tag: "FILM_EMULSION",
-            tech: "Texture Mapping"
-        },
-        {
-            icon: Video,
-            name: "Cinematic Rim Light",
-            desc: "High-contrast color grading with strong backlighting. Separates subject from background for a premium, editorial magazine look.",
-            img: "/images/cinematic-photo.webp",
-            tag: "VOLUMETRIC_LIGHT",
-            tech: "Color Grading Engine"
-        }
-    ];
+    // Auto-rotate styles every 5 seconds
+    React.useEffect(() => {
+        const interval = setInterval(() => {
+            setActiveStyle((prev) => (prev + 1) % styles.length);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, [activeStyle]);
 
     return (
         <section className="min-h-screen bg-black text-white relative border-b border-[#333] overflow-hidden flex flex-col lg:flex-row">
@@ -161,24 +169,6 @@ export const LightingLabSection: React.FC = () => {
                         </div>
                     </motion.div>
                 </AnimatePresence>
-
-                {/* Tech Grid Overlay */}
-                <div className="absolute inset-0 pointer-events-none opacity-20 mix-blend-overlay" 
-                    style={{ backgroundImage: 'linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)', backgroundSize: '60px 60px' }}>
-                </div>
-                
-                {/* Crosshairs */}
-                <div className="absolute inset-0 pointer-events-none flex items-center justify-center opacity-30">
-                    <div className="w-[90%] h-[90%] border border-white/20 relative">
-                        <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-[#CCFF00]"></div>
-                        <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-[#CCFF00]"></div>
-                        <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-[#CCFF00]"></div>
-                        <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-[#CCFF00]"></div>
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 border border-white/30 rounded-full flex items-center justify-center">
-                            <div className="w-1 h-1 bg-[#CCFF00] rounded-full"></div>
-                        </div>
-                    </div>
-                </div>
             </div>
 
         </section>

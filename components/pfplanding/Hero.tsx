@@ -6,39 +6,19 @@ export const Hero: React.FC = () => {
   return (
     <div className="min-h-screen bg-black text-white font-sans selection:bg-[#CCFF00] selection:text-black flex flex-col w-full overflow-x-hidden">
       
-      {/* Ticker Tape / Marquee */}
-      <div className="w-full border-b border-[#333] bg-[#CCFF00] text-black overflow-hidden flex whitespace-nowrap py-1.5 font-mono text-[10px] uppercase font-bold tracking-widest">
-        <div 
-          className="flex gap-8"
-        >
-          {[...Array(10)].map((_, i) => (
-            <span key={i} className="flex items-center gap-8">
-              <span>// PFPFORME_ACTIVE</span>
-              <span>NO PLASTIC SKIN</span>
-              <span>10X MATCH RATE</span>
-              <span>BEAT THE ALGORITHM</span>
-            </span>
-          ))}
-        </div>
-      </div>
+     
 
       {/* Main Hero Area */}
       <div className="flex flex-col xl:flex-row w-full min-h-[90vh] border-b border-[#333]">
         
-        {/* Left Rail (Desktop Only) */}
-        <div className="hidden xl:flex w-16 border-r border-[#333] flex-col items-center justify-between py-8 font-mono text-[10px] text-[#666]">
-          <Crosshair className="w-5 h-5 text-[#CCFF00]" />
-        
-          <Fingerprint className="w-5 h-5" />
-        </div>
+     
 
         {/* Center Pane: Copy & CTA */}
         <div className="w-full xl:w-[55%] p-6 md:p-12 lg:p-16 xl:p-20 flex flex-col justify-center relative z-10">
           
           <div className="inline-flex items-center gap-3 border border-[#CCFF00] text-[#CCFF00] px-3 py-1.5 font-mono text-[10px] md:text-xs uppercase w-fit mb-8 shadow-[0_0_15px_rgba(204,255,0,0.15)] bg-[#CCFF00]/5">
             <span className="w-2 h-2 bg-[#CCFF00] animate-pulse"></span>
-            Target: Maximum Conversion
-          </div>
+            #1 Dating Photoshoot app for Men</div>
 
           <h1 className="font-display text-6xl md:text-8xl lg:text-[5.5rem] leading-[0.85] tracking-wide uppercase mb-8">
             <span className="text-white">Hyper-Realistic AI Photos</span><br />
@@ -97,45 +77,64 @@ export const Hero: React.FC = () => {
       </div>
 
       {/* 3 Processing Nodes (Replaces standard 3 steps) */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 w-full bg-black border-b border-[#333]">
+      <div className="flex flex-col xl:flex-row w-full bg-black border-b border-[#333]">
         
-        {/* Node 1 */}
-        <div className="p-8 md:p-12 border-b lg:border-b-0 lg:border-r border-[#333] relative group hover:bg-[#050505] transition-colors">
-          <div className="flex justify-between items-start mb-12">
-            <div className="font-display text-6xl text-[#333] group-hover:text-white transition-colors">01</div>
-            <div className="font-mono text-[9px] text-[#CCFF00] border border-[#CCFF00]/30 bg-[#CCFF00]/5 px-2 py-1 uppercase tracking-widest">
-              Upload_Photos
+        {/* Left Group (55% to match Hero split) - Contains Header & Step 1 */}
+        <div className="flex flex-col md:flex-row w-full xl:w-[55%] border-b xl:border-b-0 xl:border-r border-[#333]">
+            
+            {/* New Header Section (32.5% of total / 59.1% of parent) */}
+            <div className="w-full md:w-[59.1%] p-8 md:p-12 border-b md:border-b-0 md:border-r border-[#333] flex flex-col justify-between">
+                <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-8">
+                    3 Steps to <br />
+                    <span className="text-[#333]">The Vibe.</span>
+                </h2>
+                <div className="font-mono text-xs text-[#666] mt-8">
+                    PROCESS_ID: GEN_V2.0
+                </div>
             </div>
-          </div>
-          <h3 className="font-display text-3xl uppercase mb-3 text-white">Provide Base Photos</h3>
-          <p className="font-mono text-[#888] text-xs md:text-sm leading-relaxed">
-Upload 4 different & clear photos of yourself (avoid only selfie). The AI learns your unique features to create your personal model.          </p>
+
+            {/* Node 1 (22.5% of total / 40.9% of parent) */}
+            <div className="w-full md:w-[40.9%] p-8 md:p-12 relative group hover:bg-[#050505] transition-colors">
+                <div className="flex justify-between items-start mb-12">
+                <div className="font-display text-6xl text-[#333] group-hover:text-white transition-colors">01</div>
+                <div className="font-mono text-[9px] text-[#CCFF00] border border-[#CCFF00]/30 bg-[#CCFF00]/5 px-2 py-1 uppercase tracking-widest">
+                    Upload_Photos
+                </div>
+                </div>
+                <h3 className="font-display text-3xl uppercase mb-3 text-white">Provide Base Photos</h3>
+                <p className="font-mono text-[#888] text-xs md:text-sm leading-relaxed">
+    Upload 4 different & clear photos of yourself (avoid only selfie). The AI learns your unique features to create your personal model.          </p>
+            </div>
         </div>
 
-        {/* Node 2 */}
-        <div className="p-8 md:p-12 border-b lg:border-b-0 lg:border-r border-[#333] relative group hover:bg-[#050505] transition-colors">
-          <div className="flex justify-between items-start mb-12">
-            <div className="font-display text-6xl text-[#333] group-hover:text-white transition-colors">02</div>
-            <div className="font-mono text-[9px] text-[#CCFF00] border border-[#CCFF00]/30 bg-[#CCFF00]/5 px-2 py-1 uppercase tracking-widest">
-              Choose_Vibe
+        {/* Right Group (45% to match Hero split) - Contains Step 2 & Step 3 */}
+        <div className="flex flex-col md:flex-row w-full xl:w-[45%]">
+            
+            {/* Node 2 (22.5% of total / 50% of parent) */}
+            <div className="w-full md:w-[50%] p-8 md:p-12 border-b md:border-b-0 border-r border-[#333] relative group hover:bg-[#050505] transition-colors">
+                <div className="flex justify-between items-start mb-12">
+                <div className="font-display text-6xl text-[#333] group-hover:text-white transition-colors">02</div>
+                <div className="font-mono text-[9px] text-[#CCFF00] border border-[#CCFF00]/30 bg-[#CCFF00]/5 px-2 py-1 uppercase tracking-widest">
+                    Choose_Vibe
+                </div>
+                </div>
+                <h3 className="font-display text-3xl uppercase mb-3 text-white">Pick Your Vibe</h3>
+                <p className="font-mono text-[#888] text-xs md:text-sm leading-relaxed">
+    Choose from 4 film modes: Night Flash, Golden Hour, Gritty Vintage, or Cineamtic Shoot. Set lighting and describe your scene.          </p>
             </div>
-          </div>
-          <h3 className="font-display text-3xl uppercase mb-3 text-white">Pick Your Vibe</h3>
-          <p className="font-mono text-[#888] text-xs md:text-sm leading-relaxed">
-Choose from 4 film modes: Night Flash, Golden Hour, Gritty Vintage, or Cineamtic Shoot. Set lighting and describe your scene.          </p>
-        </div>
 
-        {/* Node 3 */}
-        <div className="p-8 md:p-12 relative group hover:bg-[#050505] transition-colors">
-          <div className="flex justify-between items-start mb-12">
-            <div className="font-display text-6xl text-[#333] group-hover:text-[#CCFF00] transition-colors">03</div>
-            <div className="font-mono text-[9px] text-[#CCFF00] border border-[#CCFF00]/30 bg-[#CCFF00]/5 px-2 py-1 uppercase tracking-widest">
-              Get_Results
+            {/* Node 3 (22.5% of total / 50% of parent) */}
+            <div className="w-full md:w-[50%] p-8 md:p-12 relative group hover:bg-[#050505] transition-colors">
+                <div className="flex justify-between items-start mb-12">
+                <div className="font-display text-6xl text-[#333] group-hover:text-[#CCFF00] transition-colors">03</div>
+                <div className="font-mono text-[9px] text-[#CCFF00] border border-[#CCFF00]/30 bg-[#CCFF00]/5 px-2 py-1 uppercase tracking-widest">
+                    Get_Results
+                </div>
+                </div>
+                <h3 className="font-display text-3xl uppercase mb-3 text-white">Get Your Matches</h3>
+                <p className="font-mono text-[#888] text-xs md:text-sm leading-relaxed">
+    AI generates hyper-realistic photos ready for dating apps in under 60 seconds. Download instantly. No plastic AI look. Real skin, real texture.          </p>
             </div>
-          </div>
-          <h3 className="font-display text-3xl uppercase mb-3 text-white">Get Your Matches</h3>
-          <p className="font-mono text-[#888] text-xs md:text-sm leading-relaxed">
-AI generates hyper-realistic photos ready for dating apps in under 60 seconds. Download instantly. No plastic AI look. Real skin, real texture.          </p>
         </div>
 
       </div>
