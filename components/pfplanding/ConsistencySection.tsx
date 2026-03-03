@@ -24,7 +24,7 @@ export const ConsistencySection: React.FC = () => {
 
                     {/* Right Side: Description */}
                     <div className="max-w-md text-left md:text-left">
-                        <p className="font-mono text-[#888] text-sm md:text-base leading-relaxed">
+                        <p className="font-mono text-[#a4a4a4] text-sm md:text-base leading-relaxed">
                             You aren't "shadowbanned." You're just feeding the algorithm bad data. 
                             We replace the 3 biggest red flags in your profile with green flags.
                         </p>

@@ -8,7 +8,7 @@
   /* Developer-specified colors for public pages */
   --color-bg: #080808;
   --color-text: #ebebeb;
-  --color-accent: #ff4d00;
+  --color-accent: #CCFF00;
 
 
   --background: oklch(1 0 0);
@@ -204,7 +204,7 @@
 .theme-public {
   --background: #080808;
   --foreground: #EBEBEB;
-  --accent: #FF4D00;
+  --accent: #CCFF00;
   --text-primary: #EBEBEB;
 
   font-family: var(--font-jetbrains-mono), monospace;
@@ -1044,7 +1044,7 @@
 
 /* Links - Dark Theme */
 .theme-public .blog-content a {
-  color: #FF4D00;
+  color: #CCFF00;
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -1066,13 +1066,13 @@
 }
 
 .theme-public .blog-content li::marker {
-  color: #FF4D00;
+  color: #CCFF00;
 }
 
 /* Blockquotes - Dark Theme */
 .theme-public .blog-content blockquote {
   background: rgba(255, 77, 0, 0.05);
-  border-left: 3px solid #FF4D00;
+  border-left: 3px solid #CCFF00;
   border-radius: 0;
   padding: 1rem 1.5rem;
   margin: 1.5rem 0;
@@ -1086,7 +1086,7 @@
 /* Code - Dark Theme */
 .theme-public .blog-content code {
   background: #0a0a0a;
-  color: #FF4D00;
+  color: #CCFF00;
   padding: 0.2rem 0.4rem;
   border-radius: 0;
   font-size: 0.85em;
@@ -1159,7 +1159,7 @@
 
 /* Buttons - Dark Theme */
 .theme-public .blog-content .wp-block-button__link {
-  background: #FF4D00;
+  background: #CCFF00;
   color: #080808;
   font-family: var(--font-jetbrains-mono), monospace;
   text-transform: uppercase;

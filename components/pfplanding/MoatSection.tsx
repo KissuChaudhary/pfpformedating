@@ -78,10 +78,11 @@ export const MoatSection: React.FC = () => {
                         <span className="w-1.5 h-1.5 bg-[#CCFF00] animate-pulse"></span>
                         Reality Check
                     </div>
-                    <h2 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold uppercase leading-[0.9] text-white mb-6">
-                        Stop Being <span className="text-[#CCFF00]">Ignored</span>.
+                    <h2 className="font-display text-5xl md:text-7xl font-bold uppercase leading-[0.9]">
+                        Stop Being <span className="text-transparent stroke-text-lime">Ignored.</span>
+
                     </h2>
-                    <p className="font-mono text-[#888] text-sm leading-relaxed max-w-md">
+                    <p className="font-mono text-[#a4a4a4] text-sm leading-relaxed max-w-md">
                         The dating app algorithm is simple: <strong>Better Photos = More Matches.</strong> <br/><br/>
                         Right now, your selfies are signaling "low effort." You need photos that signal "high value" without looking like you hired a wedding photographer.
                     </p>
@@ -108,13 +109,22 @@ export const MoatSection: React.FC = () => {
                         { 
                             title: "Algorithm Hack", 
                             desc: "Apps push profiles with high engagement. Better photos stop the scroll, boosting your ELO score instantly." 
+                        },
+                        { 
+                            title: "Anti-Ban Protection", 
+                            desc: "We add realistic noise, grain, and metadata to every photo. Passes AI-detection filters on Tinder, Hinge, and Bumble. 100% Safe." 
                         }
-                    ].map((item, i) => (
-                        <div key={i} className="group border-l-2 border-[#333] pl-6 py-2 hover:border-[#CCFF00] transition-colors">
-                            <h4 className="font-display text-lg text-white uppercase mb-2 group-hover:text-[#CCFF00] transition-colors">{item.title}</h4>
-                            <p className="font-mono text-xs text-[#666] leading-relaxed group-hover:text-[#888] transition-colors">{item.desc}</p>
-                        </div>
-                    ))}
+                    ].map((item, i) => {
+                        const isHighlight = item.title === "Anti-Ban Protection";
+                        return (
+                            <div key={i} className={`group border-l-2 pl-6 py-2 transition-colors ${isHighlight ? 'border-[#CCFF00] bg-[#CCFF00]/5' : 'border-[#333] hover:border-[#CCFF00]'}`}>
+                                <h4 className={`font-display text-lg uppercase mb-2 transition-colors ${isHighlight ? 'text-[#CCFF00]' : 'text-white group-hover:text-[#CCFF00]'}`}>
+                                    {item.title}
+                                </h4>
+                                <p className={`font-mono text-xs leading-relaxed transition-colors ${isHighlight ? 'text-[#CCFF00]/80' : 'text-[#666] group-hover:text-[#a4a4a4]'}`}>{item.desc}</p>
+                            </div>
+                        );
+                    })}
                  </div>
             </div>
 

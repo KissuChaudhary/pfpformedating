@@ -20,7 +20,7 @@ const COLUMN_2_IMAGES = [
 
 export const FullFrameSection: React.FC = () => {
     return (
-        <section className="h-screen min-h-[800px] grid md:grid-cols-2 border-b border-[#333] bg-black overflow-hidden">
+        <section className="min-h-screen md:h-screen grid md:grid-cols-2 border-b border-[#333] bg-black overflow-hidden">
             {/* Copy Side (Left) */}
             <div className="flex flex-col justify-center p-8 md:p-20 border-r border-[#333] relative z-10 bg-black">
                 <div className="mb-12">
@@ -28,13 +28,13 @@ export const FullFrameSection: React.FC = () => {
                         <span className="w-1.5 h-1.5 bg-[#CCFF00] animate-pulse rounded-full"></span>
                         Social Proof // Verified
                     </div>
-                    <h2 className="font-display text-4xl md:text-6xl font-bold uppercase leading-[0.9]">
+                    <h2 className="font-display text-5xl md:text-7xl font-bold uppercase leading-[0.9]">
                         Stop Being Ghosted. <br/>
                         <span className="text-transparent stroke-text-lime">Start Getting Matches.</span>
                     </h2>
                 </div>
 
-                <p className="font-mono text-[#888] mb-12 text-sm md:text-base max-w-md leading-relaxed border-l-2 border-[#333] pl-6">
+                <p className="font-mono text-[#a4a4a4] mb-12 text-sm md:text-base max-w-md leading-relaxed border-l-2 border-[#333] pl-6">
                    Stop losing matches to bad selfies and awkward angles. We generate candid, lifestyle photos that look like <strong className="text-white">your best friend took them on a night out.</strong>
                 </p>
 
@@ -59,7 +59,7 @@ export const FullFrameSection: React.FC = () => {
             </div>
 
             {/* Visual Side (Right) - Vertical Masonry */}
-            <div className="relative bg-[#050505] overflow-hidden h-full border-l border-[#333]">
+            <div className="relative bg-[#050505] overflow-hidden h-[50vh] min-h-[400px] md:h-full md:min-h-0 border-t md:border-t-0 md:border-l border-[#333]">
                
 
                 {/* Gradient Masks (Top/Bottom) */}

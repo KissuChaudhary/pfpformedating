@@ -10,10 +10,10 @@ export const FAQ: React.FC = () => {
         <section className="grid md:grid-cols-12 border-b border-[#333] bg-black text-white min-h-[50vh]">
             <div className="col-span-12 md:col-span-4 p-8 md:p-12 border-b md:border-b-0 md:border-r border-[#333] flex flex-col justify-between">
                 <div>
-                    <h2 className="font-display text-4xl md:text-6xl font-bold uppercase mb-4 leading-[1]">
+                    <h2 className="font-display text-5xl md:text-7xl font-bold uppercase leading-[1]">
                         FAQs about <span className="text-transparent stroke-text-lime">PFPfor.ME</span>
                     </h2>
-                    <p className="font-mono text-xs text-[#888] mb-8">
+                    <p className="font-mono text-xs text-[#a4a4a4] mb-8">
                         Straight answers. No marketing fluff. <br/>
                     </p>
                 </div>
@@ -29,7 +29,7 @@ export const FAQ: React.FC = () => {
                             onClick={() => setOpenIndex(openIndex === i ? null : i)}
                         >
                             <div className="flex items-start gap-4 pr-8">
-                                <span className={`font-mono text-xs mt-1 transition-colors ${openIndex === i ? 'text-[#CCFF00]' : 'text-[#444] group-hover:text-[#888]'}`}>
+                                <span className={`font-mono text-xs mt-1 transition-colors ${openIndex === i ? 'text-[#CCFF00]' : 'text-[#444] group-hover:text-[#a4a4a4]'}`}>
                                     {i < 9 ? `0${i + 1}` : i + 1}
                                 </span>
                                 <span className={`font-display text-lg md:text-xl font-bold uppercase transition-colors ${openIndex === i ? 'text-[#CCFF00]' : 'text-white group-hover:text-[#CCFF00]'}`}>
@@ -44,7 +44,7 @@ export const FAQ: React.FC = () => {
                             className={`overflow-hidden transition-all duration-500 ease-in-out ${openIndex === i ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
                         >
                             <div className="p-8 pt-0 pl-16">
-                                <p className="font-mono text-sm text-[#888] leading-relaxed max-w-2xl border-l border-[#333] pl-4">
+                                <p className="font-mono text-sm text-[#a4a4a4] leading-relaxed max-w-2xl border-l border-[#333] pl-4">
                                     {item.a}
                                 </p>
                             </div>

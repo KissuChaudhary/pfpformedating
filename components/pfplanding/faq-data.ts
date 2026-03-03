@@ -5,6 +5,10 @@ export const faqData = [
         a: "Not unless you tell them. Unlike other apps that give you 'plastic skin' and 'dead eyes', PFPforME is engineered for imperfection. We add film grain, motion blur, and realistic skin texture. Our photos are designed to pass the 'friend test'—if your best friend can't tell, your matches won't either.",
     },
     {
+        q: "Will I get banned for using this?",
+        a: "No. Dating apps ban 'catfishing' (fake people) and 'bots'. You are uploading photos of yourself, just with better lighting. Our system also embeds realistic camera metadata and noise patterns that bypass AI-detection filters on Tinder, Hinge, and Bumble. Your account is 100% safe.",
+    },
+    {
         q: "Can I use these on Hinge, Tinder, and Bumble?",
         a: "Absolutely. That is exactly what they are built for. The algorithm favors profiles with high-quality, varied photos. Our users typically see a 3x increase in match rate because their profiles signal 'high effort' and 'social proof' without looking staged.",
     },

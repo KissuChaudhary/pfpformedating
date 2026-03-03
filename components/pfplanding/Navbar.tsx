@@ -93,7 +93,7 @@ export const Navbar: React.FC = () => {
                         <Link
                             key={item.name}
                             href={item.href}
-                            className="relative h-full px-6 flex items-center justify-center font-mono text-xs uppercase tracking-widest text-[#888] hover:text-black hover:bg-[#CCFF00] transition-all duration-200 group border-r border-[#333] last:border-r-0"
+                            className="relative h-full px-6 flex items-center justify-center font-mono text-xs uppercase tracking-widest text-[#a4a4a4] hover:text-black hover:bg-[#CCFF00] transition-all duration-200 group border-r border-[#333] last:border-r-0"
                         >
                             <span className="relative z-10">{item.name}</span>
                         </Link>

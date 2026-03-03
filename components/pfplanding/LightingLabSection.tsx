@@ -55,15 +55,15 @@ export const LightingLabSection: React.FC = () => {
             {/* --- Left Panel: Controls (40%) --- */}
             <div className="w-full lg:w-[40%] p-8 md:p-16 flex flex-col justify-center border-r border-[#333] relative z-20 bg-black">
                 <div className="mb-12">
-                    <div className="inline-flex items-center gap-2 border border-[#CCFF00] text-[#CCFF00] px-3 py-1.5 font-mono text-[10px] uppercase w-fit mb-6 shadow-[0_0_15px_rgba(204,255,0,0.15)] bg-[#CCFF00]/5 rounded-full">
-                        <span className="w-1.5 h-1.5 bg-[#CCFF00] animate-pulse rounded-full"></span>
-                        Virtual Studio Engine
-                    </div>
-                    <h2 className="font-display text-5xl md:text-6xl font-bold uppercase leading-[0.9] mb-6">
+                  
+                    <div className="inline-flex items-center gap-3 border border-[#CCFF00] text-[#CCFF00] px-3 py-1.5 font-mono text-[10px] md:text-xs uppercase w-fit mb-8 shadow-[0_0_15px_rgba(204,255,0,0.15)] bg-[#CCFF00]/5">
+            <span className="w-2 h-2 bg-[#CCFF00] animate-pulse"></span>
+             The Hyper-realistic looks</div>
+                    <h2 className="font-display text-5xl md:text-7xl font-bold uppercase leading-[0.9]">
                         Physics-Based Lighting<br/>
                         <span className="text-transparent stroke-text-lime">to avoid AI detection</span>
                     </h2>
-                    <p className="font-mono text-[#888] text-sm leading-relaxed max-w-md">
+                    <p className="font-mono text-[#a4a4a4] text-sm leading-relaxed max-w-md">
                         Other AI tools just paste your face. We simulate real-world photography physics—<strong className="text-white">shutter speed, aperture, and film grain</strong>—to trick the eye into seeing reality.
                     </p>
                 </div>
@@ -89,7 +89,7 @@ export const LightingLabSection: React.FC = () => {
                                     </div>
                                     <div className="flex flex-col">
                                         <span className={`font-display text-lg uppercase tracking-wide leading-none mb-1 ${
-                                            activeStyle === i ? 'text-white' : 'text-[#888] group-hover:text-white'
+                                            activeStyle === i ? 'text-white' : 'text-[#a4a4a4] group-hover:text-white'
                                         }`}>
                                             {style.name}
                                         </span>

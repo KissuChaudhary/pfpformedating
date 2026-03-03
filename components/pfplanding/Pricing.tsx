@@ -56,11 +56,11 @@ export const Pricing: React.FC<PricingProps> = ({ asH1 = false }) => {
                         <span className="w-1.5 h-1.5 bg-[#CCFF00] animate-pulse rounded-full"></span>
                         // Transparent Pricing
                     </div>
-                    <HeadingTag className="font-display text-5xl md:text-6xl font-bold uppercase leading-[0.9] mb-6">
+                    <HeadingTag className="font-display text-5xl md:text-7xl font-bold uppercase leading-[0.9]">
                         Invest in <br/>
                         <span className="text-transparent stroke-text-lime">Yourself.</span>
                     </HeadingTag>
-                    <p className="font-mono text-[#888] text-sm max-w-sm mb-8 border-l-2 border-[#333] pl-4">
+                    <p className="font-mono text-[#a4a4a4] text-sm max-w-sm mb-8 border-l-2 border-[#333] pl-4">
                         Cheaper than a bad date. Cancel anytime. <br/>
                         <strong className="text-white">100% Money-Back Guarantee.</strong>
                     </p>
@@ -83,7 +83,7 @@ export const Pricing: React.FC<PricingProps> = ({ asH1 = false }) => {
                             <span className="font-mono text-xs text-[#555]">{plans[0].priceNote}</span>
                         </div>
                         
-                        <ul className="space-y-3 font-mono text-sm text-[#888] mb-12">
+                        <ul className="space-y-3 font-mono text-sm text-[#a4a4a4] mb-12">
                              {plans[0].features.map((feature, i) => (
                                 <li key={i} className={`flex items-center gap-3 ${feature.included ? '' : 'opacity-30 line-through'}`}>
                                     {feature.included ? <Check className="w-4 h-4" /> : <X className="w-4 h-4" />}
@@ -94,7 +94,7 @@ export const Pricing: React.FC<PricingProps> = ({ asH1 = false }) => {
                     </div>
 
                     <Link href="/login" className="block w-full">
-                        <button className="w-full py-4 border border-[#333] font-mono text-xs uppercase tracking-widest text-[#888] hover:bg-white hover:text-black hover:border-white transition-all flex items-center justify-center gap-2 group">
+                        <button className="w-full py-4 border border-[#333] font-mono text-xs uppercase tracking-widest text-[#a4a4a4] hover:bg-white hover:text-black hover:border-white transition-all flex items-center justify-center gap-2 group">
                             <span>{plans[0].cta}</span>
                             <ArrowRight className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
                         </button>
@@ -121,7 +121,7 @@ export const Pricing: React.FC<PricingProps> = ({ asH1 = false }) => {
 
                          <div className="flex items-baseline gap-2 mb-8">
                             <span className="font-display text-6xl font-bold text-white tracking-tighter">{plans[1].price}</span>
-                            <span className="font-mono text-xs text-[#888]">{plans[1].priceNote}</span>
+                            <span className="font-mono text-xs text-[#a4a4a4]">{plans[1].priceNote}</span>
                         </div>
                         
                         <ul className="space-y-3 font-mono text-sm text-white mb-12">
